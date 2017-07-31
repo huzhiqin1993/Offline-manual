@@ -1,0 +1,384 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/cli.md",
+  "miscs": [
+    {
+      "textRaw": "Command Line Options",
+      "name": "Command Line Options",
+      "type": "misc",
+      "desc": "<p>Node.js 自带了各种命令行选项。\n这些选项对外暴露了内置调试、多种执行脚本的方式、以及其他有用的运行时选项。</p>\n<p>要在终端中查看本文档作为操作手册，运行 <code>man node</code>。</p>\n",
+      "miscs": [
+        {
+          "textRaw": "Synopsis",
+          "name": "synopsis",
+          "desc": "<p><code>node [options] [v8 options] [script.js | -e &quot;script&quot;] [arguments]</code></p>\n<p><code>node debug [script.js | -e &quot;script&quot; | &lt;host&gt;:&lt;port&gt;] …</code></p>\n<p><code>node --v8-options</code></p>\n<p>执行时不带参数，会启动 <a href=\"repl.html\"/*tpa=http://nodejs.cn/api/repl.html*/>REPL</a>。</p>\n<p>关于 <code>node debug</code> 的更多信息，详见<a href=\"debugger.html\"/*tpa=http://nodejs.cn/api/debugger.html*/>调试器</a>文档。</p>\n",
+          "type": "misc",
+          "displayName": "Synopsis"
+        },
+        {
+          "textRaw": "Options",
+          "name": "options",
+          "modules": [
+            {
+              "textRaw": "`-v`, `--version`",
+              "name": "`-v`,_`--version`",
+              "meta": {
+                "added": [
+                  "v0.1.3"
+                ]
+              },
+              "desc": "<p>打印 node 的版本号。</p>\n",
+              "type": "module",
+              "displayName": "`-v`, `--version`"
+            },
+            {
+              "textRaw": "`-h`, `--help`",
+              "name": "`-h`,_`--help`",
+              "meta": {
+                "added": [
+                  "v0.1.3"
+                ]
+              },
+              "desc": "<p>打印 node 的命令行选项。\n此选项的输出不如本文档详细。</p>\n",
+              "type": "module",
+              "displayName": "`-h`, `--help`"
+            },
+            {
+              "textRaw": "`-e`, `--eval \"script\"`",
+              "name": "`-e`,_`--eval_\"script\"`",
+              "meta": {
+                "added": [
+                  "v0.5.2"
+                ]
+              },
+              "desc": "<p>把跟随的参数作为 JavaScript 来执行。\n在 REPL 中预定义的模块也可以在 <code>script</code> 中使用。</p>\n",
+              "type": "module",
+              "displayName": "`-e`, `--eval \"script\"`"
+            },
+            {
+              "textRaw": "`-p`, `--print \"script\"`",
+              "name": "`-p`,_`--print_\"script\"`",
+              "meta": {
+                "added": [
+                  "v0.6.4"
+                ]
+              },
+              "desc": "<p>与 <code>-e</code> 相同，但会打印结果。</p>\n",
+              "type": "module",
+              "displayName": "`-p`, `--print \"script\"`"
+            },
+            {
+              "textRaw": "`-c`, `--check`",
+              "name": "`-c`,_`--check`",
+              "meta": {
+                "added": [
+                  "v5.0.0"
+                ]
+              },
+              "desc": "<p>在不执行的情况下，对脚本进行语法检查。</p>\n",
+              "type": "module",
+              "displayName": "`-c`, `--check`"
+            },
+            {
+              "textRaw": "`-i`, `--interactive`",
+              "name": "`-i`,_`--interactive`",
+              "meta": {
+                "added": [
+                  "v0.7.7"
+                ]
+              },
+              "desc": "<p>打开 REPL，即使 stdin 看起来不像终端。</p>\n",
+              "type": "module",
+              "displayName": "`-i`, `--interactive`"
+            },
+            {
+              "textRaw": "`-r`, `--require module`",
+              "name": "`-r`,_`--require_module`",
+              "meta": {
+                "added": [
+                  "v1.6.0"
+                ]
+              },
+              "desc": "<p>在启动时预加载指定的模块。</p>\n<p>遵循 <code>require()</code> 的模块解析规则。\n<code>module</code> 可以是一个文件的路径，或一个 node 模块名称。</p>\n",
+              "type": "module",
+              "displayName": "`-r`, `--require module`"
+            },
+            {
+              "textRaw": "`--no-deprecation`",
+              "name": "`--no-deprecation`",
+              "meta": {
+                "added": [
+                  "v0.8.0"
+                ]
+              },
+              "desc": "<p>静默废弃的警告。</p>\n",
+              "type": "module",
+              "displayName": "`--no-deprecation`"
+            },
+            {
+              "textRaw": "`--trace-deprecation`",
+              "name": "`--trace-deprecation`",
+              "meta": {
+                "added": [
+                  "v0.8.0"
+                ]
+              },
+              "desc": "<p>打印废弃的堆栈跟踪。</p>\n",
+              "type": "module",
+              "displayName": "`--trace-deprecation`"
+            },
+            {
+              "textRaw": "`--throw-deprecation`",
+              "name": "`--throw-deprecation`",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.11.14"
+                ]
+              },
+              "desc": "<p>抛出废弃的错误。</p>\n",
+              "type": "module",
+              "displayName": "`--throw-deprecation`"
+            },
+            {
+              "textRaw": "`--no-warnings`",
+              "name": "`--no-warnings`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>静默一切进程警告（包括废弃警告）。</p>\n",
+              "type": "module",
+              "displayName": "`--no-warnings`"
+            },
+            {
+              "textRaw": "`--trace-warnings`",
+              "name": "`--trace-warnings`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>打印进程警告的堆栈跟踪（包括废弃警告）。</p>\n",
+              "type": "module",
+              "displayName": "`--trace-warnings`"
+            },
+            {
+              "textRaw": "`--trace-sync-io`",
+              "name": "`--trace-sync-io`",
+              "meta": {
+                "added": [
+                  "v2.1.0"
+                ]
+              },
+              "desc": "<p>每当事件循环的第一帧之后检测到同步 I/O 时，打印堆栈跟踪。</p>\n",
+              "type": "module",
+              "displayName": "`--trace-sync-io`"
+            },
+            {
+              "textRaw": "`--zero-fill-buffers`",
+              "name": "`--zero-fill-buffers`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>自动用 0 填充所有新分配的 <a href=\"buffer.html#buffer_buffer\">Buffer</a> 和 <a href=\"buffer.html#buffer_class_slowbuffer\">SlowBuffer</a> 实例。</p>\n",
+              "type": "module",
+              "displayName": "`--zero-fill-buffers`"
+            },
+            {
+              "textRaw": "`--preserve-symlinks`",
+              "name": "`--preserve-symlinks`",
+              "meta": {
+                "added": [
+                  "v6.3.0"
+                ]
+              },
+              "desc": "<p>当解析和缓存模块时，命令模块加载器保持符号连接。</p>\n<p>默认情况下，当 Node.js 从一个被符号连接到另一块磁盘位置的路径加载一个模块时，Node.js 会解引用该连接，并使用模块的真实磁盘的实际路径，作为定位其他依赖模块的标识符和根路径。\n大多数情况下，默认行为是可接受的。\n但是，当使用符号连接的同行依赖，如下例子所描述的，如果 <code>moduleA</code> 试图引入 <code>moduleB</code> 作为一个同行依赖，默认行为就会抛出异常：</p>\n<pre><code class=\"lang-text\">{appDir}\n ├── app\n │   ├── index.js\n │   └── node_modules\n │       ├── moduleA -&gt; {appDir}/moduleA\n │       └── moduleB\n │           ├── index.js\n │           └── package.json\n └── moduleA\n     ├── index.js\n     └── package.json\n</code></pre>\n<p><code>--preserve-symlinks</code> 命令行标志命令 Node.js 使用模块的符号路径而不是真实路径，是符号连接的同行依赖能被找到。</p>\n<p>注意，使用 <code>--preserve-symlinks</code> 会有其他方面的影响。\n比如，如果符号连接的原生模块在依赖树里来自超过一个位置，它们会加载失败。\n（Node.js 会将它们视为两个独立的模块，且会试图多次加载模块，造成抛出异常。）</p>\n",
+              "type": "module",
+              "displayName": "`--preserve-symlinks`"
+            },
+            {
+              "textRaw": "`--track-heap-objects`",
+              "name": "`--track-heap-objects`",
+              "meta": {
+                "added": [
+                  "v2.4.0"
+                ]
+              },
+              "desc": "<p>为堆快照追踪堆栈对象的分配。</p>\n",
+              "type": "module",
+              "displayName": "`--track-heap-objects`"
+            },
+            {
+              "textRaw": "`--prof-process`",
+              "name": "`--prof-process`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>处理 v8 分析器的输出，通过使用 v8 选项 <code>--prof</code> 生成。</p>\n",
+              "type": "module",
+              "displayName": "`--prof-process`"
+            },
+            {
+              "textRaw": "`--v8-options`",
+              "name": "`--v8-options`",
+              "meta": {
+                "added": [
+                  "v0.1.3"
+                ]
+              },
+              "desc": "<p>打印 v8 命令行选项。</p>\n<p>注意，v8 选项允许单词使用破折号（<code>-</code>）或下划线（<code>_</code>）分隔。</p>\n<p>例如，<code>--stack-trace-limit</code> 等同于 <code>--stack_trace_limit</code>。</p>\n",
+              "type": "module",
+              "displayName": "`--v8-options`"
+            },
+            {
+              "textRaw": "`--tls-cipher-list=list`",
+              "name": "`--tls-cipher-list=list`",
+              "meta": {
+                "added": [
+                  "v4.0.0"
+                ]
+              },
+              "desc": "<p>指定备用的默认 TLS 加密列表。\n（需要 Node.js 被构建为支持加密。（默认））</p>\n",
+              "type": "module",
+              "displayName": "`--tls-cipher-list=list`"
+            },
+            {
+              "textRaw": "`--enable-fips`",
+              "name": "`--enable-fips`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>启动时启用符合 FIPS 标准的加密。\n（需要 Node.js 使用 <code>./configure --openssl-fips</code> 构建）</p>\n",
+              "type": "module",
+              "displayName": "`--enable-fips`"
+            },
+            {
+              "textRaw": "`--force-fips`",
+              "name": "`--force-fips`",
+              "meta": {
+                "added": [
+                  "v6.0.0"
+                ]
+              },
+              "desc": "<p>启动时强制使用符合 FIPS 标准的加密。\n（无法通过脚本代码禁用。）\n（要求同 <code>--enable-fips</code>）</p>\n",
+              "type": "module",
+              "displayName": "`--force-fips`"
+            },
+            {
+              "textRaw": "`--openssl-config=file`",
+              "name": "`--openssl-config=file`",
+              "meta": {
+                "added": [
+                  "v6.9.0"
+                ]
+              },
+              "desc": "<p>启动时加载 OpenSSL 配置文件。\n在其他用途中，如果 Node.js 使用 <code>./configure --openssl-fips</code> 构建，它可以用于启用符合 FIPS 标准的加密。</p>\n",
+              "type": "module",
+              "displayName": "`--openssl-config=file`"
+            },
+            {
+              "textRaw": "`--icu-data-dir=file`",
+              "name": "`--icu-data-dir=file`",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.11.15"
+                ]
+              },
+              "desc": "<p>指定 ICU 数据的加载路径。\n（覆盖 <code>NODE_ICU_DATA</code>）</p>\n",
+              "type": "module",
+              "displayName": "`--icu-data-dir=file`"
+            }
+          ],
+          "type": "misc",
+          "displayName": "Options"
+        },
+        {
+          "textRaw": "Environment Variables",
+          "name": "environment_variables",
+          "modules": [
+            {
+              "textRaw": "`NODE_DEBUG=module[,…]`",
+              "name": "`node_debug=module[,…]`",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.32"
+                ]
+              },
+              "desc": "<p>以 <code>&#39;,&#39;</code> 分隔的应该打印调试信息的核心模块列表。</p>\n",
+              "type": "module",
+              "displayName": "`NODE_DEBUG=module[,…]`"
+            },
+            {
+              "textRaw": "`NODE_PATH=path[:…]`",
+              "name": "`node_path=path[:…]`",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.32"
+                ]
+              },
+              "desc": "<p>以 <code>&#39;:&#39;</code> 分隔的有模块搜索路径作前缀的目录列表。</p>\n<p>注意，在 Windows 中，列表是用 <code>&#39;;&#39;</code> 分隔的。</p>\n",
+              "type": "module",
+              "displayName": "`NODE_PATH=path[:…]`"
+            },
+            {
+              "textRaw": "`NODE_DISABLE_COLORS=1`",
+              "name": "`node_disable_colors=1`",
+              "meta": {
+                "added": [
+                  "v0.3.0"
+                ]
+              },
+              "desc": "<p>当设为 <code>1</code> 时，不会在 REPL 中使用颜色。</p>\n",
+              "type": "module",
+              "displayName": "`NODE_DISABLE_COLORS=1`"
+            },
+            {
+              "textRaw": "`NODE_ICU_DATA=file`",
+              "name": "`node_icu_data=file`",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.11.15"
+                ]
+              },
+              "desc": "<p>ICU（Intl 对象）数据的数据路径。\n当使用 <code>small-icu</code> 编译时，扩展链接的数据。</p>\n",
+              "type": "module",
+              "displayName": "`NODE_ICU_DATA=file`"
+            },
+            {
+              "textRaw": "`NODE_REPL_HISTORY=file`",
+              "name": "`node_repl_history=file`",
+              "meta": {
+                "added": [
+                  "v3.0.0"
+                ]
+              },
+              "desc": "<p>用于存储持久性的 REPL 历史记录的文件的路径。\n默认路径是 <code>~/.node_repl_history</code>，可被该变量覆盖。\n将值设为空字符串（<code>&quot;&quot;</code> 或 <code>&quot; &quot;</code>）会禁用持久性的 REPL 历史记录。</p>\n",
+              "type": "module",
+              "displayName": "`NODE_REPL_HISTORY=file`"
+            },
+            {
+              "textRaw": "`NODE_TTY_UNSAFE_ASYNC=1`",
+              "name": "`node_tty_unsafe_async=1`",
+              "meta": {
+                "added": [
+                  "6.4.0"
+                ]
+              },
+              "desc": "<p>当设为 <code>1</code> 时，当输出到一个支持异步输入输出的平台的 TTY 时，写入到 <code>stdout</code> 和 <code>stderr</code> 会是非阻塞与异步的。\n设置该值会使标准输入输出在程序退出时不会被交叉存取或丢弃。\n<strong>不建议使用这个模式。</strong></p>\n",
+              "type": "module",
+              "displayName": "`NODE_TTY_UNSAFE_ASYNC=1`"
+            }
+          ],
+          "type": "misc",
+          "displayName": "Environment Variables"
+        }
+      ]
+    }
+  ]
+}

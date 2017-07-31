@@ -1,0 +1,11 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/synopsis.md",
+  "miscs": [
+    {
+      "textRaw": "Usage",
+      "name": "Usage",
+      "type": "misc",
+      "desc": "<p><code>node [options] [v8 options] [script.js | -e &quot;script&quot;] [arguments]</code></p>\n<p>使用 Node.js 运行脚本的各种参数与方法，请查看<a href=\"cli.html#cli_command_line_options\">命令行参数</a>文档。</p>\n<h2>Example</h2>\n<p>例子，使用 Node.js 编写的 <a href=\"http.html\"/*tpa=http://nodejs.cn/api/http.html*/>Web 服务器</a>，响应返回 <code>&#39;Hello World&#39;</code>：</p>\n<pre><code class=\"lang-js\">const http = require(&#39;http&#39;);\n\nconst hostname = &#39;127.0.0.1&#39;;\nconst port = 3000;\n\nconst server = http.createServer((req, res) =&gt; {\n  res.statusCode = 200;\n  res.setHeader(&#39;Content-Type&#39;, &#39;text/plain&#39;);\n  res.end(&#39;Hello World\\n&#39;);\n});\n\nserver.listen(port, hostname, () =&gt; {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});\n</code></pre>\n<p>要运行这个服务器，需将代码保存到名为 <code>example.js</code> 的文件，并使用 Node.js 来执行：</p>\n<pre><code class=\"lang-txt\">$ node example.js\nServer running at http://127.0.0.1:3000/\n</code></pre>\n<p>文档中所有的例子都可以用相同的方式运行。</p>\n"
+    }
+  ]
+}

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <title>assert | Node.js API &#x6587;&#x6863;</title>
+  <link rel="stylesheet" href="../static/api.css" tppabs="http://nodejs.cn/static/api.css">
+  <link rel="icon" sizes="32x32" type="image/png" href="/static/favicon.png">
+</head>
+<body class="alt apidoc" id="api-section-assert">
+  <div id="content" class="clearfix">
+    <div id="column2" class="interior">
+      <div id="intro" class="interior">
+        <a href="javascript:if(confirm('http://nodejs.cn/  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='http://nodejs.cn/'" tppabs="http://nodejs.cn/" title="Go back to the home page">
+          Node.js &#x4E2D;&#x6587;&#x7F51;
+        </a>
+      </div>
+      <ul>
+<li><a class="nav-documentation" href="documentation.html" tppabs="http://nodejs.cn/api/documentation.html">&#x5173;&#x4E8E;&#x672C;&#x6587;&#x6863;</a></li>
+<li><a class="nav-synopsis" href="synopsis.html" tppabs="http://nodejs.cn/api/synopsis.html">&#x7528;&#x6CD5;&#x4E0E;&#x4F8B;&#x5B50;</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-assert active" href="assert.html" tppabs="http://nodejs.cn/api/assert.html">Assert (&#x65AD;&#x8A00;)</a></li>
+<li><a class="nav-buffer" href="buffer.html" tppabs="http://nodejs.cn/api/buffer.html">Buffer</a></li>
+<li><a class="nav-addons" href="addons.html" tppabs="http://nodejs.cn/api/addons.html">C/C++ &#x63D2;&#x4EF6;</a></li>
+<li><a class="nav-child_process" href="child_process.html" tppabs="http://nodejs.cn/api/child_process.html">Child Processes (&#x5B50;&#x8FDB;&#x7A0B;)</a></li>
+<li><a class="nav-cluster" href="cluster.html" tppabs="http://nodejs.cn/api/cluster.html">Cluster (&#x96C6;&#x7FA4;)</a></li>
+<li><a class="nav-cli" href="cli.html" tppabs="http://nodejs.cn/api/cli.html">CLI (&#x547D;&#x4EE4;&#x884C;&#x9009;&#x9879;)</a></li>
+<li><a class="nav-console" href="console.html" tppabs="http://nodejs.cn/api/console.html">Console (&#x63A7;&#x5236;&#x53F0;)</a></li>
+<li><a class="nav-crypto" href="crypto.html" tppabs="http://nodejs.cn/api/crypto.html">Crypto (&#x52A0;&#x5BC6;)</a></li>
+<li><a class="nav-debugger" href="debugger.html" tppabs="http://nodejs.cn/api/debugger.html">Debugger (&#x8C03;&#x8BD5;&#x5668;)</a></li>
+<li><a class="nav-dns" href="dns.html" tppabs="http://nodejs.cn/api/dns.html">DNS (&#x57DF;&#x540D;&#x670D;&#x52A1;&#x5668;)</a></li>
+<li><a class="nav-domain" href="domain.html" tppabs="http://nodejs.cn/api/domain.html">Domain (&#x57DF;)</a></li>
+<li><a class="nav-errors" href="errors.html" tppabs="http://nodejs.cn/api/errors.html">Error (&#x9519;&#x8BEF;)</a></li>
+<li><a class="nav-events" href="events.html" tppabs="http://nodejs.cn/api/events.html">Events (&#x4E8B;&#x4EF6;)</a></li>
+<li><a class="nav-fs" href="fs.html" tppabs="http://nodejs.cn/api/fs.html">File System (&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;)</a></li>
+<li><a class="nav-globals" href="globals.html" tppabs="http://nodejs.cn/api/globals.html">Global (&#x5168;&#x5C40;&#x53D8;&#x91CF;)</a></li>
+<li><a class="nav-http" href="http.html" tppabs="http://nodejs.cn/api/http.html">HTTP</a></li>
+<li><a class="nav-https" href="https.html" tppabs="http://nodejs.cn/api/https.html">HTTPS</a></li>
+<li><a class="nav-modules" href="modules.html" tppabs="http://nodejs.cn/api/modules.html">Module (&#x6A21;&#x5757;)</a></li>
+<li><a class="nav-net" href="net.html" tppabs="http://nodejs.cn/api/net.html">Net (&#x7F51;&#x7EDC;)</a></li>
+<li><a class="nav-os" href="os.html" tppabs="http://nodejs.cn/api/os.html">OS (&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;)</a></li>
+<li><a class="nav-path" href="path.html" tppabs="http://nodejs.cn/api/path.html">Path (&#x8DEF;&#x5F84;)</a></li>
+<li><a class="nav-process" href="process.html" tppabs="http://nodejs.cn/api/process.html">Process (&#x8FDB;&#x7A0B;)</a></li>
+<li><a class="nav-punycode" href="punycode.html" tppabs="http://nodejs.cn/api/punycode.html">Punycode</a></li>
+<li><a class="nav-querystring" href="querystring.html" tppabs="http://nodejs.cn/api/querystring.html">Query Strings (&#x67E5;&#x8BE2;&#x5B57;&#x7B26;&#x4E32;)</a></li>
+<li><a class="nav-readline" href="readline.html" tppabs="http://nodejs.cn/api/readline.html">Readline</a></li>
+<li><a class="nav-repl" href="repl.html" tppabs="http://nodejs.cn/api/repl.html">REPL</a></li>
+<li><a class="nav-stream" href="stream.html" tppabs="http://nodejs.cn/api/stream.html">Stream (&#x6D41;)</a></li>
+<li><a class="nav-string_decoder" href="string_decoder.html" tppabs="http://nodejs.cn/api/string_decoder.html">String Decoder (&#x5B57;&#x7B26;&#x4E32;&#x89E3;&#x7801;)</a></li>
+<li><a class="nav-timers" href="timers.html" tppabs="http://nodejs.cn/api/timers.html">Timer (&#x5B9A;&#x65F6;&#x5668;)</a></li>
+<li><a class="nav-tls" href="tls.html" tppabs="http://nodejs.cn/api/tls.html">TLS/SSL</a></li>
+<li><a class="nav-tty" href="tty.html" tppabs="http://nodejs.cn/api/tty.html">TTY</a></li>
+<li><a class="nav-dgram" href="dgram.html" tppabs="http://nodejs.cn/api/dgram.html">UDP/Datagram</a></li>
+<li><a class="nav-url" href="url.html" tppabs="http://nodejs.cn/api/url.html">URL</a></li>
+<li><a class="nav-util" href="util.html" tppabs="http://nodejs.cn/api/util.html">Utilities (&#x5B9E;&#x7528;&#x51FD;&#x6570;)</a></li>
+<li><a class="nav-v8" href="v8.html" tppabs="http://nodejs.cn/api/v8.html">V8</a></li>
+<li><a class="nav-vm" href="vm.html" tppabs="http://nodejs.cn/api/vm.html">VM (&#x865A;&#x62DF;&#x673A;)</a></li>
+<li><a class="nav-zlib" href="zlib.html" tppabs="http://nodejs.cn/api/zlib.html">ZLIB (&#x538B;&#x7F29;)</a></li>
+</ul>
+<div class="line"></div>
+
+
+    </div>
+
+    <div id="column1" data-id="assert" class="interior">
+      <header>
+        <h1>Node.js 6.9.5 &#x6587;&#x6863;</h1>
+        <div id="gtoc">
+          <p>
+            <a href="index.htm" tppabs="http://nodejs.cn/api/" name="toc">&#x7D22;&#x5F15;</a> |
+            <!--<a href="/api/all.html">ÂçïÈ°µÈù¢ÊòæÁ§∫</a> |-->
+            <a href="assert.json" tppabs="http://nodejs.cn/api/assert.json">JSON&#x683C;&#x5F0F;</a> |
+            <a href="en/assert.html" tppabs="http://nodejs.cn/api/en/assert.html">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a>
+          </p>
+        </div>
+        <hr>
+      </header>
+
+      <div id="toc">
+        <h2>&#x76EE;&#x5F55;</h2>
+        <ul>
+<li><span class="stability_3"><a href="#assert_assert">assert (&#x65AD;&#x8A00;)</a></span><ul>
+<li><span class="stability_undefined"><a href="#assert_assert_value_message">assert(value[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_deepequal_actual_expected_message">assert.deepEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_deepstrictequal_actual_expected_message">assert.deepStrictEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_doesnotthrow_block_error_message">assert.doesNotThrow(block[, error][, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_equal_actual_expected_message">assert.equal(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_fail_actual_expected_message_operator">assert.fail(actual, expected, message, operator)</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_iferror_value">assert.ifError(value)</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_notdeepequal_actual_expected_message">assert.notDeepEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_notdeepstrictequal_actual_expected_message">assert.notDeepStrictEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_notequal_actual_expected_message">assert.notEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_notstrictequal_actual_expected_message">assert.notStrictEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_ok_value_message">assert.ok(value[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_strictequal_actual_expected_message">assert.strictEqual(actual, expected[, message])</a></span></li>
+<li><span class="stability_undefined"><a href="#assert_assert_throws_block_error_message">assert.throws(block[, error][, message])</a></span></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+
+      <div id="apicontent">
+        <h1>assert (&#x65AD;&#x8A00;)<span><a class="mark" href="#assert_assert" id="assert_assert">#</a></span></h1><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<pre class="api_stability api_stability_3">&#x7A33;&#x5B9A;&#x6027;: 3 - &#x9501;&#x5B9A;&#x7684;</pre><p><code>assert</code> &#x6A21;&#x5757;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x7EC4;&#x7B80;&#x5355;&#x7684;&#x65AD;&#x8A00;&#x6D4B;&#x8BD5;&#x96C6;&#x5408;&#xFF0C;&#x7528;&#x4E8E;&#x6D4B;&#x8BD5;&#x4E0D;&#x53D8;&#x91CF;&#x3002;
+&#x8BE5;&#x6A21;&#x5757;&#x662F;&#x4F9B; Node.js &#x5185;&#x90E8;&#x4F7F;&#x7528;&#x7684;&#xFF0C;&#x4F46;&#x53EF;&#x4EE5;&#x901A;&#x8FC7; <code>require(&apos;assert&apos;)</code> &#x5728;&#x4EE3;&#x7801;&#x4E2D;&#x4F7F;&#x7528;&#x3002;
+<code>assert</code> &#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x6D4B;&#x8BD5;&#x6846;&#x67B6;&#xFF0C;&#x4E5F;&#x65E0;&#x610F;&#x6210;&#x4E3A;&#x901A;&#x7528;&#x7684;&#x65AD;&#x8A00;&#x5E93;&#x3002;</p>
+<p><code>assert</code> &#x6A21;&#x5757;&#x7684; API &#x662F;<a href="documentation.html#documentation_stability_index" tppabs="http://nodejs.cn/api/documentation.html#documentation_stability_index">&#x9501;&#x5B9A;&#x7684;</a>&#x3002;
+&#x8FD9;&#x610F;&#x5473;&#x7740;&#x5C06;&#x4E0D;&#x4F1A;&#x65B0;&#x589E;&#x6216;&#x66F4;&#x6539;&#x4EFB;&#x4F55;&#x7531;&#x8BE5;&#x6A21;&#x5757;&#x5B9E;&#x73B0;&#x4E0E;&#x516C;&#x5F00;&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
+<h2>assert(value[, message])<span><a class="mark" href="#assert_assert_value_message" id="assert_assert_value_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_value_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_value_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.5.9</span>
+</div><p><a href="#assert_assert_ok_value_message"><code>assert.ok()</code></a> &#x7684;&#x522B;&#x540D;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert(true);
+// &#x901A;&#x8FC7;
+assert(1);
+// &#x901A;&#x8FC7;
+assert(false);
+// &#x629B;&#x51FA; &quot;AssertionError: false == true&quot;
+assert(0);
+// &#x629B;&#x51FA; &quot;AssertionError: 0 == true&quot;
+assert(false, &apos;it\&apos;s false&apos;);
+// &#x629B;&#x51FA; &quot;AssertionError: it&apos;s false&quot;
+</code></pre>
+<h2>assert.deepEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_deepequal_actual_expected_message" id="assert_assert_deepequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_deepequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_deepequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;&#x3002;
+&#x539F;&#x59CB;&#x503C;&#x4F1A;&#x4F7F;&#x7528;&#x76F8;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>==</code>&#xFF09;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x3002;</p>
+<p>&#x53EA;&#x6BD4;&#x8F83;&#x53EF;&#x679A;&#x4E3E;&#x7684;&#x81EA;&#x8EAB;&#x5C5E;&#x6027;&#x3002;
+<code>deepEqual()</code> &#x4E0D;&#x6D4B;&#x8BD5;&#x5BF9;&#x8C61;&#x7684;&#x539F;&#x578B;&#x3001;&#x8FDE;&#x63A5;&#x7B26;&#x3001;&#x6216;&#x4E0D;&#x53EF;&#x679A;&#x4E3E;&#x7684;&#x5C5E;&#x6027;&#x3002;
+&#x8FD9;&#x4F1A;&#x5F15;&#x8D77;&#x4E00;&#x4E9B;&#x6F5C;&#x5728;&#x7684;&#x610F;&#x6599;&#x4E4B;&#x5916;&#x7684;&#x7ED3;&#x679C;&#x3002;
+&#x4F8B;&#x5982;&#xFF0C;&#x4E0B;&#x9762;&#x7684;&#x4F8B;&#x5B50;&#x4E0D;&#x4F1A;&#x629B;&#x51FA; <code>AssertionError</code>&#xFF0C;&#x56E0;&#x4E3A; <a href="errors.html#errors_class_error" tppabs="http://nodejs.cn/api/errors.html#errors_class_error">Error</a> &#x5BF9;&#x8C61;&#x7684;&#x5C5E;&#x6027;&#x662F;&#x4E0D;&#x53EF;&#x679A;&#x4E3E;&#x7684;&#xFF1A;</p>
+<pre><code class="lang-js">// &#x6CE8;&#x610F;&#xFF1A;&#x8FD9;&#x4E0D;&#x4F1A;&#x629B;&#x51FA; AssertionError&#xFF01;
+assert.deepEqual(Error(&apos;a&apos;), Error(&apos;b&apos;));
+</code></pre>
+<p>&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;&#x610F;&#x5473;&#x7740;&#x5B50;&#x5BF9;&#x8C61;&#x7684;&#x53EF;&#x679A;&#x4E3E;&#x7684;&#x81EA;&#x8EAB;&#x5C5E;&#x6027;&#x4E5F;&#x4F1A;&#x88AB;&#x6BD4;&#x8F83;&#xFF1A;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+const obj1 = {
+  a : {
+    b : 1
+  }
+};
+const obj2 = {
+  a : {
+    b : 2
+  }
+};
+const obj3 = {
+  a : {
+    b : 1
+  }
+};
+const obj4 = Object.create(obj1);
+
+assert.deepEqual(obj1, obj1);
+// &#x901A;&#x8FC7;&#xFF0C;&#x5BF9;&#x8C61;&#x4E0E;&#x81EA;&#x8EAB;&#x76F8;&#x7B49;
+
+assert.deepEqual(obj1, obj2);
+// &#x629B;&#x51FA; AssertionError: { a: { b: 1 } } deepEqual { a: { b: 2 } }
+// b &#x7684;&#x503C;&#x4E0D;&#x540C;
+
+assert.deepEqual(obj1, obj3);
+// &#x901A;&#x8FC7;&#xFF0C;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x76F8;&#x7B49;
+
+assert.deepEqual(obj1, obj4);
+// &#x629B;&#x51FA; AssertionError: { a: { b: 1 } } deepEqual {}
+// &#x539F;&#x578B;&#x4F1A;&#x88AB;&#x5FFD;&#x7565;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x4E0D;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.deepStrictEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_deepstrictequal_actual_expected_message" id="assert_assert_deepstrictequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_deepstrictequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_deepstrictequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v1.2.0</span>
+</div><p>&#x5927;&#x591A;&#x6570;&#x60C5;&#x51B5;&#x4E0B;&#x7B49;&#x540C;&#x4E8E; <code>assert.deepEqual()</code>&#xFF0C;&#x4F46;&#x6709;&#x4E24;&#x4E2A;&#x4F8B;&#x5916;&#x3002;
+&#x9996;&#x5148;&#xFF0C;&#x539F;&#x59CB;&#x503C;&#x4F7F;&#x7528;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>===</code>&#xFF09;&#x8FDB;&#x884C;&#x6BD4;&#x8F83;&#x3002;
+&#x5176;&#x6B21;&#xFF0C;&#x5BF9;&#x8C61;&#x5BF9;&#x6BD4;&#x5305;&#x62EC;&#x4E25;&#x683C;&#x6BD4;&#x8F83;&#x5B83;&#x4EEC;&#x7684;&#x539F;&#x578B;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.deepEqual({a:1}, {a:&apos;1&apos;});
+// &#x901A;&#x8FC7;&#xFF0C;&#x56E0;&#x4E3A; 1 == &apos;1&apos;
+
+assert.deepStrictEqual({a:1}, {a:&apos;1&apos;});
+// &#x629B;&#x51FA; AssertionError: { a: 1 } deepStrictEqual { a: &apos;1&apos; }
+// &#x56E0;&#x4E3A; 1 !== &apos;1&apos; &#x4F7F;&#x7528;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x4E0D;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.doesNotThrow(block[, error][, message])<span><a class="mark" href="#assert_assert_doesnotthrow_block_error_message" id="assert_assert_doesnotthrow_block_error_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_doesnotthrow_block_error_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_doesnotthrow_block_error_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x65AD;&#x8A00; <code>block</code> &#x51FD;&#x6570;&#x4E0D;&#x4F1A;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#x3002;
+&#x67E5;&#x770B; <a href="#assert_assert_throws_block_error_message">assert.throws()</a> &#x4E86;&#x89E3;&#x66F4;&#x591A;&#x3002;</p>
+<p>&#x5F53;&#x8C03;&#x7528; <code>assert.doesNotThrow()</code> &#x65F6;&#xFF0C;&#x5B83;&#x4F1A;&#x7ACB;&#x5373;&#x8C03;&#x7528; <code>block</code> &#x51FD;&#x6570;&#x3002;</p>
+<p>&#x5982;&#x679C; <code>block</code> &#x51FD;&#x6570;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#xFF0C;&#x5E76;&#x4E14;&#x9519;&#x8BEF;&#x7C7B;&#x578B;&#x4E0E; <code>error</code> &#x53C2;&#x6570;&#x6307;&#x5B9A;&#x7684;&#x76F8;&#x540C;&#xFF0C;&#x5219;&#x629B;&#x51FA; <code>AssertionError</code>&#x3002;
+&#x5982;&#x679C;&#x9519;&#x8BEF;&#x7C7B;&#x578B;&#x4E0D;&#x76F8;&#x540C;&#xFF0C;&#x6216; <code>error</code> &#x53C2;&#x6570;&#x662F; <code>undefined</code>&#xFF0C;&#x5219;&#x9519;&#x8BEF;&#x56DE;&#x4F20;&#x7ED9;&#x8C03;&#x7528;&#x8005;&#x3002;</p>
+<p>&#x4EE5;&#x4E0B;&#x4F8B;&#x5B50;&#x4F1A;&#x629B;&#x51FA; <a href="errors.html#errors_class_typeerror" tppabs="http://nodejs.cn/api/errors.html#errors_class_typeerror">TypeError</a>&#xFF0C;&#x56E0;&#x4E3A;&#x5728;&#x65AD;&#x8A00;&#x4E2D;&#x6CA1;&#x6709;&#x5339;&#x914D;&#x7684;&#x9519;&#x8BEF;&#x7C7B;&#x578B;&#xFF1A;</p>
+<pre><code class="lang-js">assert.doesNotThrow(
+  () =&gt; {
+    throw new TypeError(&apos;Wrong value&apos;);
+  },
+  SyntaxError
+);
+</code></pre>
+<p>&#x4EE5;&#x4E0B;&#x4F8B;&#x5B50;&#x4F1A;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; &apos;Got unwanted exception (TypeError)..&apos; &#x4FE1;&#x606F;&#x7684; <code>AssertionError</code>&#xFF1A;</p>
+<pre><code class="lang-js">assert.doesNotThrow(
+  () =&gt; {
+    throw new TypeError(&apos;Wrong value&apos;);
+  },
+  TypeError
+);
+</code></pre>
+<p>&#x5982;&#x679C;&#x629B;&#x51FA;&#x4E86; <code>AssertionError</code>&#xFF0C;&#x5E76;&#x4E14;&#x6709;&#x4E3A; <code>message</code> &#x53C2;&#x6570;&#x4F20;&#x503C;&#xFF0C;&#x5219; <code>message</code> &#x7684;&#x503C;&#x4F1A;&#x88AB;&#x8FFD;&#x52A0;&#x5230; <code>AssertionError</code> &#x7684;&#x6D88;&#x606F;&#x4E2D;&#xFF1A;</p>
+<pre><code class="lang-js">assert.doesNotThrow(
+  () =&gt; {
+    throw new TypeError(&apos;Wrong value&apos;);
+  },
+  TypeError,
+  &apos;Whoops&apos;
+);
+// &#x629B;&#x51FA; AssertionError: Got unwanted exception (TypeError). Whoops
+</code></pre>
+<h2>assert.equal(actual, expected[, message])<span><a class="mark" href="#assert_assert_equal_actual_expected_message" id="assert_assert_equal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_equal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_equal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x4F7F;&#x7528;&#x76F8;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>==</code>&#xFF09;&#x6765;&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x76F8;&#x7B49;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.equal(1, 1);
+// &#x901A;&#x8FC7;&#xFF0C;1 == 1
+assert.equal(1, &apos;1&apos;);
+// &#x901A;&#x8FC7;&#xFF0C;1 == &apos;1&apos;
+
+assert.equal(1, 2);
+// &#x629B;&#x51FA; AssertionError: 1 == 2
+assert.equal({a: {b: 1}}, {a: {b: 1}});
+// &#x629B;&#x51FA; AssertionError: { a: { b: 1 } } == { a: { b: 1 } }
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x4E0D;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.fail(actual, expected, message, operator)<span><a class="mark" href="#assert_assert_fail_actual_expected_message_operator" id="assert_assert_fail_actual_expected_message_operator">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_fail_actual_expected_message_operator" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_fail_actual_expected_message_operator">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x629B;&#x51FA; <code>AssertionError</code>&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x7684;&#x503C;&#x4E0D;&#x4E3A;&#x771F;&#xFF0C;&#x5219;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x4E3A; <code>actual</code> &#x548C; <code>expected</code> &#x7684;&#x503C;&#xFF0C;&#x5E76;&#x4EE5; <code>operator</code> &#x5206;&#x9694;&#x3002;
+&#x5426;&#x5219;&#xFF0C;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x4E3A; <code>message</code> &#x7684;&#x503C;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.fail(1, 2, undefined, &apos;&gt;&apos;);
+// &#x629B;&#x51FA; AssertionError: 1 &gt; 2
+
+assert.fail(1, 2, &apos;whoops&apos;, &apos;&gt;&apos;);
+// &#x629B;&#x51FA; AssertionError: whoops
+</code></pre>
+<h2>assert.ifError(value)<span><a class="mark" href="#assert_assert_iferror_value" id="assert_assert_iferror_value">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_iferror_value" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_iferror_value">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.97</span>
+</div><p>&#x5982;&#x679C; <code>value</code> &#x7684;&#x503C;&#x4E3A;&#x771F;&#xFF0C;&#x629B;&#x51FA; <code>value</code>&#x3002;
+&#x5F53;&#x6D4B;&#x8BD5;&#x56DE;&#x8C03;&#x51FD;&#x6570;&#x7684; <code>error</code> &#x53C2;&#x6570;&#x65F6;&#x975E;&#x5E38;&#x6709;&#x7528;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.ifError(0);
+// &#x901A;&#x8FC7;
+assert.ifError(1);
+// &#x629B;&#x51FA; 1
+assert.ifError(&apos;error&apos;);
+// &#x629B;&#x51FA; &apos;error&apos;
+assert.ifError(new Error());
+// &#x629B;&#x51FA; Error
+</code></pre>
+<h2>assert.notDeepEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_notdeepequal_actual_expected_message" id="assert_assert_notdeepequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_notdeepequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_notdeepequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x4E0D;&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;&#x3002;
+&#x4E0E; <a href="#assert_assert_deepequal_actual_expected_message">assert.deepEqual()</a> &#x76F8;&#x53CD;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+const obj1 = {
+  a : {
+    b : 1
+  }
+};
+const obj2 = {
+  a : {
+    b : 2
+  }
+};
+const obj3 = {
+  a : {
+    b : 1
+  }
+};
+const obj4 = Object.create(obj1);
+
+assert.notDeepEqual(obj1, obj1);
+// &#x629B;&#x51FA; AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+
+assert.notDeepEqual(obj1, obj2);
+// &#x901A;&#x8FC7;&#xFF0C;obj1 &#x4E0E; obj2 &#x4E0D;&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;
+
+assert.notDeepEqual(obj1, obj3);
+// &#x629B;&#x51FA; AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }
+
+assert.notDeepEqual(obj1, obj4);
+// &#x901A;&#x8FC7;&#xFF0C;obj1 &#x4E0E; obj4 &#x4E0D;&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x6DF1;&#x5EA6;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.notDeepStrictEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_notdeepstrictequal_actual_expected_message" id="assert_assert_notdeepstrictequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_notdeepstrictequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_notdeepstrictequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v1.2.0</span>
+</div><p>&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x4E0D;&#x6DF1;&#x5EA6;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x3002;
+&#x4E0E; <a href="#assert_assert_deepstrictequal_actual_expected_message">assert.deepStrictEqual()</a> &#x76F8;&#x53CD;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.notDeepEqual({a:1}, {a:&apos;1&apos;});
+// &#x629B;&#x51FA; AssertionError: { a: 1 } notDeepEqual { a: &apos;1&apos; }
+
+assert.notDeepStrictEqual({a:1}, {a:&apos;1&apos;});
+// &#x901A;&#x8FC7;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x6DF1;&#x5EA6;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.notEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_notequal_actual_expected_message" id="assert_assert_notequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_notequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_notequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x4F7F;&#x7528;&#x4E0D;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>!=</code>&#xFF09;&#x6765;&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x4E0D;&#x76F8;&#x7B49;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.notEqual(1, 2);
+// &#x901A;&#x8FC7;
+
+assert.notEqual(1, 1);
+// &#x629B;&#x51FA; AssertionError: 1 != 1
+
+assert.notEqual(1, &apos;1&apos;);
+// &#x629B;&#x51FA; AssertionError: 1 != &apos;1&apos;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.notStrictEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_notstrictequal_actual_expected_message" id="assert_assert_notstrictequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_notstrictequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_notstrictequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x4F7F;&#x7528;&#x4E25;&#x683C;&#x4E0D;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>!==</code>&#xFF09;&#x6765;&#x6D4B;&#x8BD5; <code>actual</code> &#x548C; <code>expected</code> &#x53C2;&#x6570;&#x662F;&#x5426;&#x4E0D;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.notStrictEqual(1, 2);
+// &#x901A;&#x8FC7;
+
+assert.notStrictEqual(1, 1);
+// &#x629B;&#x51FA; AssertionError: 1 !== 1
+
+assert.notStrictEqual(1, &apos;1&apos;);
+// &#x901A;&#x8FC7;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.ok(value[, message])<span><a class="mark" href="#assert_assert_ok_value_message" id="assert_assert_ok_value_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_ok_value_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_ok_value_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x6D4B;&#x8BD5; <code>value</code> &#x662F;&#x5426;&#x4E3A;&#x771F;&#x503C;&#x3002;
+&#x76F8;&#x5F53;&#x4E8E; <code>assert.equal(!!value, true, message)</code>&#x3002;</p>
+<p>&#x5982;&#x679C; <code>value</code> &#x4E0D;&#x4E3A;&#x771F;&#x503C;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.ok(true);
+// &#x901A;&#x8FC7;
+assert.ok(1);
+// &#x901A;&#x8FC7;
+assert.ok(false);
+// &#x629B;&#x51FA; &quot;AssertionError: false == true&quot;
+assert.ok(0);
+// &#x629B;&#x51FA; &quot;AssertionError: 0 == true&quot;
+assert.ok(false, &apos;it\&apos;s false&apos;);
+// &#x629B;&#x51FA; &quot;AssertionError: it&apos;s false&quot;
+</code></pre>
+<h2>assert.strictEqual(actual, expected[, message])<span><a class="mark" href="#assert_assert_strictequal_actual_expected_message" id="assert_assert_strictequal_actual_expected_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_strictequal_actual_expected_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_strictequal_actual_expected_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x4F7F;&#x7528;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x8FD0;&#x7B97;&#x7B26;&#xFF08;<code>===</code>&#xFF09;&#x6D4B;&#x8BD5;&#x662F;&#x5426;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#x3002;</p>
+<pre><code class="lang-js">const assert = require(&apos;assert&apos;);
+
+assert.strictEqual(1, 2);
+// &#x629B;&#x51FA; AssertionError: 1 === 2
+
+assert.strictEqual(1, 1);
+// &#x901A;&#x8FC7;
+
+assert.strictEqual(1, &apos;1&apos;);
+// &#x629B;&#x51FA; AssertionError: 1 === &apos;1&apos;
+</code></pre>
+<p>&#x5982;&#x679C;&#x4E24;&#x4E2A;&#x503C;&#x4E0D;&#x4E25;&#x683C;&#x76F8;&#x7B49;&#xFF0C;&#x5219;&#x629B;&#x51FA;&#x4E00;&#x4E2A;&#x5E26;&#x6709; <code>message</code> &#x5C5E;&#x6027;&#x7684; <code>AssertionError</code>&#xFF0C;&#x5176;&#x4E2D; <code>message</code> &#x5C5E;&#x6027;&#x7684;&#x503C;&#x7B49;&#x4E8E;&#x4F20;&#x5165;&#x7684; <code>message</code> &#x53C2;&#x6570;&#x7684;&#x503C;&#x3002;
+&#x5982;&#x679C; <code>message</code> &#x53C2;&#x6570;&#x4E3A; <code>undefined</code>&#xFF0C;&#x5219;&#x8F93;&#x51FA;&#x9ED8;&#x8BA4;&#x7684;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x3002;</p>
+<h2>assert.throws(block[, error][, message])<span><a class="mark" href="#assert_assert_throws_block_error_message" id="assert_assert_throws_block_error_message">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/assert.html#assert_assert_throws_block_error_message" tppabs="http://nodejs.cn/api/en/assert.html#assert_assert_throws_block_error_message">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.21</span>
+</div><p>&#x671F;&#x671B; <code>block</code> &#x51FD;&#x6570;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x6307;&#x5B9A; <code>error</code>&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x662F;&#x4E00;&#x4E2A;&#x6784;&#x9020;&#x51FD;&#x6570;&#x3001;<a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;</a>&#x3001;&#x6216;&#x6821;&#x9A8C;&#x51FD;&#x6570;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x6307;&#x5B9A; <code>message</code>&#xFF0C;&#x5F53; <code>block</code> &#x51FD;&#x6570;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#x65F6;&#xFF0C;<code>message</code> &#x4F1A;&#x4F5C;&#x4E3A;&#x9519;&#x8BEF;&#x4FE1;&#x606F;&#x4F20;&#x7ED9; <code>AssertionError</code>&#x3002;</p>
+<p>&#x4F7F;&#x7528;&#x6784;&#x9020;&#x51FD;&#x6570;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<pre><code class="lang-js">assert.throws(
+  () =&gt; {
+    throw new Error(&apos;Wrong value&apos;);
+  },
+  Error
+);
+</code></pre>
+<p>&#x4F7F;&#x7528;&#x6B63;&#x5219;&#x8868;&#x8FBE;&#x5F0F;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<pre><code class="lang-js">assert.throws(
+  () =&gt; {
+    throw new Error(&apos;Wrong value&apos;);
+  },
+  /value/
+);
+</code></pre>
+<p>&#x4F7F;&#x7528;&#x81EA;&#x5B9A;&#x4E49;&#x6821;&#x9A8C;&#x51FD;&#x6570;&#x7684;&#x4F8B;&#x5B50;&#xFF1A;</p>
+<pre><code class="lang-js">assert.throws(
+  () =&gt; {
+    throw new Error(&apos;Wrong value&apos;);
+  },
+  function(err) {
+    if ( (err instanceof Error) &amp;&amp; /value/.test(err) ) {
+      return true;
+    }
+  },
+  &apos;unexpected error&apos;
+);
+</code></pre>
+<p>&#x6CE8;&#x610F;&#xFF0C;<code>error</code> &#x53C2;&#x6570;&#x4E0D;&#x80FD;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#x3002;
+&#x5982;&#x679C;&#x7B2C;&#x4E8C;&#x4E2A;&#x53C2;&#x6570;&#x662F;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x5219;&#x89C6;&#x4E3A;&#x4E0D;&#x4F20; <code>error</code> &#x53C2;&#x6570;&#xFF0C;&#x4F20;&#x5165;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#x4F1A;&#x88AB;&#x5F53;&#x4F5C;&#x662F; <code>message</code> &#x7684;&#x503C;&#x3002;
+&#x8FD9;&#x53EF;&#x80FD;&#x4F1A;&#x5F15;&#x8D77;&#x8BEF;&#x89E3;&#xFF1A;</p>
+<pre><code class="lang-js">// &#x8FD9;&#x662F;&#x9519;&#x8BEF;&#x7684;&#xFF01;&#x4E0D;&#x8981;&#x8FD9;&#x4E48;&#x505A;&#xFF01;
+assert.throws(myFunction, &apos;missing foo&apos;, &apos;did not throw with expected message&apos;);
+
+// &#x5E94;&#x8BE5;&#x8FD9;&#x4E48;&#x505A;&#x3002;
+assert.throws(myFunction, /missing foo/, &apos;did not throw with expected message&apos;);
+</code></pre>
+
+      </div>
+    </div>
+  </div>
+  <script src="../static/api.js" tppabs="http://nodejs.cn/static/api.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+</body>
+</html>

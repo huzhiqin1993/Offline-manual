@@ -1,0 +1,237 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/errors.md",
+  "classes": [
+    {
+      "textRaw": "Class: Error",
+      "type": "class",
+      "name": "Error",
+      "desc": "<p>一个通用的 JavaScript <code>Error</code> 对象，它不表示错误发生的具体情况。\n<code>Error</code> 对象会捕捉一个“堆栈跟踪”，详细说明被实例化的 <code>Error</code> 对象在代码中的位置，并可能提供错误的文字描述。</p>\n<p>所有由 Node.js 产生的错误，包括所有系统的和 JavaScript 的错误都实例化自或继承自 <code>Error</code> 类。</p>\n",
+      "methods": [
+        {
+          "textRaw": "Error.captureStackTrace(targetObject[, constructorOpt])",
+          "type": "method",
+          "name": "captureStackTrace",
+          "desc": "<p>在 <code>targetObject</code> 上创建一个 <code>.stack</code> 属性，当访问时返回一个表示代码中调用 <code>Error.captureStackTrace()</code> 的位置的字符串。</p>\n<pre><code class=\"lang-js\">const myObject = {};\nError.captureStackTrace(myObject);\nmyObject.stack  // 类似 `new Error().stack`\n</code></pre>\n<p>跟踪的第一行，不是前缀为 <code>ErrorType: message</code>，而是调用 <code>targetObject.toString()</code> 的结果。</p>\n<p>可选的 <code>constructorOpt</code> 参数接受一个函数。\n如果提供了，则 <code>constructorOpt</code> 之上包括自身在内的全部栈帧都会被生成的堆栈跟踪省略。</p>\n<p><code>constructorOpt</code> 参数用在向最终用户隐藏错误生成的具体细节时非常有用。例如：</p>\n<pre><code class=\"lang-js\">function MyError() {\n  Error.captureStackTrace(this, MyError);\n}\n\n// 没传入 MyError 到 captureStackTrace，MyError 帧会显示在 .stack 属性。\n// 通过传入构造函数，可以省略该帧及其之上的所有帧。\nnew MyError().stack\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "targetObject"
+                },
+                {
+                  "name": "constructorOpt",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "Error.stackTraceLimit",
+          "name": "stackTraceLimit",
+          "desc": "<p><code>Error.stackTraceLimit</code> 属性指定了堆栈跟踪收集的栈帧数量（无论是 <code>new Error().stack</code> 或 <code>Error.captureStackTrace(obj)</code> 产生的）。</p>\n<p>默认值为 <code>10</code> ，但可设为任何有效的 JavaScript 数值。\n值改变后的变化会影响所有捕获到的堆栈跟踪。</p>\n<p>如果设为一个非数值或负数，则堆栈跟踪不会捕捉任何栈帧。</p>\n",
+          "properties": [
+            {
+              "textRaw": "error.message",
+              "name": "message",
+              "desc": "<p>返回错误的字符串描述，通过调用 <code>new Error(message)</code> 设置。\n传给构造函数的 <code>message</code> 也会出现在 <code>Error</code> 的堆栈跟踪的第一行。\n但是，<code>Error</code> 对象创建后改变这个属性可能不会改变堆栈跟踪的第一行。</p>\n<pre><code class=\"lang-js\">const err = new Error(&#39;错误信息&#39;);\nconsole.log(err.message);\n// 打印: 错误信息\n</code></pre>\n"
+            },
+            {
+              "textRaw": "error.stack",
+              "name": "stack",
+              "desc": "<p>返回一个字符串，描述代码中 <code>Error</code> 被实例化的位置。</p>\n<p>例子：</p>\n<pre><code class=\"lang-txt\">Error: Things keep happening!\n   at /home/gbusey/file.js:525:2\n   at Frobnicator.refrobulate (/home/gbusey/business-logic.js:424:21)\n   at Actor.&lt;anonymous&gt; (/home/gbusey/actors.js:400:8)\n   at increaseSynergy (/home/gbusey/actors.js:701:6)\n</code></pre>\n<p>第一行会被格式化为 <code>&lt;error class name&gt;: &lt;error message&gt;</code>，且带上一系列栈帧（每一行都以 &quot;at &quot; 开头）。\n每一帧描述了一个代码中导致错误生成的调用点。\nV8 引擎会试图显示每个函数的名称（变量名、函数名、或对象的方法名），但偶尔也可能找不到一个合适的名称。\n如果 V8 引擎没法确定一个函数的名称，则只显示帧的位置信息。\n否则，在位置信息的旁边会显示明确的函数名。</p>\n<p>注意，帧只由 JavaScript 函数产生。\n例如，同步地执行一个名为 <code>cheetahify</code> 的 C++ 插件，且插件自身调用一个 JavaScript 函数，代表 <code>cheetahify</code> 回调的栈帧不会出现在堆栈跟踪里：</p>\n<pre><code class=\"lang-js\">const cheetahify = require(&#39;./native-binding.node&#39;);\n\nfunction makeFaster() {\n  // cheetahify 同步地调用 speedy.\n  cheetahify(function speedy() {\n    throw new Error(&#39;oh no!&#39;);\n  });\n}\n\nmakeFaster(); // 会抛出：\n  // /home/gbusey/file.js:6\n  //     throw new Error(&#39;oh no!&#39;);\n  //           ^\n  // Error: oh no!\n  //     at speedy (/home/gbusey/file.js:6:11)\n  //     at makeFaster (/home/gbusey/file.js:5:3)\n  //     at Object.&lt;anonymous&gt; (/home/gbusey/file.js:10:1)\n  //     at Module._compile (module.js:456:26)\n  //     at Object.Module._extensions..js (module.js:474:10)\n  //     at Module.load (module.js:356:32)\n  //     at Function.Module._load (module.js:312:12)\n  //     at Function.Module.runMain (module.js:497:10)\n  //     at startup (node.js:119:16)\n  //     at node.js:906:3\n</code></pre>\n<p>位置信息会是其中之一：</p>\n<ul>\n<li><code>native</code>，帧表示一个 V8 引擎内部的调用（比如，<code>[].forEach</code>）。</li>\n<li><code>plain-filename.js:line:column</code>，帧表示一个 Node.js 内部的调用。</li>\n<li><code>/absolute/path/to/file.js:line:column</code>，帧表示一个用户程序或其依赖的调用。</li>\n</ul>\n<p>代表堆栈跟踪的字符串是在 <code>error.stack</code> 属性被访问时才生成的。</p>\n<p>堆栈跟踪捕获的帧的数量是由 <code>Error.stackTraceLimit</code> 或当前事件循环中可用的帧数量的最小值界定的。</p>\n<p>系统级的错误是由扩展的 <code>Error</code> 实例产生的，详见<a href=\"#errors_system_errors\">系统错误</a>。</p>\n"
+            }
+          ]
+        }
+      ],
+      "signatures": [
+        {
+          "params": [
+            {
+              "name": "message"
+            }
+          ],
+          "desc": "<p>新建一个 <code>Error</code> 实例，并设置 <code>error.message</code> 属性以提供文本信息。\n如果 <code>message</code> 传的是一个对象，则会调用 <code>message.toString()</code> 生成文本信息。\n<code>error.stack</code> 属性表示被调用的 <code>new Error()</code> 在代码中的位置。\n堆栈跟踪是基于 <a href=\"https://github.com/v8/v8/wiki/Stack-Trace-API\">V8 的堆栈跟踪 API</a> 的。\n堆栈跟踪只会取（a）异步代码执行的开头或（b）<code>Error.stackTraceLimit</code> 属性给出的栈帧中的最小项。</p>\n"
+        }
+      ]
+    },
+    {
+      "textRaw": "Class: RangeError",
+      "type": "class",
+      "name": "RangeError",
+      "desc": "<p><code>Error</code> 的一个子类，表明一个函数的一个给定的参数的值不在可接受的集合或范围内；\n无论是一个数字范围还是给定函数参数的选项的集合。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">require(&#39;net&#39;).connect(-1);\n  // 抛出 RangeError，端口应该是 &gt; 0 &amp;&amp; &lt; 65536\n</code></pre>\n<p>Node.js 会生成并以参数校验的形式立即抛出 <code>RangeError</code> 实例。</p>\n"
+    },
+    {
+      "textRaw": "Class: ReferenceError",
+      "type": "class",
+      "name": "ReferenceError",
+      "desc": "<p><code>Error</code> 的一个子类，表明试图访问一个未定义的变量。\n这些错误通常表明代码有拼写错误或程序已损坏。</p>\n<p>虽然客户端代码可能产生和传播这些错误，但在实践中，只有 V8 引擎会这么做。</p>\n<pre><code class=\"lang-js\">doesNotExist;\n  // 抛出 ReferenceError，在这个程序中 doesNotExist 不是一个变量。\n</code></pre>\n<p><code>ReferenceError</code> 实例有一个 <code>error.arguments</code> 属性，其值是一个只有单个元素（一个代表未定义的变量的字符串）的数组。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\ntry {\n  doesNotExist;\n} catch(err) {\n  assert(err.arguments[0], &#39;doesNotExist&#39;);\n}\n</code></pre>\n<p>除非应用程序是动态生成并运行的代码，否则 <code>ReferenceError</code> 实例应该始终被视为代码中或其依赖中的错误。</p>\n"
+    },
+    {
+      "textRaw": "Class: SyntaxError",
+      "type": "class",
+      "name": "SyntaxError",
+      "desc": "<p><code>Error</code> 的一个子类，表明程序不是有效的 JavaScript 代码。\n这些错误是代码执行的结果产生和传播的。\n代码执行可能产生自 <code>eval</code>、<code>Function</code>、<code>require</code> 或 <a href=\"vm.html\"/*tpa=http://nodejs.cn/api/vm.html*/>vm</a>。\n这些错误几乎都表明程序已损坏。</p>\n<pre><code class=\"lang-js\">try {\n  require(&#39;vm&#39;).runInThisContext(&#39;binary ! isNotOk&#39;);\n} catch(err) {\n  // err 是一个 SyntaxError\n}\n</code></pre>\n<p><code>SyntaxError</code> 实例在创建它们的上下文中是不可恢复的。\n它们只可被其他上下文捕获。</p>\n"
+    },
+    {
+      "textRaw": "Class: TypeError",
+      "type": "class",
+      "name": "TypeError",
+      "desc": "<p><code>Error</code> 的一个子类，表明提供的参数不是一个被允许的类型。\n例如，将一个函数传给一个期望字符串的参数会被视为一个 <code>TypeError</code>。</p>\n<pre><code class=\"lang-js\">require(&#39;url&#39;).parse(() =&gt; { });\n  // 抛出 TypeError，因为它期望的是一个字符串\n</code></pre>\n<p>Node.js 会生成并以参数校验的形式立即抛出 <code>TypeError</code> 实例。</p>\n"
+    }
+  ],
+  "miscs": [
+    {
+      "textRaw": "Errors",
+      "name": "Errors",
+      "type": "misc",
+      "desc": "<p>Node.js 中运行的应用程序一般会遇到以下四类错误：</p>\n<ul>\n<li>标准的 JavaScript 错误：<ul>\n<li>{EvalError} : 当调用 <code>eval()</code> 失败时抛出。</li>\n<li>{SyntaxError} : 当 JavaScript 语法错误时抛出。</li>\n<li>{RangeError} : 当一个值不在预期范围内时抛出。</li>\n<li>{ReferenceError} : 当使用未定义的变量时抛出。</li>\n<li>{TypeError} : 当传入错误类型的参数时抛出。</li>\n<li>{URIError} : 当一个全局的 URI 处理函数被误用时抛出。</li>\n</ul>\n</li>\n<li>由底层操作系的触发的系统错误，例如试图打开一个不存在的文件、试图向一个已关闭的 socket 发送数据等。</li>\n<li>由应用程序代码触发的用户自定义的错误。</li>\n<li>断言错误是错误的一个特殊的类，每当 Node.js 检测到一个不应该发生的异常逻辑时会触发。\n这类错误通常由 <code>assert</code> 模块触发。</li>\n</ul>\n<p>所有 Node.js 引起的 JavaScript 和系统错误都是继承自或实例化自标准的 JavaScript 的 {Error} 类，且保证至少提供类中的可用的属性。</p>\n",
+      "miscs": [
+        {
+          "textRaw": "Error Propagation and Interception",
+          "name": "Error Propagation and Interception",
+          "type": "misc",
+          "desc": "<p>Node.js 支持几种当应用程序运行时发生的错误的冒泡和处理的机制。\n如何报告和处理这些错误完全取决于错误的类型和被调用的 API 的风格。</p>\n<p>所有 JavaScript 错误都会被作为异常处理，异常会立即产生并使用标准的 JavaScript <code>throw</code> 机制抛出一个错误。\n这些都是使用 JavaScript 语言提供的 <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch\"><code>try / catch</code> 语句</a>处理的。</p>\n<pre><code class=\"lang-js\">// 抛出一个 ReferenceError，因为 z 为 undefined\ntry {\n  const m = 1;\n  const n = m + z;\n} catch (err) {\n  // 在这里处理错误。\n}\n</code></pre>\n<p>JavaScript 的 <code>throw</code> 机制的任何使用都会引起异常，异常必须使用 <code>try / catch</code> 处理，否则 Node.js 进程会立即退出。</p>\n<p>除了少数例外，同步的 API（任何不接受 <code>callback</code> 函数的阻塞方法，例如 <a href=\"fs.html#fs_fs_readfilesync_file_options\"><code>fs.readFileSync</code></a>）会使用 <code>throw</code> 报告错误。</p>\n<p>异步的 API 中发生的错误可能会以多种方式进行报告：</p>\n<ul>\n<li><p>大多数的异步方法都接受一个 <code>callback</code> 函数，该函数会接受一个 <code>Error</code> 对象传入作为第一个参数。\n如果第一个参数不是 <code>null</code> 而是一个 <code>Error</code> 实例，则说明发生了错误，应该进行处理。</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\nfs.readFile(&#39;一个不存在的文件&#39;, (err, data) =&gt; {\n  if (err) {\n    console.error(&#39;读取文件出错！&#39;, err);\n    return;\n  }\n  // 否则处理数据\n});\n</code></pre>\n</li>\n<li><p>当一个异步方法被一个 <code>EventEmitter</code> 对象调用时，错误会被分发到对象的 <code>&#39;error&#39;</code> 事件上。</p>\n<pre><code class=\"lang-js\">const net = require(&#39;net&#39;);\nconst connection = net.connect(&#39;localhost&#39;);\n\n// 添加一个 &#39;error&#39; 事件句柄到一个流：\nconnection.on(&#39;error&#39;, (err) =&gt; {\n  // 如果连接被服务器重置，或无法连接，或发生任何错误，则错误会被发送到这里。 \n  console.error(err);\n});\n\nconnection.pipe(process.stdout);\n</code></pre>\n</li>\n<li><p>Node.js API 中有一小部分普通的异步方法仍可能使用 <code>throw</code> 机制抛出异常，且必须使用 <code>try / catch</code> 处理。\n这些方法并没有一个完整的列表；请参阅各个方法的文档以确定所需的合适的错误处理机制。</p>\n</li>\n</ul>\n<p><code>&#39;error&#39;</code> 事件机制的使用常见于<a href=\"stream.html\"/*tpa=http://nodejs.cn/api/stream.html*/>基于流</a>和<a href=\"events.html#events_class_eventemitter\">基于事件触发器</a>的 API，它们本身就代表了一系列的异步操作（相对于要么成功要么失败的单一操作）。</p>\n<p>对于所有的 <code>EventEmitter</code> 对象，如果没有提供一个 <code>&#39;error&#39;</code> 事件句柄，则错误会被抛出，并造成 Node.js 进程报告一个未处理的异常且随即崩溃，除非：\n适当地使用 <a href=\"domain.html\"/*tpa=http://nodejs.cn/api/domain.html*/><code>domain</code></a> 模块或已经注册了一个 <a href=\"process.html#process_event_uncaughtexception\"><code>process.on(&#39;uncaughtException&#39;)</code></a> 事件的句柄。</p>\n<pre><code class=\"lang-js\">const EventEmitter = require(&#39;events&#39;);\nconst ee = new EventEmitter();\n\nsetImmediate(() =&gt; {\n  // 这会使进程崩溃，因为还为添加 &#39;error&#39; 事件句柄。\n  ee.emit(&#39;error&#39;, new Error(&#39;这会崩溃&#39;));\n});\n</code></pre>\n<p>这种方式产生的错误无法使用 <code>try / catch</code> 截获，因为它们是在调用的代码已经退出后抛出的。</p>\n<p>开发者必须查阅各个方法的文档以明确在错误发生时这些方法是如何冒泡的。</p>\n",
+          "miscs": [
+            {
+              "textRaw": "Node.js style callbacks",
+              "name": "Node.js style callbacks",
+              "type": "misc",
+              "desc": "<p>大多数由 Node.js 核心 API 暴露出来的异步方法都遵循一个被称为“Node.js 风格的回调”的惯用模式。\n使用这种模式，一个回调函数是作为一个参数传给方法的。\n当操作完成或发生错误时，回调函数会被调用，并带上错误对象（如果有）作为第一个参数。\n如果没有发生错误，则第一个参数为 <code>null</code>。</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\nfunction nodeStyleCallback(err, data) {\n if (err) {\n   console.error(&#39;有一个错误&#39;, err);\n   return;\n }\n console.log(data);\n}\n\nfs.readFile(&#39;/some/file/that/does-not-exist&#39;, nodeStyleCallback);\nfs.readFile(&#39;/some/file/that/does-exist&#39;, nodeStyleCallback)\n</code></pre>\n<p>JavaScript 的 <code>try / catch</code> 机制无法用于捕获由异步 API 引起的错误。\n尝试使用 <code>throw</code> 而不是一个 Node.js 风格的回调，是初学者常犯的错误：</p>\n<pre><code class=\"lang-js\">// 这无法使用：\nconst fs = require(&#39;fs&#39;);\n\ntry {\n  fs.readFile(&#39;/some/file/that/does-not-exist&#39;, (err, data) =&gt; {\n    // 假设的错误：在这里抛出\n    if (err) {\n      throw err;\n    }\n  });\n} catch(err) {\n  // 这不会捕获到抛出！\n  console.log(err);\n}\n</code></pre>\n<p>这无法使用，因为传给 <code>fs.readFile()</code> 的回调函数是被异步地调用。\n当回调被调用时，周围的代码（包括 <code>try { } catch(err) { }</code> 区域）已经退出。\n大多数情况下，在回调内抛出一个错误会使 Node.js 进程崩溃。\n如果<a href=\"domain.html\"/*tpa=http://nodejs.cn/api/domain.html*/>域</a>已启用，或已在 <code>process.on(&#39;uncaughtException&#39;)</code> 注册了一个句柄，则这些错误可被捕获。</p>\n"
+            }
+          ]
+        },
+        {
+          "textRaw": "Exceptions vs. Errors",
+          "name": "Exceptions vs. Errors",
+          "type": "misc",
+          "desc": "<p>JavaScript 异常是一个作为一个无效操作的结果或作为一个 <code>throw</code> 声明的目标所抛出的值。\n虽然它不要求这些值是 <code>Error</code> 的实例或继承自 <code>Error</code> 的类的实例，但所有通过 Node.js 或 JavaScript 运行时抛出的异常都是 <code>Error</code> 实例。</p>\n<p>有些异常在 JavaScript 层是无法恢复的。\n这些异常总会引起 Node.js 进程的崩溃。\n例如 <code>assert()</code> 检测或在 C++ 层调用的 <code>abort()</code>。</p>\n"
+        },
+        {
+          "textRaw": "System Errors",
+          "name": "system_errors",
+          "desc": "<p>系统错误是当程序运行环境中发生异常时产生的。\n特别是，当应用程序违反了操作系统的限制时发生的操作错误，例如试图读取一个不存在的文件或用户没有足够的权限。</p>\n<p>系统错误通常产生于系统调用层级。\n在大多数 Unix 系统上，可通过运行 <code>man 2 intro</code>、<code>man 3 errno</code>、或<a href=\"http://man7.org/linux/man-pages/man3/errno.3.html\">在线文档</a>获取错误代码的详细清单和含义。</p>\n<p>系统错误是由扩展的 <code>Error</code> 对象加上附加属性表现的。</p>\n",
+          "classes": [
+            {
+              "textRaw": "Class: System Error",
+              "type": "class",
+              "name": "System",
+              "properties": [
+                {
+                  "textRaw": "http://nodejs.cn/api/error.code",
+                  "name": "code",
+                  "desc": "<p>返回一个表示错误码的字符串，总是 <code>E</code> 带上一串大写字母，参考 <code>man 2 intro</code>。</p>\n"
+                },
+                {
+                  "textRaw": "error.errno",
+                  "name": "errno",
+                  "desc": "<p>返回一个与错误码对应的负数，可参考 <code>man 2 intro</code>。\n例如，<code>ENOENT</code> 错误的 <code>errno</code> 为 <code>-2</code>，因为 <code>ENOENT</code> 的错误码是 <code>2</code>。</p>\n"
+                },
+                {
+                  "textRaw": "error.syscall",
+                  "name": "syscall",
+                  "desc": "<p>返回一个描述失败的<a href=\"http://man7.org/linux/man-pages/man2/syscall.2.html\">系统调用</a>的字符串。</p>\n"
+                }
+              ]
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "Common System Errors",
+              "name": "common_system_errors",
+              "desc": "<p>以下列表是不完整的，但列举了编写 Node.js 程序时会遇到的一些常见的系统错误。\n详细的列表可从 <a href=\"http://man7.org/linux/man-pages/man3/errno.3.html\">ERRNO 文档</a>找到。</p>\n<ul>\n<li><p><code>EACCES</code> (拒绝访问): 试图以被一个文件的访问权限禁止的方式访问一个文件。</p>\n</li>\n<li><p><code>EADDRINUSE</code> (地址已被使用):  试图绑定一个服务器（<a href=\"net.html\"/*tpa=http://nodejs.cn/api/net.html*/><code>net</code></a>、<a href=\"http.html\"/*tpa=http://nodejs.cn/api/http.html*/><code>http</code></a> 或 <a href=\"https.html\"/*tpa=http://nodejs.cn/api/https.html*/><code>https</code></a>）到本地地址，但因另一个本地系统的服务器已占用了该地址而导致失败。</p>\n</li>\n<li><p><code>ECONNREFUSED</code> (连接被拒绝): 无法连接，因为目标机器积极拒绝。\n这通常是因为试图连接到外部主机上的废弃的服务。</p>\n</li>\n<li><p><code>ECONNRESET</code> (连接被重置): 一个连接被强行关闭。\n这通常是因为连接到远程 socket 超时或重启。\n常发生于 <a href=\"http.html\"/*tpa=http://nodejs.cn/api/http.html*/><code>http</code></a> 和 <a href=\"net.html\"/*tpa=http://nodejs.cn/api/net.html*/><code>net</code></a> 模块。</p>\n</li>\n<li><p><code>EEXIST</code> (文件已存在): 一个操作的目标文件已存在，而要求目标不存在。</p>\n</li>\n<li><p><code>EISDIR</code> (是一个目录): 一个操作要求一个文件，但给定的路径是一个目录。</p>\n</li>\n<li><p><code>EMFILE</code> (系统打开了太多文件): 已达到系统<a href=\"https://en.wikipedia.org/wiki/File_descriptor\">文件描述符</a>允许的最大数量，且描述符的请求不能被满足直到至少关闭其中一个。\n当一次并行打开多个文件时会发生这个错误，尤其是在进程的文件描述限制数量较低的操作系统（如 OS X）。\n要解决这个限制，可在运行 Node.js 进程的同一 shell 中运行 <code>ulimit -n 2048</code>。</p>\n</li>\n<li><p><code>ENOENT</code> (无此文件或目录): 通常是由 <a href=\"fs.html\"/*tpa=http://nodejs.cn/api/fs.html*/><code>fs</code></a> 操作引起的，表明指定的路径不存在，即给定的路径找不到文件或目录。</p>\n</li>\n<li><p><code>ENOTDIR</code> (不是一个目录): 给定的路径虽然存在，但不是一个目录。\n通常是由 <a href=\"fs.html#fs_fs_readdir_path_options_callback\"><code>fs.readdir</code></a> 引起的。</p>\n</li>\n<li><p><code>ENOTEMPTY</code> (目录非空): 一个操作的目标是一个非空的目录，而要求的是一个空目录。\n通常是由 <a href=\"fs.html#fs_fs_unlink_path_callback\"><code>fs.unlink</code></a> 引起的。</p>\n</li>\n<li><p><code>EPERM</code> (操作不被允许): 试图执行一个需要更高权限的操作。</p>\n</li>\n<li><p><code>EPIPE</code> (管道损坏): 写入一个管道、socket 或 FIFO 时没有进程读取数据。\n常见于 <a href=\"net.html\"/*tpa=http://nodejs.cn/api/net.html*/><code>net</code></a> 和 <a href=\"http.html\"/*tpa=http://nodejs.cn/api/http.html*/><code>http</code></a> 层，表明远端要写入的流已被关闭。</p>\n</li>\n<li><p><code>ETIMEDOUT</code> (操作超时): 一个连接或发送的请求失败，因为连接方在一段时间后没有做出合适的响应。\n常见于 <a href=\"http.html\"/*tpa=http://nodejs.cn/api/http.html*/><code>http</code></a> 或 <a href=\"net.html\"/*tpa=http://nodejs.cn/api/net.html*/><code>net</code></a>。\n往往标志着 <code>socket.end()</code> 没有被正确地调用。</p>\n</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "Common System Errors"
+            }
+          ],
+          "type": "misc",
+          "displayName": "System Errors"
+        }
+      ],
+      "classes": [
+        {
+          "textRaw": "Class: Error",
+          "type": "class",
+          "name": "Error",
+          "desc": "<p>一个通用的 JavaScript <code>Error</code> 对象，它不表示错误发生的具体情况。\n<code>Error</code> 对象会捕捉一个“堆栈跟踪”，详细说明被实例化的 <code>Error</code> 对象在代码中的位置，并可能提供错误的文字描述。</p>\n<p>所有由 Node.js 产生的错误，包括所有系统的和 JavaScript 的错误都实例化自或继承自 <code>Error</code> 类。</p>\n",
+          "methods": [
+            {
+              "textRaw": "Error.captureStackTrace(targetObject[, constructorOpt])",
+              "type": "method",
+              "name": "captureStackTrace",
+              "desc": "<p>在 <code>targetObject</code> 上创建一个 <code>.stack</code> 属性，当访问时返回一个表示代码中调用 <code>Error.captureStackTrace()</code> 的位置的字符串。</p>\n<pre><code class=\"lang-js\">const myObject = {};\nError.captureStackTrace(myObject);\nmyObject.stack  // 类似 `new Error().stack`\n</code></pre>\n<p>跟踪的第一行，不是前缀为 <code>ErrorType: message</code>，而是调用 <code>targetObject.toString()</code> 的结果。</p>\n<p>可选的 <code>constructorOpt</code> 参数接受一个函数。\n如果提供了，则 <code>constructorOpt</code> 之上包括自身在内的全部栈帧都会被生成的堆栈跟踪省略。</p>\n<p><code>constructorOpt</code> 参数用在向最终用户隐藏错误生成的具体细节时非常有用。例如：</p>\n<pre><code class=\"lang-js\">function MyError() {\n  Error.captureStackTrace(this, MyError);\n}\n\n// 没传入 MyError 到 captureStackTrace，MyError 帧会显示在 .stack 属性。\n// 通过传入构造函数，可以省略该帧及其之上的所有帧。\nnew MyError().stack\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targetObject"
+                    },
+                    {
+                      "name": "constructorOpt",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": [
+            {
+              "textRaw": "Error.stackTraceLimit",
+              "name": "stackTraceLimit",
+              "desc": "<p><code>Error.stackTraceLimit</code> 属性指定了堆栈跟踪收集的栈帧数量（无论是 <code>new Error().stack</code> 或 <code>Error.captureStackTrace(obj)</code> 产生的）。</p>\n<p>默认值为 <code>10</code> ，但可设为任何有效的 JavaScript 数值。\n值改变后的变化会影响所有捕获到的堆栈跟踪。</p>\n<p>如果设为一个非数值或负数，则堆栈跟踪不会捕捉任何栈帧。</p>\n",
+              "properties": [
+                {
+                  "textRaw": "error.message",
+                  "name": "message",
+                  "desc": "<p>返回错误的字符串描述，通过调用 <code>new Error(message)</code> 设置。\n传给构造函数的 <code>message</code> 也会出现在 <code>Error</code> 的堆栈跟踪的第一行。\n但是，<code>Error</code> 对象创建后改变这个属性可能不会改变堆栈跟踪的第一行。</p>\n<pre><code class=\"lang-js\">const err = new Error(&#39;错误信息&#39;);\nconsole.log(err.message);\n// 打印: 错误信息\n</code></pre>\n"
+                },
+                {
+                  "textRaw": "error.stack",
+                  "name": "stack",
+                  "desc": "<p>返回一个字符串，描述代码中 <code>Error</code> 被实例化的位置。</p>\n<p>例子：</p>\n<pre><code class=\"lang-txt\">Error: Things keep happening!\n   at /home/gbusey/file.js:525:2\n   at Frobnicator.refrobulate (/home/gbusey/business-logic.js:424:21)\n   at Actor.&lt;anonymous&gt; (/home/gbusey/actors.js:400:8)\n   at increaseSynergy (/home/gbusey/actors.js:701:6)\n</code></pre>\n<p>第一行会被格式化为 <code>&lt;error class name&gt;: &lt;error message&gt;</code>，且带上一系列栈帧（每一行都以 &quot;at &quot; 开头）。\n每一帧描述了一个代码中导致错误生成的调用点。\nV8 引擎会试图显示每个函数的名称（变量名、函数名、或对象的方法名），但偶尔也可能找不到一个合适的名称。\n如果 V8 引擎没法确定一个函数的名称，则只显示帧的位置信息。\n否则，在位置信息的旁边会显示明确的函数名。</p>\n<p>注意，帧只由 JavaScript 函数产生。\n例如，同步地执行一个名为 <code>cheetahify</code> 的 C++ 插件，且插件自身调用一个 JavaScript 函数，代表 <code>cheetahify</code> 回调的栈帧不会出现在堆栈跟踪里：</p>\n<pre><code class=\"lang-js\">const cheetahify = require(&#39;./native-binding.node&#39;);\n\nfunction makeFaster() {\n  // cheetahify 同步地调用 speedy.\n  cheetahify(function speedy() {\n    throw new Error(&#39;oh no!&#39;);\n  });\n}\n\nmakeFaster(); // 会抛出：\n  // /home/gbusey/file.js:6\n  //     throw new Error(&#39;oh no!&#39;);\n  //           ^\n  // Error: oh no!\n  //     at speedy (/home/gbusey/file.js:6:11)\n  //     at makeFaster (/home/gbusey/file.js:5:3)\n  //     at Object.&lt;anonymous&gt; (/home/gbusey/file.js:10:1)\n  //     at Module._compile (module.js:456:26)\n  //     at Object.Module._extensions..js (module.js:474:10)\n  //     at Module.load (module.js:356:32)\n  //     at Function.Module._load (module.js:312:12)\n  //     at Function.Module.runMain (module.js:497:10)\n  //     at startup (node.js:119:16)\n  //     at node.js:906:3\n</code></pre>\n<p>位置信息会是其中之一：</p>\n<ul>\n<li><code>native</code>，帧表示一个 V8 引擎内部的调用（比如，<code>[].forEach</code>）。</li>\n<li><code>plain-filename.js:line:column</code>，帧表示一个 Node.js 内部的调用。</li>\n<li><code>/absolute/path/to/file.js:line:column</code>，帧表示一个用户程序或其依赖的调用。</li>\n</ul>\n<p>代表堆栈跟踪的字符串是在 <code>error.stack</code> 属性被访问时才生成的。</p>\n<p>堆栈跟踪捕获的帧的数量是由 <code>Error.stackTraceLimit</code> 或当前事件循环中可用的帧数量的最小值界定的。</p>\n<p>系统级的错误是由扩展的 <code>Error</code> 实例产生的，详见<a href=\"#errors_system_errors\">系统错误</a>。</p>\n"
+                }
+              ]
+            }
+          ],
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "message"
+                }
+              ],
+              "desc": "<p>新建一个 <code>Error</code> 实例，并设置 <code>error.message</code> 属性以提供文本信息。\n如果 <code>message</code> 传的是一个对象，则会调用 <code>message.toString()</code> 生成文本信息。\n<code>error.stack</code> 属性表示被调用的 <code>new Error()</code> 在代码中的位置。\n堆栈跟踪是基于 <a href=\"https://github.com/v8/v8/wiki/Stack-Trace-API\">V8 的堆栈跟踪 API</a> 的。\n堆栈跟踪只会取（a）异步代码执行的开头或（b）<code>Error.stackTraceLimit</code> 属性给出的栈帧中的最小项。</p>\n"
+            }
+          ]
+        },
+        {
+          "textRaw": "Class: RangeError",
+          "type": "class",
+          "name": "RangeError",
+          "desc": "<p><code>Error</code> 的一个子类，表明一个函数的一个给定的参数的值不在可接受的集合或范围内；\n无论是一个数字范围还是给定函数参数的选项的集合。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">require(&#39;net&#39;).connect(-1);\n  // 抛出 RangeError，端口应该是 &gt; 0 &amp;&amp; &lt; 65536\n</code></pre>\n<p>Node.js 会生成并以参数校验的形式立即抛出 <code>RangeError</code> 实例。</p>\n"
+        },
+        {
+          "textRaw": "Class: ReferenceError",
+          "type": "class",
+          "name": "ReferenceError",
+          "desc": "<p><code>Error</code> 的一个子类，表明试图访问一个未定义的变量。\n这些错误通常表明代码有拼写错误或程序已损坏。</p>\n<p>虽然客户端代码可能产生和传播这些错误，但在实践中，只有 V8 引擎会这么做。</p>\n<pre><code class=\"lang-js\">doesNotExist;\n  // 抛出 ReferenceError，在这个程序中 doesNotExist 不是一个变量。\n</code></pre>\n<p><code>ReferenceError</code> 实例有一个 <code>error.arguments</code> 属性，其值是一个只有单个元素（一个代表未定义的变量的字符串）的数组。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\ntry {\n  doesNotExist;\n} catch(err) {\n  assert(err.arguments[0], &#39;doesNotExist&#39;);\n}\n</code></pre>\n<p>除非应用程序是动态生成并运行的代码，否则 <code>ReferenceError</code> 实例应该始终被视为代码中或其依赖中的错误。</p>\n"
+        },
+        {
+          "textRaw": "Class: SyntaxError",
+          "type": "class",
+          "name": "SyntaxError",
+          "desc": "<p><code>Error</code> 的一个子类，表明程序不是有效的 JavaScript 代码。\n这些错误是代码执行的结果产生和传播的。\n代码执行可能产生自 <code>eval</code>、<code>Function</code>、<code>require</code> 或 <a href=\"vm.html\"/*tpa=http://nodejs.cn/api/vm.html*/>vm</a>。\n这些错误几乎都表明程序已损坏。</p>\n<pre><code class=\"lang-js\">try {\n  require(&#39;vm&#39;).runInThisContext(&#39;binary ! isNotOk&#39;);\n} catch(err) {\n  // err 是一个 SyntaxError\n}\n</code></pre>\n<p><code>SyntaxError</code> 实例在创建它们的上下文中是不可恢复的。\n它们只可被其他上下文捕获。</p>\n"
+        },
+        {
+          "textRaw": "Class: TypeError",
+          "type": "class",
+          "name": "TypeError",
+          "desc": "<p><code>Error</code> 的一个子类，表明提供的参数不是一个被允许的类型。\n例如，将一个函数传给一个期望字符串的参数会被视为一个 <code>TypeError</code>。</p>\n<pre><code class=\"lang-js\">require(&#39;url&#39;).parse(() =&gt; { });\n  // 抛出 TypeError，因为它期望的是一个字符串\n</code></pre>\n<p>Node.js 会生成并以参数校验的形式立即抛出 <code>TypeError</code> 实例。</p>\n"
+        }
+      ]
+    }
+  ]
+}

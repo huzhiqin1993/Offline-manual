@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <title>punycode | Node.js API æ–‡æ¡£</title>
+  <link rel="stylesheet" href="../static/api.css" tppabs="http://nodejs.cn/static/api.css">
+  <link rel="icon" sizes="32x32" type="image/png" href="/static/favicon.png">
+</head>
+<body class="alt apidoc" id="api-section-punycode">
+  <div id="content" class="clearfix">
+    <div id="column2" class="interior">
+      <div id="intro" class="interior">
+        <a href="javascript:if(confirm('http://nodejs.cn/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://nodejs.cn/'" tppabs="http://nodejs.cn/" title="Go back to the home page">
+          Node.js ä¸­æ–‡ç½‘
+        </a>
+      </div>
+      <ul>
+<li><a class="nav-documentation" href="documentation.html" tppabs="http://nodejs.cn/api/documentation.html">å…³äºæœ¬æ–‡æ¡£</a></li>
+<li><a class="nav-synopsis" href="synopsis.html" tppabs="http://nodejs.cn/api/synopsis.html">ç”¨æ³•ä¸ä¾‹å­</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-assert" href="assert.html" tppabs="http://nodejs.cn/api/assert.html">Assert (æ–­è¨€)</a></li>
+<li><a class="nav-buffer" href="buffer.html" tppabs="http://nodejs.cn/api/buffer.html">Buffer</a></li>
+<li><a class="nav-addons" href="addons.html" tppabs="http://nodejs.cn/api/addons.html">C/C++ æ’ä»¶</a></li>
+<li><a class="nav-child_process" href="child_process.html" tppabs="http://nodejs.cn/api/child_process.html">Child Processes (å­è¿›ç¨‹)</a></li>
+<li><a class="nav-cluster" href="cluster.html" tppabs="http://nodejs.cn/api/cluster.html">Cluster (é›†ç¾¤)</a></li>
+<li><a class="nav-cli" href="cli.html" tppabs="http://nodejs.cn/api/cli.html">CLI (å‘½ä»¤è¡Œé€‰é¡¹)</a></li>
+<li><a class="nav-console" href="console.html" tppabs="http://nodejs.cn/api/console.html">Console (æ§åˆ¶å°)</a></li>
+<li><a class="nav-crypto" href="crypto.html" tppabs="http://nodejs.cn/api/crypto.html">Crypto (åŠ å¯†)</a></li>
+<li><a class="nav-debugger" href="debugger.html" tppabs="http://nodejs.cn/api/debugger.html">Debugger (è°ƒè¯•å™¨)</a></li>
+<li><a class="nav-dns" href="dns.html" tppabs="http://nodejs.cn/api/dns.html">DNS (åŸŸåæœåŠ¡å™¨)</a></li>
+<li><a class="nav-domain" href="domain.html" tppabs="http://nodejs.cn/api/domain.html">Domain (åŸŸ)</a></li>
+<li><a class="nav-errors" href="errors.html" tppabs="http://nodejs.cn/api/errors.html">Error (é”™è¯¯)</a></li>
+<li><a class="nav-events" href="events.html" tppabs="http://nodejs.cn/api/events.html">Events (äº‹ä»¶)</a></li>
+<li><a class="nav-fs" href="fs.html" tppabs="http://nodejs.cn/api/fs.html">File System (æ–‡ä»¶ç³»ç»Ÿ)</a></li>
+<li><a class="nav-globals" href="globals.html" tppabs="http://nodejs.cn/api/globals.html">Global (å…¨å±€å˜é‡)</a></li>
+<li><a class="nav-http" href="http.html" tppabs="http://nodejs.cn/api/http.html">HTTP</a></li>
+<li><a class="nav-https" href="https.html" tppabs="http://nodejs.cn/api/https.html">HTTPS</a></li>
+<li><a class="nav-modules" href="modules.html" tppabs="http://nodejs.cn/api/modules.html">Module (æ¨¡å—)</a></li>
+<li><a class="nav-net" href="net.html" tppabs="http://nodejs.cn/api/net.html">Net (ç½‘ç»œ)</a></li>
+<li><a class="nav-os" href="os.html" tppabs="http://nodejs.cn/api/os.html">OS (æ“ä½œç³»ç»Ÿ)</a></li>
+<li><a class="nav-path" href="path.html" tppabs="http://nodejs.cn/api/path.html">Path (è·¯å¾„)</a></li>
+<li><a class="nav-process" href="process.html" tppabs="http://nodejs.cn/api/process.html">Process (è¿›ç¨‹)</a></li>
+<li><a class="nav-punycode active" href="punycode.html" tppabs="http://nodejs.cn/api/punycode.html">Punycode</a></li>
+<li><a class="nav-querystring" href="querystring.html" tppabs="http://nodejs.cn/api/querystring.html">Query Strings (æŸ¥è¯¢å­—ç¬¦ä¸²)</a></li>
+<li><a class="nav-readline" href="readline.html" tppabs="http://nodejs.cn/api/readline.html">Readline</a></li>
+<li><a class="nav-repl" href="repl.html" tppabs="http://nodejs.cn/api/repl.html">REPL</a></li>
+<li><a class="nav-stream" href="stream.html" tppabs="http://nodejs.cn/api/stream.html">Stream (æµ)</a></li>
+<li><a class="nav-string_decoder" href="string_decoder.html" tppabs="http://nodejs.cn/api/string_decoder.html">String Decoder (å­—ç¬¦ä¸²è§£ç )</a></li>
+<li><a class="nav-timers" href="timers.html" tppabs="http://nodejs.cn/api/timers.html">Timer (å®šæ—¶å™¨)</a></li>
+<li><a class="nav-tls" href="tls.html" tppabs="http://nodejs.cn/api/tls.html">TLS/SSL</a></li>
+<li><a class="nav-tty" href="tty.html" tppabs="http://nodejs.cn/api/tty.html">TTY</a></li>
+<li><a class="nav-dgram" href="dgram.html" tppabs="http://nodejs.cn/api/dgram.html">UDP/Datagram</a></li>
+<li><a class="nav-url" href="url.html" tppabs="http://nodejs.cn/api/url.html">URL</a></li>
+<li><a class="nav-util" href="util.html" tppabs="http://nodejs.cn/api/util.html">Utilities (å®ç”¨å‡½æ•°)</a></li>
+<li><a class="nav-v8" href="v8.html" tppabs="http://nodejs.cn/api/v8.html">V8</a></li>
+<li><a class="nav-vm" href="vm.html" tppabs="http://nodejs.cn/api/vm.html">VM (è™šæ‹Ÿæœº)</a></li>
+<li><a class="nav-zlib" href="zlib.html" tppabs="http://nodejs.cn/api/zlib.html">ZLIB (å‹ç¼©)</a></li>
+</ul>
+<div class="line"></div>
+
+
+    </div>
+
+    <div id="column1" data-id="punycode" class="interior">
+      <header>
+        <h1>Node.js 6.9.5 æ–‡æ¡£</h1>
+        <div id="gtoc">
+          <p>
+            <a href="index.htm" tppabs="http://nodejs.cn/api/" name="toc">ç´¢å¼•</a> |
+            <!--<a href="/api/all.html">å•é¡µé¢æ˜¾ç¤º</a> |-->
+            <a href="punycode.json" tppabs="http://nodejs.cn/api/punycode.json">JSONæ ¼å¼</a> |
+            <a href="en/punycode.html" tppabs="http://nodejs.cn/api/en/punycode.html">æŸ¥çœ‹è‹±æ–‡æ–‡æ¡£</a>
+          </p>
+        </div>
+        <hr>
+      </header>
+
+      <div id="toc">
+        <h2>ç›®å½•</h2>
+        <ul>
+<li><span class="stability_0"><a href="#punycode_punycode">punycode</a></span><ul>
+<li><span class="stability_undefined"><a href="#punycode_punycode_decode_string">punycode.decode(string)</a></span></li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_encode_string">punycode.encode(string)</a></span></li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_toascii_domain">punycode.toASCII(domain)</a></span></li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_tounicode_domain">punycode.toUnicode(domain)</a></span></li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_ucs2">punycode.ucs2</a></span><ul>
+<li><span class="stability_undefined"><a href="#punycode_punycode_ucs2_decode_string">punycode.ucs2.decode(string)</a></span></li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_ucs2_encode_codepoints">punycode.ucs2.encode(codePoints)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#punycode_punycode_version">punycode.version</a></span></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+
+      <div id="apicontent">
+        <h1>punycode<span><a class="mark" href="#punycode_punycode" id="punycode_punycode">#</a></span></h1>
+<pre class="api_stability api_stability_0">Stability: 0 - Deprecated</pre><p><strong>The version of the punycode module bundled in Node.js is being deprecated</strong>.
+In a future major version of Node.js this module will be removed. Users
+currently depending on the <code>punycode</code> module should switch to using the
+userland-provided <a href="javascript:if(confirm('https://mths.be/punycode  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://mths.be/punycode'" tppabs="https://mths.be/punycode">Punycode.js</a> module instead.</p>
+<p>The <code>punycode</code> module is a bundled version of the <a href="javascript:if(confirm('https://mths.be/punycode  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://mths.be/punycode'" tppabs="https://mths.be/punycode">Punycode.js</a> module. It
+can be accessed using:</p>
+<pre><code class="lang-js">const punycode = require(&#39;punycode&#39;);
+</code></pre>
+<p><a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a> is a character encoding scheme defined by RFC 3492 that is
+primarily intended for use in Internationalized Domain Names. Because host
+names in URLs are limited to ASCII characters only, Domain Names that contain
+non-ASCII characters must be converted into ASCII using the Punycode scheme.
+For instance, the Japanese character that translates into the English word,
+<code>&#39;example&#39;</code> is <code>&#39;ä¾‹&#39;</code>. The Internationalized Domain Name, <code>&#39;ä¾‹.com&#39;</code> (equivalent
+to <code>&#39;example.com&#39;</code>) is represented by Punycode as the ASCII string
+<code>&#39;xn--fsq.com&#39;</code>.</p>
+<p>The <code>punycode</code> module provides a simple implementation of the Punycode standard.</p>
+<p><em>Note</em>: The <code>punycode</code> module is a third-party dependency used by Node.js and
+made available to developers as a convenience. Fixes or other modifications to
+the module must be directed to the <a href="javascript:if(confirm('https://mths.be/punycode  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://mths.be/punycode'" tppabs="https://mths.be/punycode">Punycode.js</a> project.</p>
+<h2>punycode.decode(string)<span><a class="mark" href="#punycode_punycode_decode_string" id="punycode_punycode_decode_string">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.5.1</span>
+</div><ul>
+<li><code>string</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a></li>
+</ul>
+<p>The <code>punycode.decode()</code> method converts a <a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a> string of ASCII-only
+characters to the equivalent string of Unicode codepoints.</p>
+<pre><code class="lang-js">punycode.decode(&#39;maana-pta&#39;); // &#39;maÃ±ana&#39;
+punycode.decode(&#39;--dqo34k&#39;); // &#39;â˜ƒ-âŒ˜&#39;
+</code></pre>
+<h2>punycode.encode(string)<span><a class="mark" href="#punycode_punycode_encode_string" id="punycode_punycode_encode_string">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.5.1</span>
+</div><ul>
+<li><code>string</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a></li>
+</ul>
+<p>The <code>punycode.encode()</code> method converts a string of Unicode codepoints to a
+<a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a> string of ASCII-only characters.</p>
+<pre><code class="lang-js">punycode.encode(&#39;maÃ±ana&#39;); // &#39;maana-pta&#39;
+punycode.encode(&#39;â˜ƒ-âŒ˜&#39;); // &#39;--dqo34k&#39;
+</code></pre>
+<h2>punycode.toASCII(domain)<span><a class="mark" href="#punycode_punycode_toascii_domain" id="punycode_punycode_toascii_domain">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.6.1</span>
+</div><ul>
+<li><code>domain</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a></li>
+</ul>
+<p>The <code>punycode.toASCII()</code> method converts a Unicode string representing an
+Internationalized Domain Name to <a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a>. Only the non-ASCII parts of the
+domain name will be converted. Calling <code>punycode.toASCII()</code> on a string that
+already only contains ASCII characters will have no effect.</p>
+<pre><code class="lang-js">// encode domain names
+punycode.toASCII(&#39;maÃ±ana.com&#39;);  // &#39;xn--maana-pta.com&#39;
+punycode.toASCII(&#39;â˜ƒ-âŒ˜.com&#39;);   // &#39;xn----dqo34k.com&#39;
+punycode.toASCII(&#39;example.com&#39;); // &#39;example.com&#39;
+</code></pre>
+<h2>punycode.toUnicode(domain)<span><a class="mark" href="#punycode_punycode_tounicode_domain" id="punycode_punycode_tounicode_domain">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.6.1</span>
+</div><ul>
+<li><code>domain</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a></li>
+</ul>
+<p>The <code>punycode.toUnicode()</code> method converts a string representing a domain name
+containing <a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a> encoded characters into Unicode. Only the <a href="javascript:if(confirm('https://tools.ietf.org/html/rfc3492  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://tools.ietf.org/html/rfc3492'" tppabs="https://tools.ietf.org/html/rfc3492">Punycode</a>
+encoded parts of the domain name are be converted.</p>
+<pre><code class="lang-js">// decode domain names
+punycode.toUnicode(&#39;xn--maana-pta.com&#39;); // &#39;maÃ±ana.com&#39;
+punycode.toUnicode(&#39;xn----dqo34k.com&#39;);  // &#39;â˜ƒ-âŒ˜.com&#39;
+punycode.toUnicode(&#39;example.com&#39;);       // &#39;example.com&#39;
+</code></pre>
+<h2>punycode.ucs2<span><a class="mark" href="#punycode_punycode_ucs2" id="punycode_punycode_ucs2">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.7.0</span>
+</div><h3>punycode.ucs2.decode(string)<span><a class="mark" href="#punycode_punycode_ucs2_decode_string" id="punycode_punycode_ucs2_decode_string">#</a></span></h3>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.7.0</span>
+</div><ul>
+<li><code>string</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a></li>
+</ul>
+<p>The <code>punycode.ucs2.decode()</code> method returns an array containing the numeric
+codepoint values of each Unicode symbol in the string.</p>
+<pre><code class="lang-js">punycode.ucs2.decode(&#39;abc&#39;); // [0x61, 0x62, 0x63]
+// surrogate pair for U+1D306 tetragram for centre:
+punycode.ucs2.decode(&#39;\uD834\uDF06&#39;); // [0x1D306]
+</code></pre>
+<h3>punycode.ucs2.encode(codePoints)<span><a class="mark" href="#punycode_punycode_ucs2_encode_codepoints" id="punycode_punycode_ucs2_encode_codepoints">#</a></span></h3>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.7.0</span>
+</div><ul>
+<li><code>codePoints</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a></li>
+</ul>
+<p>The <code>punycode.ucs2.encode()</code> method returns a string based on an array of
+numeric code point values.</p>
+<pre><code class="lang-js">punycode.ucs2.encode([0x61, 0x62, 0x63]); // &#39;abc&#39;
+punycode.ucs2.encode([0x1D306]); // &#39;\uD834\uDF06&#39;
+</code></pre>
+<h2>punycode.version<span><a class="mark" href="#punycode_punycode_version" id="punycode_punycode_version">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v0.6.1</span>
+</div><p>Returns a string identifying the current <a href="javascript:if(confirm('https://mths.be/punycode  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://mths.be/punycode'" tppabs="https://mths.be/punycode">Punycode.js</a> version number.</p>
+
+      </div>
+    </div>
+  </div>
+  <script src="../static/api.js" tppabs="http://nodejs.cn/static/api.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+</body>
+</html>

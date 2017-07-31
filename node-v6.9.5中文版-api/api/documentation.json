@@ -1,0 +1,33 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/documentation.md",
+  "miscs": [
+    {
+      "textRaw": "About this Documentation",
+      "name": "About this Documentation",
+      "type": "misc",
+      "desc": "<p>本文档的目的是全面地讲解 Node.js 的 API，既从参考角度也从概念角度。\n每个章节介绍一个内置模块或高级概念。</p>\n<p>必要时，属性类型、方法参数、以及传给事件句柄的参数会在主题标题下的列表中详细说明。</p>\n<p>每个 <code>.html</code> 文档都有一个对应的 <code>.json</code> 文档，以结构化的方式呈现相同的内容。\n这个特性是试验的，用于帮助那些需要为编程提供文档的 IDE 或其他开发工具。</p>\n",
+      "miscs": [
+        {
+          "textRaw": "Stability Index",
+          "name": "Stability Index",
+          "type": "misc",
+          "desc": "<p>贯穿整个文档，你会看到每个章节的稳定性标志。\nNode.js 的 API 仍会有少量变化，但随着发展，部分 API 会更稳定可靠。\n有些 API 历经考验、且被大量依赖，它们几乎不会再改变。\n也有些 API 是新增的、或试验的、或被认定为有风险且正在重新设计中的。</p>\n<p>稳定性的指标如下：</p>\n<pre><code class=\"lang-txt\">稳定性: 0 - 废弃的\n这个特性被认定为存在问题，且正计划修改。\n不要依赖该特性。\n使用该特性可能会产生警告信息。\n不要指望该特性会向后兼容。\n</code></pre>\n<pre><code class=\"lang-txt\">稳定性: 1 - 试验的\n这个特性可能会变化，在命令行中会有标记提示。\n在将来的版本中该特性可能会变化或被移除。\n</code></pre>\n<pre><code class=\"lang-txt\">稳定性: 2 - 稳定的\n这个特性已被证明是符合要求的。\n与 npm 生态系统的兼容性是一个高优先级，除非绝对必要否则不会变化。\n</code></pre>\n<pre><code class=\"lang-txt\">稳定性: 3 - 锁定的\n这个特性只接受与安全性、性能、或 BUG 修复有关的修改。\n请不要在该特性提出修改 API 的建议，这些建议会被拒绝。\n</code></pre>\n"
+        },
+        {
+          "textRaw": "JSON Output",
+          "name": "json_output",
+          "desc": "<p>稳定性: 1 - 试验的</p>\n<p>每个通过 markdown 生成的 HTML 文件都有一个对应的具有相同数据的 JSON 文件。</p>\n<p>这个特性是 Node.js v0.6.12 新增的。\n该特性是试验的。</p>\n",
+          "type": "misc",
+          "displayName": "JSON Output"
+        },
+        {
+          "textRaw": "Syscalls and man pages",
+          "name": "syscalls_and_man_pages",
+          "desc": "<p>系统调用定义了用户程序和底层操作系统之间的接口，例如 <a href=\"http://man7.org/linux/man-pages/man2/open.2.html\">open(2)</a>、<a href=\"http://man7.org/linux/man-pages/man2/read.2.html\">read(2)</a>。\nNode 函数只是简单地包装了系统调用，例如 <code>fs.open()</code>。\n与之对应的帮助文档描述了系统调用的工作方式。</p>\n<p><strong>警告：</strong>有些系统调用是 BSD 系统特有的，例如 <a href=\"http://man7.org/linux/man-pages/man2/lchown.2.html\">lchown(2)</a>。\n这意味着 <code>fs.chown()</code> 只适用于 Mac OS X 和其他的 BSD 衍生系统，在 Linux 上不可用。</p>\n<p>大部分 Unix 的系统调用都有对应的 Windows 版本，但 Windows 版本运行起来可能与 Linux 和 OS X 的有些差异。\n有些 Unix 系统调用无法在 Windows 中找到对应的操作语义，详见<a href=\"https://github.com/nodejs/node/issues/4760\">议题4760</a>。</p>\n",
+          "type": "misc",
+          "displayName": "Syscalls and man pages"
+        }
+      ]
+    }
+  ]
+}

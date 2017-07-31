@@ -1,0 +1,261 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/console.md",
+  "modules": [
+    {
+      "textRaw": "Console",
+      "name": "console",
+      "desc": "<p>稳定性: 2 - 稳定的</p>\n<p><code>console</code> 模块提供了一个简单的调试控制台，它与 Web 浏览器提供的 JavaScript 控制台的机制类似。</p>\n<p>该模块导出两个特定组件：</p>\n<ul>\n<li>一个 <code>Console</code> 类，包含 <code>console.log()</code> 、 <code>console.error()</code> 和 <code>console.warn()</code> 等方法，可以用于写入到任何 Node.js 流。</li>\n<li>一个全局的 <code>console</code> 实例，用于写入 <code>stdout</code> 和 <code>stderr</code>。\n因为该对象是一个全局变量，所以使用时无需调用 <code>require(&#39;console&#39;)</code>。</li>\n</ul>\n<p>例子：使用全局的 <code>console</code>：</p>\n<pre><code class=\"lang-js\">console.log(&#39;hello world&#39;);\n// 打印: hello world 到 stdout\nconsole.log(&#39;hello %s&#39;, &#39;world&#39;);\n// 打印: hello world 到 stdout\nconsole.error(new Error(&#39;错误信息&#39;));\n// 打印: [Error: 错误信息] 到 stderr\n\nconst name = &#39;Will Robinson&#39;;\nconsole.warn(`Danger ${name}! Danger!`);\n// 打印: Danger Will Robinson! Danger! 到 stderr\n</code></pre>\n<p>例子：使用 <code>Console</code> 类：</p>\n<pre><code class=\"lang-js\">const out = getStreamSomehow();\nconst err = getStreamSomehow();\nconst myConsole = new console.Console(out, err);\n\nmyConsole.log(&#39;hello world&#39;);\n// 打印: hello world 到 out\nmyConsole.log(&#39;hello %s&#39;, &#39;world&#39;);\n// 打印: hello world 到 out\nmyConsole.error(new Error(&#39;错误信息&#39;));\n// 打印: [Error: 错误信息] 到 err\n\nconst name = &#39;Will Robinson&#39;;\nmyConsole.warn(`Danger ${name}! Danger!`);\n// 打印: Danger Will Robinson! Danger! 到 err\n</code></pre>\n<p>虽然 <code>Console</code> 类的 API 是根据浏览器的 <code>console</code> 对象设计的，但 Node.js 中的 <code>Console</code> 并没有完全复制浏览器中的功能。</p>\n",
+      "modules": [
+        {
+          "textRaw": "Asynchronous vs Synchronous Consoles",
+          "name": "asynchronous_vs_synchronous_consoles",
+          "desc": "<p><code>console</code> 函数通常是异步的，除非目标是一个文件。\n带有高速磁盘的操作系统通常采用回写缓存；写入阻塞是一个非常罕见的情况，但存在可能性。</p>\n<p>此外，当输出到 OS X 的 TTY（终端）时，因操作系统较小的 1kb 的缓存大小，<code>console</code> 函数会遭到阻塞。\n这是为了防止 <code>stdout</code> 和 <code>stderr</code> 的交叉存取。</p>\n",
+          "type": "module",
+          "displayName": "Asynchronous vs Synchronous Consoles"
+        }
+      ],
+      "classes": [
+        {
+          "textRaw": "Class: Console",
+          "type": "class",
+          "name": "Console",
+          "desc": "<p><code>Console</code> 类可用于创建一个具有可配置的输出流的简单记录器，可以通过 <code>require(&#39;console&#39;).Console</code> 或 <code>console.Console</code> 使用：</p>\n<pre><code class=\"lang-js\">const Console = require(&#39;console&#39;).Console;\nconst Console = console.Console;\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "console.assert(value[, message][, ...args])",
+              "type": "method",
+              "name": "assert",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.101"
+                ]
+              },
+              "desc": "<p>一个简单的断言测试，验证 <code>value</code> 是否为真。\n如果不为真，则抛出 <code>AssertionError</code>。\n如果提供了 <code>message</code>，则使用 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a> 格式化并作为错误信息使用。</p>\n<pre><code class=\"lang-js\">console.assert(true, &#39;does nothing&#39;);\n// 通过\nconsole.assert(false, &#39;Whoops %s&#39;, &#39;didn\\&#39;t work&#39;);\n// AssertionError: Whoops didn&#39;t work\n</code></pre>\n<p>注意：Node.js 中的 <code>console.assert()</code> 方法与<a href=\"https://developer.mozilla.org/en-US/docs/Web/API/console/assert\">在浏览器中</a>的 <code>console.assert()</code> 方法的实现是不一样的。</p>\n<p>具体地说，在浏览器中，用非真的断言调用 <code>console.assert()</code> 会导致 <code>message</code> 被打印到控制台但不会中断后续代码的执行。\n而在 Node.js 中，非真的断言会导致抛出 <code>AssertionError</code>。</p>\n<p>可以通过扩展 Node.js 的 <code>console</code> 并重写 <code>console.assert()</code> 方法来实现与浏览器中类似的功能。</p>\n<p>例子，创建一个简单的模块，并扩展与重写了 Node.js 中 <code>console</code> 的默认行为。</p>\n<pre><code class=\"lang-js\">&#39;use strict&#39;;\n\n// 用一个新的不带补丁的 assert 实现来创建一个简单的 console 扩展。\nconst myConsole = Object.setPrototypeOf({\n  assert(assertion, message, ...args) {\n    try {\n      console.assert(assertion, message, ...args);\n    } catch (err) {\n      console.error(err.stack);\n    }\n  }\n}, console);\n\nmodule.exports = myConsole;\n</code></pre>\n<p>然后可以用来直接替换内置的 console：</p>\n<pre><code class=\"lang-js\">const console = require(&#39;./myConsole&#39;);\nconsole.assert(false, &#39;会打印这个消息，但不会抛出错误&#39;);\nconsole.log(&#39;这个也会打印&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "value"
+                    },
+                    {
+                      "name": "message",
+                      "optional": true
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.dir(obj[, options])",
+              "type": "method",
+              "name": "dir",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.101"
+                ]
+              },
+              "desc": "<p>在 <code>obj</code> 上使用 <a href=\"util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a> 并打印结果字符串到 <code>stdout</code>。\n该函数会绕过任何定义在 <code>obj</code> 上的自定义的 <code>inspect()</code> 函数。\n可选的 <code>options</code> 对象可以传入用于改变被格式化的字符串：</p>\n<ul>\n<li><p><code>showHidden</code> - 如果为 <code>true</code>，则该对象中的不可枚举属性和 symbol 属性也会显示。默认为 <code>false</code>。</p>\n</li>\n<li><p><code>depth</code> - 告诉 <a href=\"util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a> 函数当格式化对象时要递归多少次。\n这对于检查较大的复杂对象很有用。\n默认为 <code>2</code>。\n设为 <code>null</code> 可无限递归。</p>\n</li>\n<li><p><code>colors</code> - 如果为 <code>true</code>，则输出会带有 ANSI 颜色代码。\n默认为 <code>false</code>。\n颜色是可定制的，详见<a href=\"util.html#util_customizing_util_inspect_colors\">定制 <code>util.inspect()</code> 颜色</a>。</p>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "obj"
+                    },
+                    {
+                      "name": "options",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.error([data][, ...args])",
+              "type": "method",
+              "name": "error",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.100"
+                ]
+              },
+              "desc": "<p>打印到 <code>stderr</code>，并带上换行符。\n可以传入多个参数，第一个参数作为主要信息，其他参数作为类似于 printf(3) 中的代替值（参数都会传给 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a>）。</p>\n<pre><code class=\"lang-js\">const code = 5;\nconsole.error(&#39;error #%d&#39;, code);\n// 打印: error #5 到 stderr\nconsole.error(&#39;error&#39;, code);\n// 打印: error 5 到 stderr\n</code></pre>\n<p>如果在第一个字符串中没有找到格式化元素（如 <code>%d</code>），则在每个参数上调用 <a href=\"util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a> 并将结果字符串值拼在一起。\n详见 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a>。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data",
+                      "optional": true
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.info([data][, ...args])",
+              "type": "method",
+              "name": "info",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.100"
+                ]
+              },
+              "desc": "<p><code>console.info()</code> 函数是 <a href=\"#console_console_log_data_args\"><code>console.log()</code></a> 的一个别名。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data",
+                      "optional": true
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.log([data][, ...args])",
+              "type": "method",
+              "name": "log",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.100"
+                ]
+              },
+              "desc": "<p>打印到 <code>stdout</code>，并带上换行符。\n可以传入多个参数，第一个参数作为主要信息，其他参数作为类似于 printf(3) 中的代替值（参数都会传给 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a>）。</p>\n<pre><code class=\"lang-js\">var count = 5;\nconsole.log(&#39;count: %d&#39;, count);\n// 打印: count: 5 到 stdout\nconsole.log(&#39;count:&#39;, count);\n// 打印: count: 5 到 stdout\n</code></pre>\n<p>如果在第一个字符串中没有找到格式化元素（如 <code>%d</code>），则在每个参数上调用 <a href=\"util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a> 并将结果字符串值拼在一起。\n详见 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a>。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data",
+                      "optional": true
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.time(label)",
+              "type": "method",
+              "name": "time",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.104"
+                ]
+              },
+              "desc": "<p>启动一个定时器，用以计算一个操作的持续时间。\n定时器由一个唯一的 <code>label</code> 标识。\n当调用 <a href=\"#console_console_timeend_label\"><code>console.timeEnd()</code></a> 时，可以使用相同的 <code>label</code> 来停止定时器，并以毫秒为单位将持续时间输出到 <code>stdout</code>。\n定时器持续时间精确到亚毫秒。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "label"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.timeEnd(label)",
+              "type": "method",
+              "name": "timeEnd",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.104"
+                ]
+              },
+              "desc": "<p>停止之前通过调用 <a href=\"#console_console_time_label\"><code>console.time()</code></a> 启动的定时器，并打印结果到 <code>stdout</code>：</p>\n<pre><code class=\"lang-js\">console.time(&#39;100-elements&#39;);\nfor (var i = 0; i &lt; 100; i++) {\n  ;\n}\nconsole.timeEnd(&#39;100-elements&#39;);\n// 打印 100-elements: 225.438ms\n</code></pre>\n<p>注意：从 Node.js v6.0.0 开始，<code>console.timeEnd()</code> 删除了计时器以避免泄漏。\n在旧版本上，计时器依然保留。\n它允许 <code>console.timeEnd()</code> 可以多次调用同一标签。\n此功能是非计划中的，不再被支持。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "label"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.trace(message[, ...args])",
+              "type": "method",
+              "name": "trace",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.104"
+                ]
+              },
+              "desc": "<p>打印字符串 <code>&#39;Trace :&#39;</code> 到 <code>stderr</code> ，并通过 <a href=\"util.html#util_util_format_format_args\"><code>util.format()</code></a> 格式化消息与堆栈跟踪在代码中的当前位置。</p>\n<pre><code class=\"lang-js\">console.trace(&#39;Show me&#39;);\n// 打印: (堆栈跟踪会根据被调用的跟踪的位置而变化)\n//  Trace: Show me\n//    at repl:2:9\n//    at REPLServer.defaultEval (repl.js:248:27)\n//    at bound (domain.js:287:14)\n//    at REPLServer.runBound [as eval] (domain.js:300:12)\n//    at REPLServer.&lt;anonymous&gt; (repl.js:412:12)\n//    at emitOne (events.js:82:20)\n//    at REPLServer.emit (events.js:169:7)\n//    at REPLServer.Interface._onLine (readline.js:210:10)\n//    at REPLServer.Interface._line (readline.js:549:8)\n//    at REPLServer.Interface._ttyWrite (readline.js:826:14)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "console.warn([data][, ...args])",
+              "type": "method",
+              "name": "warn",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.100"
+                ]
+              },
+              "desc": "<p><code>console.warn()</code> 函数是 <a href=\"#console_console_error_data_args\"><code>console.error()</code></a> 的一个别名。</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data",
+                      "optional": true
+                    },
+                    {
+                      "name": "http://nodejs.cn/api/...args",
+                      "optional": true
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "stdout"
+                },
+                {
+                  "name": "stderr",
+                  "optional": true
+                }
+              ],
+              "desc": "<p>通过传入一个或两个可写流实例，创建一个新的 <code>Console</code> 对象。\n<code>stdout</code> 是一个可写流，用于打印日志或输出信息。\n<code>stderr</code> 用于输出警告或错误。\n如果没有传入 <code>stderr</code> ，则警告或错误输出会被发送到 <code>stdout</code> 。</p>\n<pre><code class=\"lang-js\">const output = fs.createWriteStream(&#39;./stdout.log&#39;);\nconst errorOutput = fs.createWriteStream(&#39;./stderr.log&#39;);\n// 自定义的简单记录器\nconst logger = new Console(output, errorOutput);\n// 像 console 一样使用\nvar count = 5;\nlogger.log(&#39;count: %d&#39;, count);\n// stdout.log 中打印: count 5\n</code></pre>\n<p>全局的 <code>console</code> 是一个特殊的 <code>Console</code> 实例，它的输出会发送到 <a href=\"process.html#process_process_stdout\"><code>process.stdout</code></a> 和 <a href=\"process.html#process_process_stderr\"><code>process.stderr</code></a>。\n相当于调用：</p>\n<pre><code class=\"lang-js\">new Console(process.stdout, process.stderr);\n</code></pre>\n"
+            }
+          ]
+        }
+      ],
+      "type": "module",
+      "displayName": "Console"
+    }
+  ]
+}

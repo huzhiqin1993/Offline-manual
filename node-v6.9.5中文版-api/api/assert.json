@@ -1,0 +1,383 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/assert.md",
+  "modules": [
+    {
+      "textRaw": "Assert",
+      "name": "assert",
+      "desc": "<p>稳定性: 3 - 锁定的</p>\n<p><code>assert</code> 模块提供了一组简单的断言测试集合，用于测试不变量。\n该模块是供 Node.js 内部使用的，但可以通过 <code>require(&#39;assert&#39;)</code> 在代码中使用。\n<code>assert</code> 不是一个测试框架，也无意成为通用的断言库。</p>\n<p><code>assert</code> 模块的 API 是<a href=\"documentation.html#documentation_stability_index\">锁定的</a>。\n这意味着将不会新增或更改任何由该模块实现与公开的方法。</p>\n",
+      "methods": [
+        {
+          "textRaw": "assert(value[, message])",
+          "type": "method",
+          "name": "assert",
+          "meta": {
+            "added": [
+              "v0.5.9"
+            ]
+          },
+          "desc": "<p><a href=\"#assert_assert_ok_value_message\"><code>assert.ok()</code></a> 的别名。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert(true);\n// 通过\nassert(1);\n// 通过\nassert(false);\n// 抛出 &quot;AssertionError: false == true&quot;\nassert(0);\n// 抛出 &quot;AssertionError: 0 == true&quot;\nassert(false, &#39;it\\&#39;s false&#39;);\n// 抛出 &quot;AssertionError: it&#39;s false&quot;\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.deepEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "deepEqual",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>测试 <code>actual</code> 和 <code>expected</code> 参数是否深度相等。\n原始值会使用相等运算符（<code>==</code>）进行比较。</p>\n<p>只比较可枚举的自身属性。\n<code>deepEqual()</code> 不测试对象的原型、连接符、或不可枚举的属性。\n这会引起一些潜在的意料之外的结果。\n例如，下面的例子不会抛出 <code>AssertionError</code>，因为 <a href=\"errors.html#errors_class_error\">Error</a> 对象的属性是不可枚举的：</p>\n<pre><code class=\"lang-js\">// 注意：这不会抛出 AssertionError！\nassert.deepEqual(Error(&#39;a&#39;), Error(&#39;b&#39;));\n</code></pre>\n<p>深度相等意味着子对象的可枚举的自身属性也会被比较：</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nconst obj1 = {\n  a : {\n    b : 1\n  }\n};\nconst obj2 = {\n  a : {\n    b : 2\n  }\n};\nconst obj3 = {\n  a : {\n    b : 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.deepEqual(obj1, obj1);\n// 通过，对象与自身相等\n\nassert.deepEqual(obj1, obj2);\n// 抛出 AssertionError: { a: { b: 1 } } deepEqual { a: { b: 2 } }\n// b 的值不同\n\nassert.deepEqual(obj1, obj3);\n// 通过，两个对象相等\n\nassert.deepEqual(obj1, obj4);\n// 抛出 AssertionError: { a: { b: 1 } } deepEqual {}\n// 原型会被忽略\n</code></pre>\n<p>如果两个值不相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.deepStrictEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "deepStrictEqual",
+          "meta": {
+            "added": [
+              "v1.2.0"
+            ]
+          },
+          "desc": "<p>大多数情况下等同于 <code>assert.deepEqual()</code>，但有两个例外。\n首先，原始值使用严格相等运算符（<code>===</code>）进行比较。\n其次，对象对比包括严格比较它们的原型。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.deepEqual({a:1}, {a:&#39;1&#39;});\n// 通过，因为 1 == &#39;1&#39;\n\nassert.deepStrictEqual({a:1}, {a:&#39;1&#39;});\n// 抛出 AssertionError: { a: 1 } deepStrictEqual { a: &#39;1&#39; }\n// 因为 1 !== &#39;1&#39; 使用严格相等运算符\n</code></pre>\n<p>如果两个值不相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.doesNotThrow(block[, error][, message])",
+          "type": "method",
+          "name": "doesNotThrow",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>断言 <code>block</code> 函数不会抛出错误。\n查看 <a href=\"#assert_assert_throws_block_error_message\">assert.throws()</a> 了解更多。</p>\n<p>当调用 <code>assert.doesNotThrow()</code> 时，它会立即调用 <code>block</code> 函数。</p>\n<p>如果 <code>block</code> 函数抛出错误，并且错误类型与 <code>error</code> 参数指定的相同，则抛出 <code>AssertionError</code>。\n如果错误类型不相同，或 <code>error</code> 参数是 <code>undefined</code>，则错误回传给调用者。</p>\n<p>以下例子会抛出 <a href=\"errors.html#errors_class_typeerror\">TypeError</a>，因为在断言中没有匹配的错误类型：</p>\n<pre><code class=\"lang-js\">assert.doesNotThrow(\n  () =&gt; {\n    throw new TypeError(&#39;Wrong value&#39;);\n  },\n  SyntaxError\n);\n</code></pre>\n<p>以下例子会抛出一个带有 &#39;Got unwanted exception (TypeError)..&#39; 信息的 <code>AssertionError</code>：</p>\n<pre><code class=\"lang-js\">assert.doesNotThrow(\n  () =&gt; {\n    throw new TypeError(&#39;Wrong value&#39;);\n  },\n  TypeError\n);\n</code></pre>\n<p>如果抛出了 <code>AssertionError</code>，并且有为 <code>message</code> 参数传值，则 <code>message</code> 的值会被追加到 <code>AssertionError</code> 的消息中：</p>\n<pre><code class=\"lang-js\">assert.doesNotThrow(\n  () =&gt; {\n    throw new TypeError(&#39;Wrong value&#39;);\n  },\n  TypeError,\n  &#39;Whoops&#39;\n);\n// 抛出 AssertionError: Got unwanted exception (TypeError). Whoops\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "block"
+                },
+                {
+                  "name": "error",
+                  "optional": true
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.equal(actual, expected[, message])",
+          "type": "method",
+          "name": "equal",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>使用相等运算符（<code>==</code>）来测试 <code>actual</code> 和 <code>expected</code> 参数是否相等。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.equal(1, 1);\n// 通过，1 == 1\nassert.equal(1, &#39;1&#39;);\n// 通过，1 == &#39;1&#39;\n\nassert.equal(1, 2);\n// 抛出 AssertionError: 1 == 2\nassert.equal({a: {b: 1}}, {a: {b: 1}});\n// 抛出 AssertionError: { a: { b: 1 } } == { a: { b: 1 } }\n</code></pre>\n<p>如果两个值不相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.fail(actual, expected, message, operator)",
+          "type": "method",
+          "name": "fail",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>抛出 <code>AssertionError</code>。\n如果 <code>message</code> 的值不为真，则错误信息为 <code>actual</code> 和 <code>expected</code> 的值，并以 <code>operator</code> 分隔。\n否则，错误信息为 <code>message</code> 的值。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.fail(1, 2, undefined, &#39;&gt;&#39;);\n// 抛出 AssertionError: 1 &gt; 2\n\nassert.fail(1, 2, &#39;whoops&#39;, &#39;&gt;&#39;);\n// 抛出 AssertionError: whoops\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message"
+                },
+                {
+                  "name": "operator"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.ifError(value)",
+          "type": "method",
+          "name": "ifError",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.97"
+            ]
+          },
+          "desc": "<p>如果 <code>value</code> 的值为真，抛出 <code>value</code>。\n当测试回调函数的 <code>error</code> 参数时非常有用。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.ifError(0);\n// 通过\nassert.ifError(1);\n// 抛出 1\nassert.ifError(&#39;error&#39;);\n// 抛出 &#39;error&#39;\nassert.ifError(new Error());\n// 抛出 Error\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.notDeepEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "notDeepEqual",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>测试 <code>actual</code> 和 <code>expected</code> 参数是否不深度相等。\n与 <a href=\"#assert_assert_deepequal_actual_expected_message\">assert.deepEqual()</a> 相反。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nconst obj1 = {\n  a : {\n    b : 1\n  }\n};\nconst obj2 = {\n  a : {\n    b : 2\n  }\n};\nconst obj3 = {\n  a : {\n    b : 1\n  }\n};\nconst obj4 = Object.create(obj1);\n\nassert.notDeepEqual(obj1, obj1);\n// 抛出 AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj2);\n// 通过，obj1 与 obj2 不深度相等\n\nassert.notDeepEqual(obj1, obj3);\n// 抛出 AssertionError: { a: { b: 1 } } notDeepEqual { a: { b: 1 } }\n\nassert.notDeepEqual(obj1, obj4);\n// 通过，obj1 与 obj4 不深度相等\n</code></pre>\n<p>如果两个值深度相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.notDeepStrictEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "notDeepStrictEqual",
+          "meta": {
+            "added": [
+              "v1.2.0"
+            ]
+          },
+          "desc": "<p>测试 <code>actual</code> 和 <code>expected</code> 参数是否不深度严格相等。\n与 <a href=\"#assert_assert_deepstrictequal_actual_expected_message\">assert.deepStrictEqual()</a> 相反。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.notDeepEqual({a:1}, {a:&#39;1&#39;});\n// 抛出 AssertionError: { a: 1 } notDeepEqual { a: &#39;1&#39; }\n\nassert.notDeepStrictEqual({a:1}, {a:&#39;1&#39;});\n// 通过\n</code></pre>\n<p>如果两个值深度严格相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.notEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "notEqual",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>使用不等运算符（<code>!=</code>）来测试 <code>actual</code> 和 <code>expected</code> 参数是否不相等。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.notEqual(1, 2);\n// 通过\n\nassert.notEqual(1, 1);\n// 抛出 AssertionError: 1 != 1\n\nassert.notEqual(1, &#39;1&#39;);\n// 抛出 AssertionError: 1 != &#39;1&#39;\n</code></pre>\n<p>如果两个值相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.notStrictEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "notStrictEqual",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>使用严格不等运算符（<code>!==</code>）来测试 <code>actual</code> 和 <code>expected</code> 参数是否不严格相等。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.notStrictEqual(1, 2);\n// 通过\n\nassert.notStrictEqual(1, 1);\n// 抛出 AssertionError: 1 !== 1\n\nassert.notStrictEqual(1, &#39;1&#39;);\n// 通过\n</code></pre>\n<p>如果两个值严格相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.ok(value[, message])",
+          "type": "method",
+          "name": "ok",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>测试 <code>value</code> 是否为真值。\n相当于 <code>assert.equal(!!value, true, message)</code>。</p>\n<p>如果 <code>value</code> 不为真值，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.ok(true);\n// 通过\nassert.ok(1);\n// 通过\nassert.ok(false);\n// 抛出 &quot;AssertionError: false == true&quot;\nassert.ok(0);\n// 抛出 &quot;AssertionError: 0 == true&quot;\nassert.ok(false, &#39;it\\&#39;s false&#39;);\n// 抛出 &quot;AssertionError: it&#39;s false&quot;\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.strictEqual(actual, expected[, message])",
+          "type": "method",
+          "name": "strictEqual",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>使用严格相等运算符（<code>===</code>）测试是否严格相等。</p>\n<pre><code class=\"lang-js\">const assert = require(&#39;assert&#39;);\n\nassert.strictEqual(1, 2);\n// 抛出 AssertionError: 1 === 2\n\nassert.strictEqual(1, 1);\n// 通过\n\nassert.strictEqual(1, &#39;1&#39;);\n// 抛出 AssertionError: 1 === &#39;1&#39;\n</code></pre>\n<p>如果两个值不严格相等，则抛出一个带有 <code>message</code> 属性的 <code>AssertionError</code>，其中 <code>message</code> 属性的值等于传入的 <code>message</code> 参数的值。\n如果 <code>message</code> 参数为 <code>undefined</code>，则输出默认的错误信息。</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "actual"
+                },
+                {
+                  "name": "expected"
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "assert.throws(block[, error][, message])",
+          "type": "method",
+          "name": "throws",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>期望 <code>block</code> 函数抛出错误。</p>\n<p>如果指定 <code>error</code>，它可以是一个构造函数、<a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions\">正则表达式</a>、或校验函数。</p>\n<p>如果指定 <code>message</code>，当 <code>block</code> 函数抛出错误时，<code>message</code> 会作为错误信息传给 <code>AssertionError</code>。</p>\n<p>使用构造函数的例子：</p>\n<pre><code class=\"lang-js\">assert.throws(\n  () =&gt; {\n    throw new Error(&#39;Wrong value&#39;);\n  },\n  Error\n);\n</code></pre>\n<p>使用正则表达式的例子：</p>\n<pre><code class=\"lang-js\">assert.throws(\n  () =&gt; {\n    throw new Error(&#39;Wrong value&#39;);\n  },\n  /value/\n);\n</code></pre>\n<p>使用自定义校验函数的例子：</p>\n<pre><code class=\"lang-js\">assert.throws(\n  () =&gt; {\n    throw new Error(&#39;Wrong value&#39;);\n  },\n  function(err) {\n    if ( (err instanceof Error) &amp;&amp; /value/.test(err) ) {\n      return true;\n    }\n  },\n  &#39;unexpected error&#39;\n);\n</code></pre>\n<p>注意，<code>error</code> 参数不能是字符串。\n如果第二个参数是字符串，则视为不传 <code>error</code> 参数，传入的字符串会被当作是 <code>message</code> 的值。\n这可能会引起误解：</p>\n<pre><code class=\"lang-js\">// 这是错误的！不要这么做！\nassert.throws(myFunction, &#39;missing foo&#39;, &#39;did not throw with expected message&#39;);\n\n// 应该这么做。\nassert.throws(myFunction, /missing foo/, &#39;did not throw with expected message&#39;);\n</code></pre>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "block"
+                },
+                {
+                  "name": "error",
+                  "optional": true
+                },
+                {
+                  "name": "message",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "module",
+      "displayName": "Assert"
+    }
+  ]
+}

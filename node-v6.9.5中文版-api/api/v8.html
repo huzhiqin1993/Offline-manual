@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <title>v8 | Node.js API æ–‡æ¡£</title>
+  <link rel="stylesheet" href="../static/api.css" tppabs="http://nodejs.cn/static/api.css">
+  <link rel="icon" sizes="32x32" type="image/png" href="/static/favicon.png">
+</head>
+<body class="alt apidoc" id="api-section-v8">
+  <div id="content" class="clearfix">
+    <div id="column2" class="interior">
+      <div id="intro" class="interior">
+        <a href="javascript:if(confirm('http://nodejs.cn/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://nodejs.cn/'" tppabs="http://nodejs.cn/" title="Go back to the home page">
+          Node.js ä¸­æ–‡ç½‘
+        </a>
+      </div>
+      <ul>
+<li><a class="nav-documentation" href="documentation.html" tppabs="http://nodejs.cn/api/documentation.html">å…³äºæœ¬æ–‡æ¡£</a></li>
+<li><a class="nav-synopsis" href="synopsis.html" tppabs="http://nodejs.cn/api/synopsis.html">ç”¨æ³•ä¸ä¾‹å­</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-assert" href="assert.html" tppabs="http://nodejs.cn/api/assert.html">Assert (æ–­è¨€)</a></li>
+<li><a class="nav-buffer" href="buffer.html" tppabs="http://nodejs.cn/api/buffer.html">Buffer</a></li>
+<li><a class="nav-addons" href="addons.html" tppabs="http://nodejs.cn/api/addons.html">C/C++ æ’ä»¶</a></li>
+<li><a class="nav-child_process" href="child_process.html" tppabs="http://nodejs.cn/api/child_process.html">Child Processes (å­è¿›ç¨‹)</a></li>
+<li><a class="nav-cluster" href="cluster.html" tppabs="http://nodejs.cn/api/cluster.html">Cluster (é›†ç¾¤)</a></li>
+<li><a class="nav-cli" href="cli.html" tppabs="http://nodejs.cn/api/cli.html">CLI (å‘½ä»¤è¡Œé€‰é¡¹)</a></li>
+<li><a class="nav-console" href="console.html" tppabs="http://nodejs.cn/api/console.html">Console (æ§åˆ¶å°)</a></li>
+<li><a class="nav-crypto" href="crypto.html" tppabs="http://nodejs.cn/api/crypto.html">Crypto (åŠ å¯†)</a></li>
+<li><a class="nav-debugger" href="debugger.html" tppabs="http://nodejs.cn/api/debugger.html">Debugger (è°ƒè¯•å™¨)</a></li>
+<li><a class="nav-dns" href="dns.html" tppabs="http://nodejs.cn/api/dns.html">DNS (åŸŸåæœåŠ¡å™¨)</a></li>
+<li><a class="nav-domain" href="domain.html" tppabs="http://nodejs.cn/api/domain.html">Domain (åŸŸ)</a></li>
+<li><a class="nav-errors" href="errors.html" tppabs="http://nodejs.cn/api/errors.html">Error (é”™è¯¯)</a></li>
+<li><a class="nav-events" href="events.html" tppabs="http://nodejs.cn/api/events.html">Events (äº‹ä»¶)</a></li>
+<li><a class="nav-fs" href="fs.html" tppabs="http://nodejs.cn/api/fs.html">File System (æ–‡ä»¶ç³»ç»Ÿ)</a></li>
+<li><a class="nav-globals" href="globals.html" tppabs="http://nodejs.cn/api/globals.html">Global (å…¨å±€å˜é‡)</a></li>
+<li><a class="nav-http" href="http.html" tppabs="http://nodejs.cn/api/http.html">HTTP</a></li>
+<li><a class="nav-https" href="https.html" tppabs="http://nodejs.cn/api/https.html">HTTPS</a></li>
+<li><a class="nav-modules" href="modules.html" tppabs="http://nodejs.cn/api/modules.html">Module (æ¨¡å—)</a></li>
+<li><a class="nav-net" href="net.html" tppabs="http://nodejs.cn/api/net.html">Net (ç½‘ç»œ)</a></li>
+<li><a class="nav-os" href="os.html" tppabs="http://nodejs.cn/api/os.html">OS (æ“ä½œç³»ç»Ÿ)</a></li>
+<li><a class="nav-path" href="path.html" tppabs="http://nodejs.cn/api/path.html">Path (è·¯å¾„)</a></li>
+<li><a class="nav-process" href="process.html" tppabs="http://nodejs.cn/api/process.html">Process (è¿›ç¨‹)</a></li>
+<li><a class="nav-punycode" href="punycode.html" tppabs="http://nodejs.cn/api/punycode.html">Punycode</a></li>
+<li><a class="nav-querystring" href="querystring.html" tppabs="http://nodejs.cn/api/querystring.html">Query Strings (æŸ¥è¯¢å­—ç¬¦ä¸²)</a></li>
+<li><a class="nav-readline" href="readline.html" tppabs="http://nodejs.cn/api/readline.html">Readline</a></li>
+<li><a class="nav-repl" href="repl.html" tppabs="http://nodejs.cn/api/repl.html">REPL</a></li>
+<li><a class="nav-stream" href="stream.html" tppabs="http://nodejs.cn/api/stream.html">Stream (æµ)</a></li>
+<li><a class="nav-string_decoder" href="string_decoder.html" tppabs="http://nodejs.cn/api/string_decoder.html">String Decoder (å­—ç¬¦ä¸²è§£ç )</a></li>
+<li><a class="nav-timers" href="timers.html" tppabs="http://nodejs.cn/api/timers.html">Timer (å®šæ—¶å™¨)</a></li>
+<li><a class="nav-tls" href="tls.html" tppabs="http://nodejs.cn/api/tls.html">TLS/SSL</a></li>
+<li><a class="nav-tty" href="tty.html" tppabs="http://nodejs.cn/api/tty.html">TTY</a></li>
+<li><a class="nav-dgram" href="dgram.html" tppabs="http://nodejs.cn/api/dgram.html">UDP/Datagram</a></li>
+<li><a class="nav-url" href="url.html" tppabs="http://nodejs.cn/api/url.html">URL</a></li>
+<li><a class="nav-util" href="util.html" tppabs="http://nodejs.cn/api/util.html">Utilities (å®ç”¨å‡½æ•°)</a></li>
+<li><a class="nav-v8 active" href="v8.html" tppabs="http://nodejs.cn/api/v8.html">V8</a></li>
+<li><a class="nav-vm" href="vm.html" tppabs="http://nodejs.cn/api/vm.html">VM (è™šæ‹Ÿæœº)</a></li>
+<li><a class="nav-zlib" href="zlib.html" tppabs="http://nodejs.cn/api/zlib.html">ZLIB (å‹ç¼©)</a></li>
+</ul>
+<div class="line"></div>
+
+
+    </div>
+
+    <div id="column1" data-id="v8" class="interior">
+      <header>
+        <h1>Node.js 6.9.5 æ–‡æ¡£</h1>
+        <div id="gtoc">
+          <p>
+            <a href="index.htm" tppabs="http://nodejs.cn/api/" name="toc">ç´¢å¼•</a> |
+            <!--<a href="/api/all.html">å•é¡µé¢æ˜¾ç¤º</a> |-->
+            <a href="v8.json" tppabs="http://nodejs.cn/api/v8.json">JSONæ ¼å¼</a> |
+            <a href="en/v8.html" tppabs="http://nodejs.cn/api/en/v8.html">æŸ¥çœ‹è‹±æ–‡æ–‡æ¡£</a>
+          </p>
+        </div>
+        <hr>
+      </header>
+
+      <div id="toc">
+        <h2>ç›®å½•</h2>
+        <ul>
+<li><span class="stability_undefined"><a href="#v8_v8">V8</a></span><ul>
+<li><span class="stability_undefined"><a href="#v8_v8_getheapstatistics">v8.getHeapStatistics()</a></span></li>
+<li><span class="stability_undefined"><a href="#v8_v8_getheapspacestatistics">v8.getHeapSpaceStatistics()</a></span></li>
+<li><span class="stability_undefined"><a href="#v8_v8_setflagsfromstring_string">v8.setFlagsFromString(string)</a></span></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+
+      <div id="apicontent">
+        <h1>V8<span><a class="mark" href="#v8_v8" id="v8_v8">#</a></span></h1>
+<p>The <code>v8</code> module exposes APIs that are specific to the version of <a href="javascript:if(confirm('https://developers.google.com/v8/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://developers.google.com/v8/'" tppabs="https://developers.google.com/v8/">V8</a>
+built into the Node.js binary. It can be accessed using:</p>
+<pre><code class="lang-js">const v8 = require(&#39;v8&#39;);
+</code></pre>
+<p><em>Note</em>: The APIs and implementation are subject to change at any time.</p>
+<h2>v8.getHeapStatistics()<span><a class="mark" href="#v8_v8_getheapstatistics" id="v8_v8_getheapstatistics">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v1.0.0</span>
+</div><p>Returns an object with the following properties:</p>
+<ul>
+<li><code>total_heap_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>total_heap_size_executable</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>total_physical_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>total_available_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>used_heap_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>heap_size_limit</code> <span class="type">&lt;number&gt;</span></li>
+</ul>
+<p>For example:</p>
+<pre><code class="lang-js">{
+  total_heap_size: 7326976,
+  total_heap_size_executable: 4194304,
+  total_physical_size: 7326976,
+  total_available_size: 1152656,
+  used_heap_size: 3476208,
+  heap_size_limit: 1535115264
+}
+</code></pre>
+<h2>v8.getHeapSpaceStatistics()<span><a class="mark" href="#v8_v8_getheapspacestatistics" id="v8_v8_getheapspacestatistics">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v6.0.0</span>
+</div><p>Returns statistics about the V8 heap spaces, i.e. the segments which make up
+the V8 heap. Neither the ordering of heap spaces, nor the availability of a
+heap space can be guaranteed as the statistics are provided via the V8
+<a href="javascript:if(confirm('https://v8docs.nodesource.com/node-5.0/d5/dda/classv8_1_1_isolate.html  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://v8docs.nodesource.com/node-5.0/d5/dda/classv8_1_1_isolate.html#ac673576f24fdc7a33378f8f57e1d13a4'" tppabs="https://v8docs.nodesource.com/node-5.0/d5/dda/classv8_1_1_isolate.html#ac673576f24fdc7a33378f8f57e1d13a4"><code>GetHeapSpaceStatistics</code></a> function and may change from one V8 version to the
+next.</p>
+<p>The value returned is an array of objects containing the following properties:</p>
+<ul>
+<li><code>space_name</code> <span class="type">&lt;string&gt;</span></li>
+<li><code>space_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>space_used_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>space_available_size</code> <span class="type">&lt;number&gt;</span></li>
+<li><code>physical_space_size</code> <span class="type">&lt;number&gt;</span></li>
+</ul>
+<p>For example:</p>
+<pre><code class="lang-json">[
+  {
+    &quot;space_name&quot;: &quot;new_space&quot;,
+    &quot;space_size&quot;: 2063872,
+    &quot;space_used_size&quot;: 951112,
+    &quot;space_available_size&quot;: 80824,
+    &quot;physical_space_size&quot;: 2063872
+  },
+  {
+    &quot;space_name&quot;: &quot;old_space&quot;,
+    &quot;space_size&quot;: 3090560,
+    &quot;space_used_size&quot;: 2493792,
+    &quot;space_available_size&quot;: 0,
+    &quot;physical_space_size&quot;: 3090560
+  },
+  {
+    &quot;space_name&quot;: &quot;code_space&quot;,
+    &quot;space_size&quot;: 1260160,
+    &quot;space_used_size&quot;: 644256,
+    &quot;space_available_size&quot;: 960,
+    &quot;physical_space_size&quot;: 1260160
+  },
+  {
+    &quot;space_name&quot;: &quot;map_space&quot;,
+    &quot;space_size&quot;: 1094160,
+    &quot;space_used_size&quot;: 201608,
+    &quot;space_available_size&quot;: 0,
+    &quot;physical_space_size&quot;: 1094160
+  },
+  {
+    &quot;space_name&quot;: &quot;large_object_space&quot;,
+    &quot;space_size&quot;: 0,
+    &quot;space_used_size&quot;: 0,
+    &quot;space_available_size&quot;: 1490980608,
+    &quot;physical_space_size&quot;: 0
+  }
+]
+</code></pre>
+<h2>v8.setFlagsFromString(string)<span><a class="mark" href="#v8_v8_setflagsfromstring_string" id="v8_v8_setflagsfromstring_string">#</a></span></h2>
+<div class="api_metadata">
+<span>æ–°å¢äº: v1.0.0</span>
+</div><p>The <code>v8.setFlagsFromString()</code> method can be used to programmatically set
+V8 command line flags. This method should be used with care. Changing settings
+after the VM has started may result in unpredictable behavior, including
+crashes and data loss; or it may simply do nothing.</p>
+<p>The V8 options available for a version of Node.js may be determined by running
+<code>node --v8-options</code>.  An unofficial, community-maintained list of options
+and their effects is available <a href="javascript:if(confirm('https://github.com/thlorenz/v8-flags/blob/master/flags-0.11.md  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://github.com/thlorenz/v8-flags/blob/master/flags-0.11.md'" tppabs="https://github.com/thlorenz/v8-flags/blob/master/flags-0.11.md">here</a>.</p>
+<p>Usage:</p>
+<pre><code class="lang-js">// Print GC events to stdout for one minute.
+const v8 = require(&#39;v8&#39;);
+v8.setFlagsFromString(&#39;--trace_gc&#39;);
+setTimeout(function() { v8.setFlagsFromString(&#39;--notrace_gc&#39;); }, 60e3);
+</code></pre>
+
+      </div>
+    </div>
+  </div>
+  <script src="../static/api.js" tppabs="http://nodejs.cn/static/api.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+</body>
+</html>

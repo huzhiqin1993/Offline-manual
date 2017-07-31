@@ -1,0 +1,439 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/globals.md",
+  "globals": [
+    {
+      "textRaw": "Class: Buffer",
+      "type": "global",
+      "name": "Buffer",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.103"
+        ]
+      },
+      "desc": "<ul>\n<li>{Function}</li>\n</ul>\n<p>用于处理二进制数据。详见 <a href=\"buffer.html\"/*tpa=http://nodejs.cn/api/buffer.html*/>buffer 章节</a>。</p>\n"
+    },
+    {
+      "textRaw": "clearImmediate(immediateObject)",
+      "type": "global",
+      "name": "clearImmediate",
+      "meta": {
+        "added": [
+          "v0.9.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_clearimmediate_immediate\"><code>clearImmediate</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "clearInterval(intervalObject)",
+      "type": "global",
+      "name": "clearInterval",
+      "meta": {
+        "added": [
+          "v0.0.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_clearinterval_timeout\"><code>clearInterval</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "clearTimeout(timeoutObject)",
+      "type": "global",
+      "name": "clearTimeout",
+      "meta": {
+        "added": [
+          "v0.0.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_cleartimeout_timeout\"><code>clearTimeout</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "console",
+      "name": "console",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.100"
+        ]
+      },
+      "type": "global",
+      "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>用于打印 <code>stdout</code> 和 <code>stderr</code>。\n详见 <a href=\"console.html\"/*tpa=http://nodejs.cn/api/console.html*/><code>console</code></a> 章节。</p>\n"
+    },
+    {
+      "textRaw": "global",
+      "name": "global",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.27"
+        ]
+      },
+      "type": "global",
+      "desc": "<ul>\n<li>{Object} 全局的命名空间对象。</li>\n</ul>\n<p>在浏览器中，顶层作用域就是全局作用域。\n这意味着在浏览器中，如果在全局作用域内使用 <code>var something</code> 会定义一个全局变量。\n在 Node.js 中则不同。\n顶层作用域不是全局作用域；在 Node.js 模块中使用 <code>var something</code> 会是模块内部的。</p>\n"
+    },
+    {
+      "textRaw": "process",
+      "name": "process",
+      "meta": {
+        "added": [
+          "v0.1.7"
+        ]
+      },
+      "type": "global",
+      "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>进程对象。详见 <a href=\"process.html#process_process\"><code>process</code> 对象</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "setImmediate(callback[, ...args])",
+      "type": "global",
+      "name": "setImmediate",
+      "meta": {
+        "added": [
+          "v0.9.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_setimmediate_callback_args\"><code>setImmediate</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "setInterval(callback, delay[, ...args])",
+      "type": "global",
+      "name": "setInterval",
+      "meta": {
+        "added": [
+          "v0.0.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_setinterval_callback_delay_args\"><code>setInterval</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    },
+    {
+      "textRaw": "setTimeout(callback, delay[, ...args])",
+      "type": "global",
+      "name": "setTimeout",
+      "meta": {
+        "added": [
+          "v0.0.1"
+        ]
+      },
+      "desc": "<p><a href=\"timers.html#timers_settimeout_callback_delay_args\"><code>setTimeout</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+    }
+  ],
+  "vars": [
+    {
+      "textRaw": "\\_\\_dirname",
+      "name": "\\_\\_dirname",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.27"
+        ]
+      },
+      "type": "var",
+      "desc": "<ul>\n<li>{String}</li>\n</ul>\n<p>当前执行脚本所在的目录名称。</p>\n<p>例子，从 <code>/Users/mjr</code> 运行 <code>node example.js</code>：</p>\n<pre><code class=\"lang-js\">console.log(__dirname);\n// 输出: /Users/mjr\n</code></pre>\n<p><code>__dirname</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>例子，给出两个模块：<code>a</code> 和 <code>b</code>，其中 <code>b</code> 是 <code>a</code> 的一个依赖，目录结构如下：</p>\n<ul>\n<li><code>/Users/mjr/app/a.js</code></li>\n<li><code>/Users/mjr/app/node_modules/b/b.js</code></li>\n</ul>\n<p><code>b.js</code> 的 <code>__dirname</code> 返回 <code>/Users/mjr/app/node_modules/b</code>，而 <code>a.js</code> 的 <code>__dirname</code> 返回 <code>/Users/mjr/app</code>。</p>\n"
+    },
+    {
+      "textRaw": "\\_\\_filename",
+      "name": "\\_\\_filename",
+      "meta": {
+        "added": [
+          "v0.0.1"
+        ]
+      },
+      "type": "var",
+      "desc": "<ul>\n<li>{String}</li>\n</ul>\n<p>所执行的代码的文件名。\n这是代码文件的解析后的绝对路径。\n对于主程序而言，无需与在命令行中使用的文件名相同。\n在模块中此变量的值是模块文件的路径。</p>\n<p>例子，从 <code>/Users/mjr</code> 运行 <code>node example.js</code>：</p>\n<pre><code class=\"lang-js\">console.log(__filename);\n// 输出: /Users/mjr/example.js\n</code></pre>\n<p><code>__filename</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n"
+    },
+    {
+      "textRaw": "exports",
+      "name": "exports",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.12"
+        ]
+      },
+      "type": "var",
+      "desc": "<p><code>module.exports</code> 的一个简短的引用。\n何时使用 <code>exports</code> 与何时使用 <code>module.exports</code> 详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n<p><code>exports</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n"
+    },
+    {
+      "textRaw": "module",
+      "name": "module",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.16"
+        ]
+      },
+      "type": "var",
+      "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>当前模块的引用。\n具体地说，<code>module.exports</code> 用于定义一个模块导出什么，且通过 <code>require()</code> 引入。</p>\n<p><code>module</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n"
+    },
+    {
+      "textRaw": "require()",
+      "type": "var",
+      "name": "require",
+      "meta": {
+        "added": [
+          "http://nodejs.cn/api/v0.1.13"
+        ]
+      },
+      "desc": "<ul>\n<li>{Function}</li>\n</ul>\n<p>用于引入模块。详见<a href=\"modules.html#modules_modules\">模块</a>章节。\n<code>require</code> 实际上不是一个全部变量，而是每个模块内部的。</p>\n",
+      "properties": [
+        {
+          "textRaw": "`cache` {Object} ",
+          "type": "Object",
+          "name": "cache",
+          "meta": {
+            "added": [
+              "v0.3.0"
+            ]
+          },
+          "desc": "<p>当模块被引入时，它们会缓存到这个对象。\n通过从该对象删除键值，下次调用 <code>require</code> 时会重新加载模块。\n注意，这不适用于<a href=\"addons.html\"/*tpa=http://nodejs.cn/api/addons.html*/>原生插件</a>，因为重新加载会导致错误。</p>\n"
+        },
+        {
+          "textRaw": "`extensions` {Object} ",
+          "type": "Object",
+          "name": "extensions",
+          "meta": {
+            "added": [
+              "v0.3.0"
+            ],
+            "deprecated": [
+              "v0.10.6"
+            ]
+          },
+          "desc": "<p>稳定性: 0 - 废弃的</p>\n<p>Instruct <code>require</code> on how to handle certain file extensions.</p>\n<p>Process files with the extension <code>.sjs</code> as <code>.js</code>:</p>\n<pre><code class=\"lang-js\">require.extensions[&#39;.sjs&#39;] = require.extensions[&#39;.js&#39;];\n</code></pre>\n<p><strong>Deprecated</strong>  In the past, this list has been used to load\nnon-JavaScript modules into Node.js by compiling them on-demand.\nHowever, in practice, there are much better ways to do this, such as\nloading modules via some other Node.js program, or compiling them to\nJavaScript ahead of time.</p>\n<p>Since the Module system is locked, this feature will probably never go\naway.  However, it may have subtle bugs and complexities that are best\nleft untouched.</p>\n"
+        }
+      ],
+      "methods": [
+        {
+          "textRaw": "require.resolve()",
+          "type": "method",
+          "name": "resolve",
+          "meta": {
+            "added": [
+              "v0.3.0"
+            ]
+          },
+          "desc": "<p>使用内部的 <code>require()</code> 机制来查找模块的位置，但不会加载模块，只返回解析后的文件名。</p>\n",
+          "signatures": [
+            {
+              "params": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "miscs": [
+    {
+      "textRaw": "Global Objects",
+      "name": "Global Objects",
+      "type": "misc",
+      "desc": "<p>这些对象在所有模块中都是可用的。\n有些对象实际上不在全局作用域内，而是在模块作用域内，这个在文档中会注明。</p>\n<p>以下列出的对象是特定于 Node.js 的。\n有些<a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects\">内置对象</a>是 JavaScript 语言本身的一部分，它们也可以全局访问。</p>\n",
+      "globals": [
+        {
+          "textRaw": "Class: Buffer",
+          "type": "global",
+          "name": "Buffer",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.103"
+            ]
+          },
+          "desc": "<ul>\n<li>{Function}</li>\n</ul>\n<p>用于处理二进制数据。详见 <a href=\"buffer.html\"/*tpa=http://nodejs.cn/api/buffer.html*/>buffer 章节</a>。</p>\n"
+        },
+        {
+          "textRaw": "clearImmediate(immediateObject)",
+          "type": "global",
+          "name": "clearImmediate",
+          "meta": {
+            "added": [
+              "v0.9.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_clearimmediate_immediate\"><code>clearImmediate</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "clearInterval(intervalObject)",
+          "type": "global",
+          "name": "clearInterval",
+          "meta": {
+            "added": [
+              "v0.0.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_clearinterval_timeout\"><code>clearInterval</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "clearTimeout(timeoutObject)",
+          "type": "global",
+          "name": "clearTimeout",
+          "meta": {
+            "added": [
+              "v0.0.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_cleartimeout_timeout\"><code>clearTimeout</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "console",
+          "name": "console",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.100"
+            ]
+          },
+          "type": "global",
+          "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>用于打印 <code>stdout</code> 和 <code>stderr</code>。\n详见 <a href=\"console.html\"/*tpa=http://nodejs.cn/api/console.html*/><code>console</code></a> 章节。</p>\n"
+        },
+        {
+          "textRaw": "global",
+          "name": "global",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.27"
+            ]
+          },
+          "type": "global",
+          "desc": "<ul>\n<li>{Object} 全局的命名空间对象。</li>\n</ul>\n<p>在浏览器中，顶层作用域就是全局作用域。\n这意味着在浏览器中，如果在全局作用域内使用 <code>var something</code> 会定义一个全局变量。\n在 Node.js 中则不同。\n顶层作用域不是全局作用域；在 Node.js 模块中使用 <code>var something</code> 会是模块内部的。</p>\n"
+        },
+        {
+          "textRaw": "process",
+          "name": "process",
+          "meta": {
+            "added": [
+              "v0.1.7"
+            ]
+          },
+          "type": "global",
+          "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>进程对象。详见 <a href=\"process.html#process_process\"><code>process</code> 对象</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "setImmediate(callback[, ...args])",
+          "type": "global",
+          "name": "setImmediate",
+          "meta": {
+            "added": [
+              "v0.9.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_setimmediate_callback_args\"><code>setImmediate</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "setInterval(callback, delay[, ...args])",
+          "type": "global",
+          "name": "setInterval",
+          "meta": {
+            "added": [
+              "v0.0.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_setinterval_callback_delay_args\"><code>setInterval</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        },
+        {
+          "textRaw": "setTimeout(callback, delay[, ...args])",
+          "type": "global",
+          "name": "setTimeout",
+          "meta": {
+            "added": [
+              "v0.0.1"
+            ]
+          },
+          "desc": "<p><a href=\"timers.html#timers_settimeout_callback_delay_args\"><code>setTimeout</code></a> 描述在<a href=\"timers.html\"/*tpa=http://nodejs.cn/api/timers.html*/>定时器</a>章节。</p>\n"
+        }
+      ],
+      "vars": [
+        {
+          "textRaw": "\\_\\_dirname",
+          "name": "\\_\\_dirname",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.27"
+            ]
+          },
+          "type": "var",
+          "desc": "<ul>\n<li>{String}</li>\n</ul>\n<p>当前执行脚本所在的目录名称。</p>\n<p>例子，从 <code>/Users/mjr</code> 运行 <code>node example.js</code>：</p>\n<pre><code class=\"lang-js\">console.log(__dirname);\n// 输出: /Users/mjr\n</code></pre>\n<p><code>__dirname</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>例子，给出两个模块：<code>a</code> 和 <code>b</code>，其中 <code>b</code> 是 <code>a</code> 的一个依赖，目录结构如下：</p>\n<ul>\n<li><code>/Users/mjr/app/a.js</code></li>\n<li><code>/Users/mjr/app/node_modules/b/b.js</code></li>\n</ul>\n<p><code>b.js</code> 的 <code>__dirname</code> 返回 <code>/Users/mjr/app/node_modules/b</code>，而 <code>a.js</code> 的 <code>__dirname</code> 返回 <code>/Users/mjr/app</code>。</p>\n"
+        },
+        {
+          "textRaw": "\\_\\_filename",
+          "name": "\\_\\_filename",
+          "meta": {
+            "added": [
+              "v0.0.1"
+            ]
+          },
+          "type": "var",
+          "desc": "<ul>\n<li>{String}</li>\n</ul>\n<p>所执行的代码的文件名。\n这是代码文件的解析后的绝对路径。\n对于主程序而言，无需与在命令行中使用的文件名相同。\n在模块中此变量的值是模块文件的路径。</p>\n<p>例子，从 <code>/Users/mjr</code> 运行 <code>node example.js</code>：</p>\n<pre><code class=\"lang-js\">console.log(__filename);\n// 输出: /Users/mjr/example.js\n</code></pre>\n<p><code>__filename</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n"
+        },
+        {
+          "textRaw": "exports",
+          "name": "exports",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.12"
+            ]
+          },
+          "type": "var",
+          "desc": "<p><code>module.exports</code> 的一个简短的引用。\n何时使用 <code>exports</code> 与何时使用 <code>module.exports</code> 详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n<p><code>exports</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n"
+        },
+        {
+          "textRaw": "module",
+          "name": "module",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.16"
+            ]
+          },
+          "type": "var",
+          "desc": "<ul>\n<li>{Object}</li>\n</ul>\n<p>当前模块的引用。\n具体地说，<code>module.exports</code> 用于定义一个模块导出什么，且通过 <code>require()</code> 引入。</p>\n<p><code>module</code> 实际上不是一个全局变量，而是每个模块内部的。</p>\n<p>详见<a href=\"modules.html\"/*tpa=http://nodejs.cn/api/modules.html*/>模块系统文档</a>。</p>\n"
+        },
+        {
+          "textRaw": "require()",
+          "type": "var",
+          "name": "require",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.13"
+            ]
+          },
+          "desc": "<ul>\n<li>{Function}</li>\n</ul>\n<p>用于引入模块。详见<a href=\"modules.html#modules_modules\">模块</a>章节。\n<code>require</code> 实际上不是一个全部变量，而是每个模块内部的。</p>\n",
+          "properties": [
+            {
+              "textRaw": "`cache` {Object} ",
+              "type": "Object",
+              "name": "cache",
+              "meta": {
+                "added": [
+                  "v0.3.0"
+                ]
+              },
+              "desc": "<p>当模块被引入时，它们会缓存到这个对象。\n通过从该对象删除键值，下次调用 <code>require</code> 时会重新加载模块。\n注意，这不适用于<a href=\"addons.html\"/*tpa=http://nodejs.cn/api/addons.html*/>原生插件</a>，因为重新加载会导致错误。</p>\n"
+            },
+            {
+              "textRaw": "`extensions` {Object} ",
+              "type": "Object",
+              "name": "extensions",
+              "meta": {
+                "added": [
+                  "v0.3.0"
+                ],
+                "deprecated": [
+                  "v0.10.6"
+                ]
+              },
+              "desc": "<p>稳定性: 0 - 废弃的</p>\n<p>Instruct <code>require</code> on how to handle certain file extensions.</p>\n<p>Process files with the extension <code>.sjs</code> as <code>.js</code>:</p>\n<pre><code class=\"lang-js\">require.extensions[&#39;.sjs&#39;] = require.extensions[&#39;.js&#39;];\n</code></pre>\n<p><strong>Deprecated</strong>  In the past, this list has been used to load\nnon-JavaScript modules into Node.js by compiling them on-demand.\nHowever, in practice, there are much better ways to do this, such as\nloading modules via some other Node.js program, or compiling them to\nJavaScript ahead of time.</p>\n<p>Since the Module system is locked, this feature will probably never go\naway.  However, it may have subtle bugs and complexities that are best\nleft untouched.</p>\n"
+            }
+          ],
+          "methods": [
+            {
+              "textRaw": "require.resolve()",
+              "type": "method",
+              "name": "resolve",
+              "meta": {
+                "added": [
+                  "v0.3.0"
+                ]
+              },
+              "desc": "<p>使用内部的 <code>require()</code> 机制来查找模块的位置，但不会加载模块，只返回解析后的文件名。</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

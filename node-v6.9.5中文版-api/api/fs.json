@@ -1,0 +1,3849 @@
+{
+  "source": "http://nodejs.cn/api/cn/api/fs.md",
+  "modules": [
+    {
+      "textRaw": "File System",
+      "name": "fs",
+      "desc": "<p>稳定性: 2 - 稳定的</p>\n<p>文件 I/O 是由简单封装的标准 POSIX 函数提供的。\n通过 <code>require(&#39;fs&#39;)</code> 使用该模块。\n所有的方法都有异步和同步的形式。</p>\n<p>异步形式始终以完成回调作为它最后一个参数。\n传给完成回调的参数取决于具体方法，但第一个参数总是留给异常。\n如果操作成功完成，则第一个参数会是 <code>null</code> 或 <code>undefined</code>。</p>\n<p>当使用同步形式时，任何异常都会被立即抛出。\n可以使用 try/catch 来处理异常，或让它们往上冒泡。</p>\n<p>这是异步版本的例子：</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\nfs.unlink(&#39;/tmp/hello&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;successfully deleted /tmp/hello&#39;);\n});\n</code></pre>\n<p>这是同步版本的例子：</p>\n<pre><code class=\"lang-js\">const fs = require(&#39;fs&#39;);\n\nfs.unlinkSync(&#39;/tmp/hello&#39;);\nconsole.log(&#39;successfully deleted /tmp/hello&#39;);\n</code></pre>\n<p>异步方法不保证执行顺序。\n所以下面的例子容易出错：</p>\n<pre><code class=\"lang-js\">fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;renamed complete&#39;);\n});\nfs.stat(&#39;/tmp/world&#39;, (err, stats) =&gt; {\n  if (err) throw err;\n  console.log(`stats: ${JSON.stringify(stats)}`);\n});\n</code></pre>\n<p><code>fs.stat</code> 可能在 <code>fs.rename</code> 之前执行。正确的方法是把回调链起来。</p>\n<pre><code class=\"lang-js\">fs.rename(&#39;/tmp/hello&#39;, &#39;/tmp/world&#39;, (err) =&gt; {\n  if (err) throw err;\n  fs.stat(&#39;/tmp/world&#39;, (err, stats) =&gt; {\n    if (err) throw err;\n    console.log(`stats: ${JSON.stringify(stats)}`);\n  });\n});\n</code></pre>\n<p>在繁忙的进程中，<strong>强烈推荐</strong>开发者使用这些函数的异步版本。\n同步版本会阻塞整个进程，直到它们完成（停止所有连接）。</p>\n<p>可使用文件名的相对路径。\n但该路径是相对 <code>process.cwd()</code> 的。</p>\n<p>大部分 fs 函数会让你忽略回调参数。\n如果你这么做，一个默认的回调将用于抛出错误。\n为了追踪原始的调用点，可设置 <code>NODE_DEBUG</code> 环境变量：</p>\n<pre><code class=\"lang-txt\">$ cat script.js\nfunction bad() {\n  require(&#39;fs&#39;).readFile(&#39;/&#39;);\n}\nbad();\n\n$ env NODE_DEBUG=fs node script.js\nfs.js:88\n        throw backtrace;\n        ^\nError: EISDIR: illegal operation on a directory, read\n    &lt;stack trace.&gt;\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "Buffer API",
+          "name": "buffer_api",
+          "meta": {
+            "added": [
+              "v6.0.0"
+            ]
+          },
+          "desc": "<p><code>fs</code> 函数支持传递和接收字符串路径与 Buffer 路径。\n后者的目的是使其可以在允许非 UTF-8 文件名的文件系统中工作。\n对于大多数普通用途，使用 Buffer 路径是不必要的，因为字符串 API 会自动与 UTF-8 相互转换。</p>\n<p><strong>注意</strong>，在某些文件系统（如 NTFS 和 HFS+），文件名总是被编码为 UTF-8。\n在这些文件系统中，传入非 UTF-8 编码的 Buffer 到 <code>fs</code> 函数将无法像预期那样工作。</p>\n",
+          "type": "module",
+          "displayName": "Buffer API"
+        },
+        {
+          "textRaw": "FS Constants",
+          "name": "fs_constants",
+          "desc": "<p>以下常量由 <code>fs.constants</code> 输出。\n<strong>注意：</strong>不是所有的常量在每一个操作系统上都是可用的。</p>\n",
+          "modules": [
+            {
+              "textRaw": "File Access Constants",
+              "name": "file_access_constants",
+              "desc": "<p>以下常量用于 <a href=\"#fs_fs_access_path_mode_callback\"><code>fs.access()</code></a>。</p>\n<table>\n  <tr>\n    <th>常量</th>\n    <th>描述</th>\n  </tr>\n  <tr>\n    <td><code>F_OK</code></td>\n    <td>该标志表明文件对于调用进程是可见的。</td>\n  </tr>\n  <tr>\n    <td><code>R_OK</code></td>\n    <td>该标志表明文件可被调用进程读取。</td>\n  </tr>\n  <tr>\n    <td><code>W_OK</code></td>\n    <td>该标志表明文件可被调用进程写入。</td>\n  </tr>\n  <tr>\n    <td><code>X_OK</code></td>\n    <td>该标志表明文件可被调用进程执行。</td>\n  </tr>\n</table>\n\n",
+              "type": "module",
+              "displayName": "File Access Constants"
+            },
+            {
+              "textRaw": "File Open Constants",
+              "name": "file_open_constants",
+              "desc": "<p>以下常量用于 <code>fs.open()</code>。</p>\n<table>\n  <tr>\n    <th>常量</th>\n    <th>描述</th>\n  </tr>\n  <tr>\n    <td><code>O_RDONLY</code></td>\n    <td>该标志表明打开一个文件用于只读访问。</td>\n  </tr>\n  <tr>\n    <td><code>O_WRONLY</code></td>\n    <td>该标志表明打开一个文件用于只写访问。</td>\n  </tr>\n  <tr>\n    <td><code>O_RDWR</code></td>\n    <td>该标志表明打开一个文件用于读写访问。</td>\n  </tr>\n  <tr>\n    <td><code>O_CREAT</code></td>\n    <td>该标志表明如果文件不存在则创建一个文件。</td>\n  </tr>\n  <tr>\n    <td><code>O_EXCL</code></td>\n    <td>该标志表明如果设置了 <code>O_CREAT</code> 标志且文件已经存在，则打开一个文件应该失败。</td>\n  </tr>\n  <tr>\n    <td><code>O_NOCTTY</code></td>\n    <td>该标志表明如果路径是一个终端设备，则打开该路径不应该造成该终端变成进程的控制终端（如果进程还没有终端）。</td>\n  </tr>\n  <tr>\n    <td><code>O_TRUNC</code></td>\n    <td>该标志表明如果文件存在且为一个常规文件、且文件被成功打开为写入访问，则它的长度应该被截断至零。</td>\n  </tr>\n  <tr>\n    <td><code>O_APPEND</code></td>\n    <td>该标志表明数据会被追加到文件的末尾。</td>\n  </tr>\n  <tr>\n    <td><code>O_DIRECTORY</code></td>\n    <td>该标志表明如果路径不是一个目录，则打开应该失败。</td>\n  </tr>\n  <tr>\n  <td><code>O_NOATIME</code></td>\n    <td>该标志表明文件系统的读取访问权不再引起相关文件 <code>atime</code> 信息的更新。该标志只在 Linux 操作系统有效。</td>\n  </tr>\n  <tr>\n    <td><code>O_NOFOLLOW</code></td>\n    <td>该标志表明如果路径是一个符号链接，则打开应该失败。</td>\n  </tr>\n  <tr>\n    <td><code>O_SYNC</code></td>\n    <td>该标志表明文件打开用于同步 I/O。</td>\n  </tr>\n  <tr>\n    <td><code>O_SYMLINK</code></td>\n    <td>该标志表明打开符号链接自身，而不是它指向的资源。</td>\n  </tr>\n  <tr>\n    <td><code>O_DIRECT</code></td>\n    <td>当设置它时，会尝试最小化文件 I/O 的缓存效果。</td>\n  </tr>\n  <tr>\n    <td><code>O_NONBLOCK</code></td>\n    <td>该标志表明当可能时以非阻塞模式打开文件。</td>\n  </tr>\n</table>\n\n",
+              "type": "module",
+              "displayName": "File Open Constants"
+            },
+            {
+              "textRaw": "File Type Constants",
+              "name": "file_type_constants",
+              "desc": "<p>以下常量用于 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 对象中用于决定一个文件的类型的 <code>mode</code> 属性。</p>\n<table>\n  <tr>\n    <th>常量</th>\n    <th>描述</th>\n  </tr>\n  <tr>\n    <td><code>S_IFMT</code></td>\n    <td>用于提取文件类型码的位掩码。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFREG</code></td>\n    <td>表示一个常规文件的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFDIR</code></td>\n    <td>表示一个目录的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFCHR</code></td>\n    <td>表示一个面向字符的设备文件的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFBLK</code></td>\n    <td>表示一个面向块的设备文件的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFIFO</code></td>\n    <td>表示一个 FIFO/pipe 的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFLNK</code></td>\n    <td>表示一个符号链接的文件类型常量。</td>\n  </tr>\n  <tr>\n    <td><code>S_IFSOCK</code></td>\n    <td>表示一个 socket 的文件类型常量。</td>\n  </tr>\n</table>\n\n",
+              "type": "module",
+              "displayName": "File Type Constants"
+            },
+            {
+              "textRaw": "File Mode Constants",
+              "name": "file_mode_constants",
+              "desc": "<p>以下常量用于 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 对象中用于决定一个文件访问权限的 <code>mode</code> 属性。</p>\n<table>\n  <tr>\n    <th>常量</th>\n    <th>描述</th>\n  </tr>\n  <tr>\n    <td><code>S_IRWXU</code></td>\n    <td>该文件模式表明可被所有者读取、写入、执行。</td>\n  </tr>\n  <tr>\n    <td><code>S_IRUSR</code></td>\n    <td>该文件模式表明可被所有者读取。</td>\n  </tr>\n  <tr>\n    <td><code>S_IWUSR</code></td>\n    <td>该文件模式表明可被所有者写入。</td>\n  </tr>\n  <tr>\n    <td><code>S_IXUSR</code></td>\n    <td>该文件模式表明可被所有者执行。</td>\n  </tr>\n  <tr>\n    <td><code>S_IRWXG</code></td>\n    <td>该文件模式表明可被群组读取、写入、执行。</td>\n  </tr>\n  <tr>\n    <td><code>S_IRGRP</code></td>\n    <td>该文件模式表明可被群组读取。</td>\n  </tr>\n  <tr>\n    <td><code>S_IWGRP</code></td>\n    <td>该文件模式表明可被群组写入。</td>\n  </tr>\n  <tr>\n    <td><code>S_IXGRP</code></td>\n    <td>该文件模式表明可被群组执行。</td>\n  </tr>\n  <tr>\n    <td><code>S_IRWXO</code></td>\n    <td>该文件模式表明可被其他人读取、写入、执行。</td>\n  </tr>\n  <tr>\n    <td><code>S_IROTH</code></td>\n    <td>该文件模式表明可被其他人读取。</td>\n  </tr>\n  <tr>\n    <td><code>S_IWOTH</code></td>\n    <td>该文件模式表明可被其他人写入。</td>\n  </tr>\n  <tr>\n    <td><code>S_IXOTH</code></td>\n    <td>该文件模式表明可被其他人执行。</td>\n  </tr>\n</table>\n\n",
+              "type": "module",
+              "displayName": "File Mode Constants"
+            }
+          ],
+          "type": "module",
+          "displayName": "FS Constants"
+        }
+      ],
+      "classes": [
+        {
+          "textRaw": "Class: fs.FSWatcher",
+          "type": "class",
+          "name": "fs.FSWatcher",
+          "meta": {
+            "added": [
+              "v0.5.8"
+            ]
+          },
+          "desc": "<p>从 <a href=\"#fs_fs_watch_filename_options_listener\"><code>fs.watch()</code></a> 返回的对象是该类型。</p>\n<p>提供给 <code>fs.watch()</code> 的 <code>listener</code> 回调会接收返回的 FSWatcher 的 <code>change</code> 事件。</p>\n<p>该对象本身可触发以下事件：</p>\n",
+          "events": [
+            {
+              "textRaw": "Event: 'change'",
+              "type": "event",
+              "name": "change",
+              "meta": {
+                "added": [
+                  "v0.5.8"
+                ]
+              },
+              "params": [],
+              "desc": "<p>当一个被监视的目录或文件有变化时触发。\n详见 <a href=\"#fs_fs_watch_filename_options_listener\"><code>fs.watch()</code></a>。</p>\n<p><code>filename</code> 参数可能不会被提供，这依赖于操作系统支持。\n如果提供了 <code>filename</code>，则若 <code>fs.watch()</code> 被调用时 <code>encoding</code> 选项被设置为 <code>&#39;buffer&#39;</code> 则它会是一个 <code>Buffer</code>，否则 <code>filename</code> 是一个字符串。</p>\n<pre><code class=\"lang-js\">// 例子，处理 fs.watch 监听器\nfs.watch(&#39;./tmp&#39;, {encoding: &#39;buffer&#39;}, (eventType, filename) =&gt; {\n  if (filename)\n    console.log(filename);\n    // 输出: &lt;Buffer ...&gt;\n});\n</code></pre>\n"
+            },
+            {
+              "textRaw": "Event: 'error'",
+              "type": "event",
+              "name": "error",
+              "meta": {
+                "added": [
+                  "v0.5.8"
+                ]
+              },
+              "params": [],
+              "desc": "<p>当发生错误时触发。</p>\n"
+            }
+          ],
+          "methods": [
+            {
+              "textRaw": "watcher.close()",
+              "type": "method",
+              "name": "close",
+              "meta": {
+                "added": [
+                  "v0.5.8"
+                ]
+              },
+              "desc": "<p>停止监视给定的 <code>fs.FSWatcher</code> 的变化。</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "Class: fs.ReadStream",
+          "type": "class",
+          "name": "fs.ReadStream",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.93"
+            ]
+          },
+          "desc": "<p><code>ReadStream</code> 是一个<a href=\"stream.html#stream_class_stream_readable\">可读流</a>。</p>\n",
+          "events": [
+            {
+              "textRaw": "Event: 'open'",
+              "type": "event",
+              "name": "open",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "params": [],
+              "desc": "<p>当 ReadStream 文件被打开时触发。</p>\n"
+            },
+            {
+              "textRaw": "Event: 'close'",
+              "type": "event",
+              "name": "close",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "desc": "<p>当 <code>ReadStream</code> 底层的文件描述符已被使用 <code>fs.close()</code> 方法关闭时触发。</p>\n",
+              "params": []
+            }
+          ],
+          "properties": [
+            {
+              "textRaw": "readStream.bytesRead",
+              "name": "bytesRead",
+              "meta": {
+                "added": [
+                  "6.4.0"
+                ]
+              },
+              "desc": "<p>已读取的字节数。</p>\n"
+            },
+            {
+              "textRaw": "http://nodejs.cn/api/readStream.path",
+              "name": "path",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "desc": "<p>流正在读取的文件的路径，指定在 <code>fs.createReadStream()</code> 的第一个参数。\n如果 <code>path</code> 传入的是一个字符串，则 <code>readStream.path</code> 是一个字符串。\n如果 <code>path</code> 传入的是一个 <code>Buffer</code>，则 <code>readStream.path</code> 是一个 <code>Buffer</code>。</p>\n"
+            }
+          ]
+        },
+        {
+          "textRaw": "Class: fs.Stats",
+          "type": "class",
+          "name": "fs.Stats",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "desc": "<p>从 <a href=\"#fs_fs_stat_path_callback\"><code>fs.stat()</code></a>、<a href=\"#fs_fs_lstat_path_callback\"><code>fs.lstat()</code></a> 和 <a href=\"#fs_fs_fstat_fd_callback\"><code>fs.fstat()</code></a> 及其同步版本返回的对象都是该类型。</p>\n<ul>\n<li><code>stats.isFile()</code></li>\n<li><code>stats.isDirectory()</code></li>\n<li><code>stats.isBlockDevice()</code></li>\n<li><code>stats.isCharacterDevice()</code></li>\n<li><code>stats.isSymbolicLink()</code> (仅对 <a href=\"#fs_fs_lstat_path_callback\"><code>fs.lstat()</code></a> 有效)</li>\n<li><code>stats.isFIFO()</code></li>\n<li><code>stats.isSocket()</code></li>\n</ul>\n<p>对于一个普通文件，<a href=\"util.html#util_util_inspect_object_options\"><code>util.inspect(stats)</code></a> 会返回一个类似如下的字符串：</p>\n<pre><code class=\"lang-js\">{\n  dev: 2114,\n  ino: 48064969,\n  mode: 33188,\n  nlink: 1,\n  uid: 85,\n  gid: 100,\n  rdev: 0,\n  size: 527,\n  blksize: 4096,\n  blocks: 8,\n  atime: Mon, 10 Oct 2011 23:24:11 GMT,\n  mtime: Mon, 10 Oct 2011 23:24:11 GMT,\n  ctime: Mon, 10 Oct 2011 23:24:11 GMT,\n  birthtime: Mon, 10 Oct 2011 23:24:11 GMT\n}\n</code></pre>\n<p>注意，<code>atime</code>、<code>mtime</code>、<code>birthtime</code> 和 <code>ctime</code> 是 <a href=\"https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date\"><code>Date</code></a> 对象的实例，比较这些对象的值需要使用适当的方法。\n对于大多数一般用途，<a href=\"https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date/getTime\"><code>getTime()</code></a> 会返回 <strong>1970年1月1日 00:00:00 UTC</strong> 至今已过的毫秒数，且该整数应该满足任何对比，当然也有可用于显示模糊信息的其他方法。\n详见 <a href=\"https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date\">MDN JavaScript 手册</a>。</p>\n",
+          "modules": [
+            {
+              "textRaw": "Stat Time Values",
+              "name": "stat_time_values",
+              "desc": "<p>stat 对象中的时间有以下语义：</p>\n<ul>\n<li><code>atime</code> &quot;访问时间&quot; - 文件数据最近被访问的时间。\n会被 mknod(2)、 utimes(2) 和 read(2) 系统调用改变。</li>\n<li><code>mtime</code> &quot;修改时间&quot; - 文件数据最近被修改的时间。\n会被 mknod(2)、 utimes(2) 和 write(2) 系统调用改变。</li>\n<li><code>ctime</code> &quot;变化时间&quot; - 文件状态最近更改的时间（修改索引节点数据）\n会被 chmod(2)、 chown(2)、 link(2)、 mknod(2)、 rename(2)、 unlink(2)、 utimes(2)、 read(2) 和 write(2) 系统调用改变。</li>\n<li><code>birthtime</code> &quot;创建时间&quot; -  文件创建的时间。\n当文件被创建时设定一次。\n在创建时间不可用的文件系统中，该字段可能被替代为 <code>ctime</code> 或 <code>1970-01-01T00:00Z</code>（如 Unix 的纪元时间戳 <code>0</code>）。\n注意，该值在此情况下可能会大于 <code>atime</code> 或 <code>mtime</code>。\n在 Darwin 和其它的 FreeBSD 衍生系统中，如果 <code>atime</code> 被使用 utimes(2) 系统调用显式地设置为一个比当前 <code>birthtime</code> 更早的值，也会有这种情况。</li>\n</ul>\n<p>在 Node.js v0.12 之前的版本中，<code>ctime</code> 在 Windows 系统中保存 <code>birthtime</code>。\n注意，在 v0.12 中，<code>ctime</code> 不是“创建时间”，并且在 Unix 系统中，它从来都不是。</p>\n",
+              "type": "module",
+              "displayName": "Stat Time Values"
+            }
+          ]
+        },
+        {
+          "textRaw": "Class: fs.WriteStream",
+          "type": "class",
+          "name": "fs.WriteStream",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.93"
+            ]
+          },
+          "desc": "<p><code>WriteStream</code> 一个<a href=\"stream.html#stream_class_stream_writable\">可写流</a>。</p>\n",
+          "events": [
+            {
+              "textRaw": "Event: 'open'",
+              "type": "event",
+              "name": "open",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "params": [],
+              "desc": "<p>当 WriteStream 文件被打开时触发。</p>\n"
+            },
+            {
+              "textRaw": "Event: 'close'",
+              "type": "event",
+              "name": "close",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "desc": "<p>当 <code>WriteStream</code> 底层的文件描述符已被使用 <code>fs.close()</code> 方法关闭时触发。</p>\n",
+              "params": []
+            }
+          ],
+          "properties": [
+            {
+              "textRaw": "writeStream.bytesWritten",
+              "name": "bytesWritten",
+              "meta": {
+                "added": [
+                  "v0.4.7"
+                ]
+              },
+              "desc": "<p>已写入的字节数。\n不包括仍在排队等待写入的数据。</p>\n"
+            },
+            {
+              "textRaw": "http://nodejs.cn/api/writeStream.path",
+              "name": "path",
+              "meta": {
+                "added": [
+                  "http://nodejs.cn/api/v0.1.93"
+                ]
+              },
+              "desc": "<p>流正在写入的文件的路径，指定在 <code>fs.createWriteStream()</code> 的第一个参数。\n如果 <code>path</code> 传入的是一个字符串，则 <code>writeStream.path</code> 是一个字符串。\n如果 <code>path</code> 传入的是一个 <code>Buffer</code>，则 <code>writeStream.path</code> 是一个 <code>Buffer</code>。</p>\n"
+            }
+          ]
+        }
+      ],
+      "methods": [
+        {
+          "textRaw": "fs.access(path[, mode], callback)",
+          "type": "method",
+          "name": "access",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.11.15"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>测试 <code>path</code> 指定的文件或目录的用户权限。\n<code>mode</code> 是一个可选的整数，指定要执行的可访问性检查。\n以下常量定义了 <code>mode</code> 的可能值。\n可以创建由两个或更多个值的位或组成的掩码。</p>\n<ul>\n<li><code>fs.constants.F_OK</code> - <code>path</code> 文件对调用进程可见。\n这在确定文件是否存在时很有用，但不涉及 <code>rwx</code> 权限。\n如果没指定 <code>mode</code>，则默认为该值。</li>\n<li><code>fs.constants.R_OK</code> - <code>path</code> 文件可被调用进程读取。</li>\n<li><code>fs.constants.W_OK</code> - <code>path</code> 文件可被调用进程写入。</li>\n<li><code>fs.constants.X_OK</code> - <code>path</code> 文件可被调用进程执行。\n对 Windows 系统没作用（相当于 <code>fs.constants.F_OK</code>）。</li>\n</ul>\n<p>最后一个参数 <code>callback</code> 是一个回调函数，会带有一个可能的错误参数被调用。\n如果可访问性检查有任何的失败，则错误参数会被传入。\n下面的例子会检查 <code>/etc/passwd</code> 文件是否可以被当前进程读取和写入。</p>\n<pre><code class=\"lang-js\">fs.access(&#39;/etc/passwd&#39;, fs.constants.R_OK | fs.constants.W_OK, (err) =&gt; {\n  console.log(err ? &#39;no access!&#39; : &#39;can read/write&#39;);\n});\n</code></pre>\n<p>不建议在调用 <code>fs.open()</code> 、 <code>fs.readFile()</code> 或 <code>fs.writeFile()</code> 之前使用 <code>fs.access()</code> 检查一个文件的可访问性。\n如此处理会造成紊乱情况，因为其他进程可能在两个调用之间改变该文件的状态。\n作为替代，用户代码应该直接打开/读取/写入文件，当文件无法访问时再处理错误。</p>\n<p>例子：</p>\n<p><strong>写入（不推荐）</strong></p>\n<pre><code class=\"lang-js\">fs.access(&#39;myfile&#39;, (err) =&gt; {\n  if (!err) {\n    console.error(&#39;myfile already exists&#39;);\n    return;\n  }\n\n  fs.open(&#39;myfile&#39;, &#39;wx&#39;, (err, fd) =&gt; {\n    if (err) throw err;\n    writeMyData(fd);\n  });\n});\n</code></pre>\n<p><strong>写入（推荐）</strong></p>\n<pre><code class=\"lang-js\">fs.open(&#39;myfile&#39;, &#39;wx&#39;, (err, fd) =&gt; {\n  if (err) {\n    if (err.code === &quot;EEXIST&quot;) {\n      console.error(&#39;myfile already exists&#39;);\n      return;\n    } else {\n      throw err;\n    }\n  }\n\n  writeMyData(fd);\n});\n</code></pre>\n<p><strong>读取（不推荐）</strong></p>\n<pre><code class=\"lang-js\">fs.access(&#39;myfile&#39;, (err) =&gt; {\n  if (err) {\n    if (err.code === &quot;ENOENT&quot;) {\n      console.error(&#39;myfile does not exist&#39;);\n      return;\n    } else {\n      throw err;\n    }\n  }\n\n  fs.open(&#39;myfile&#39;, &#39;r&#39;, (err, fd) =&gt; {\n    if (err) throw err;\n    readMyData(fd);\n  });\n});\n</code></pre>\n<p><strong>写入（推荐）</strong></p>\n<pre><code class=\"lang-js\">fs.open(&#39;myfile&#39;, &#39;r&#39;, (err, fd) =&gt; {\n  if (err) {\n    if (err.code === &quot;ENOENT&quot;) {\n      console.error(&#39;myfile does not exist&#39;);\n      return;\n    } else {\n      throw err;\n    }\n  }\n\n  readMyData(fd);\n});\n</code></pre>\n<p>以上<strong>不推荐</strong>的例子检查可访问性之后再使用文件；\n<strong>推荐</strong>的例子更好，因为它们直接使用文件并处理任何错误。</p>\n<p>通常，仅在文件不会被直接使用时才检查一个文件的可访问性，例如当它的可访问性是来自另一个进程的信号。</p>\n"
+        },
+        {
+          "textRaw": "fs.accessSync(path[, mode])",
+          "type": "method",
+          "name": "accessSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.11.15"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_access_path_mode_callback\"><code>fs.access()</code></a> 的同步版本。\n如果有任何可访问性检查失败则抛出错误，否则什么也不做。</p>\n"
+        },
+        {
+          "textRaw": "fs.appendFile(file, data[, options], callback)",
+          "type": "method",
+          "name": "appendFile",
+          "meta": {
+            "added": [
+              "v0.6.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Number} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Number",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `'utf8'`"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} 默认 = `0o666` ",
+                      "name": "mode",
+                      "type": "Integer",
+                      "desc": "默认 = `0o666`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'a'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'a'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步地追加数据到一个文件，如果文件不存在则创建文件。\n<code>data</code> 可以是一个字符串或 buffer。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">fs.appendFile(&#39;message.txt&#39;, &#39;data to append&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;The &quot;data to append&quot; was appended to file!&#39;);\n});\n</code></pre>\n<p>如果 <code>options</code> 是一个字符串，则它指定了字符编码。例如：</p>\n<pre><code class=\"lang-js\">fs.appendFile(&#39;message.txt&#39;, &#39;data to append&#39;, &#39;utf8&#39;, callback);\n</code></pre>\n<p>任何指定的文件描述符必须为了追加而被打开。</p>\n<p>注意：如果文件描述符被指定为 <code>file</code>，则不会被自动关闭。</p>\n"
+        },
+        {
+          "textRaw": "fs.appendFileSync(file, data[, options])",
+          "type": "method",
+          "name": "appendFileSync",
+          "meta": {
+            "added": [
+              "v0.6.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Number} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Number",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `'utf8'`"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} 默认 = `0o666` ",
+                      "name": "mode",
+                      "type": "Integer",
+                      "desc": "默认 = `0o666`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'a'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'a'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"fs.html#fs_fs_appendfile_file_data_options_callback\"><code>fs.appendFile()</code></a> 的同步版本。\n返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.chmod(path, mode, callback)",
+          "type": "method",
+          "name": "chmod",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.30"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 chmod(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.chmodSync(path, mode)",
+          "type": "method",
+          "name": "chmodSync",
+          "meta": {
+            "added": [
+              "v0.6.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 chmod(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.chown(path, uid, gid, callback)",
+          "type": "method",
+          "name": "chown",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.97"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 chown(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.chownSync(path, uid, gid)",
+          "type": "method",
+          "name": "chownSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.97"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 chown(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.close(fd, callback)",
+          "type": "method",
+          "name": "close",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 close(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.closeSync(fd)",
+          "type": "method",
+          "name": "closeSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 close(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.createReadStream(path[, options])",
+          "type": "method",
+          "name": "createReadStream",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`flags` {String} ",
+                      "name": "flags",
+                      "type": "String"
+                    },
+                    {
+                      "textRaw": "`encoding` {String} ",
+                      "name": "encoding",
+                      "type": "String"
+                    },
+                    {
+                      "textRaw": "`fd` {Integer} ",
+                      "name": "fd",
+                      "type": "Integer"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} ",
+                      "name": "mode",
+                      "type": "Integer"
+                    },
+                    {
+                      "textRaw": "`autoClose` {Boolean} ",
+                      "name": "autoClose",
+                      "type": "Boolean"
+                    },
+                    {
+                      "textRaw": "`start` {Integer} ",
+                      "name": "start",
+                      "type": "Integer"
+                    },
+                    {
+                      "textRaw": "`end` {Integer} ",
+                      "name": "end",
+                      "type": "Integer"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>返回一个新建的 <a href=\"#fs_class_fs_readstream\"><code>ReadStream</code></a> 对象（详见<a href=\"stream.html#stream_class_stream_readable\">可读流</a>）。</p>\n<p>不同于在一个可读流上设置的 <code>highWaterMark</code> 默认值（16 kb），该方法在相同参数下返回的流具有 64 kb 的默认值。</p>\n<p><code>options</code> 是一个带有以下默认值的对象或字符串：</p>\n<pre><code class=\"lang-js\">{\n  flags: &#39;r&#39;,\n  encoding: null,\n  fd: null,\n  mode: 0o666,\n  autoClose: true\n}\n</code></pre>\n<p><code>options</code> 可以包括 <code>start</code> 和 <code>end</code> 值，使其可以从文件读取一定范围的字节而不是整个文件。\n<code>start</code> 和 <code>end</code> 都是包括在内的，并且起始值是 0。\n如果指定了 <code>fd</code> 且 <code>start</code> 不传或为 <code>undefined</code>，则 <code>fs.createReadStream()</code> 从当前文件位置按顺序地读取。\n<code>encoding</code> 可以是任何可以被 <a href=\"buffer.html#buffer_buffer\"><code>Buffer</code></a> 接受的值。</p>\n<p>如果指定了 <code>fd</code>，则 <code>ReadStream</code> 会忽略 <code>path</code> 参数并且会使用指定的文件描述符。\n这意味着不会触发 <code>&#39;open&#39;</code> 事件。\n注意，<code>fd</code> 应该是阻塞的；非阻塞的 <code>fd</code> 们应该传给 <a href=\"net.html#net_class_net_socket\"><code>net.Socket</code></a>。</p>\n<p>如果 <code>autoClose</code> 为 <code>false</code>，则文件描述符不会被关闭，即使有错误。\n你需要负责关闭它，并且确保没有文件描述符泄漏。\n如果 <code>autoClose</code> 被设置为 <code>true</code>（默认），则在 <code>error</code> 或 <code>end</code> 时，文件描述符会被自动关闭。</p>\n<p><code>mode</code> 用于设置文件模式（权限和粘结位），但仅限创建文件时。</p>\n<p>例子，从一个 100 字节长的文件中读取最后 10 个字节：</p>\n<pre><code class=\"lang-js\">fs.createReadStream(&#39;sample.txt&#39;, {start: 90, end: 99});\n</code></pre>\n<p>如果 <code>options</code> 是一个字符串，则它指定了字符编码。</p>\n"
+        },
+        {
+          "textRaw": "fs.createWriteStream(path[, options])",
+          "type": "method",
+          "name": "createWriteStream",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`flags` {String} ",
+                      "name": "flags",
+                      "type": "String"
+                    },
+                    {
+                      "textRaw": "`defaultEncoding` {String} ",
+                      "name": "defaultEncoding",
+                      "type": "String"
+                    },
+                    {
+                      "textRaw": "`fd` {Integer} ",
+                      "name": "fd",
+                      "type": "Integer"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} ",
+                      "name": "mode",
+                      "type": "Integer"
+                    },
+                    {
+                      "textRaw": "`autoClose` {Boolean} ",
+                      "name": "autoClose",
+                      "type": "Boolean"
+                    },
+                    {
+                      "textRaw": "`start` {Integer} ",
+                      "name": "start",
+                      "type": "Integer"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>返回一个新建的 <a href=\"#fs_class_fs_writestream\"><code>WriteStream</code></a> 对象（详见<a href=\"stream.html#stream_class_stream_writable\">可写流</a>）。</p>\n<p><code>options</code> 是一个带有以下默认值的对象或字符串：</p>\n<pre><code class=\"lang-js\">{\n  flags: &#39;w&#39;,\n  defaultEncoding: &#39;utf8&#39;,\n  fd: null,\n  mode: 0o666,\n  autoClose: true\n}\n</code></pre>\n<p><code>options</code> 也可以包括一个 <code>start</code> 选项，使其可以写入数据到文件某个位置。\n如果是修改一个文件而不是覆盖它，则需要<code>flags</code> 模式为 <code>r+</code> 而不是默认的 <code>w</code> 模式。\n<code>defaultEncoding</code> 可以是任何可以被 <a href=\"buffer.html#buffer_buffer\"><code>Buffer</code></a> 接受的值。</p>\n<p>如果 <code>autoClose</code> 被设置为 <code>true</code>（默认），则在 <code>error</code> 或 <code>end</code> 时，文件描述符会被自动关闭。\n如果 <code>autoClose</code> 为 <code>false</code>，则文件描述符不会被关闭，即使有错误。\n你需要负责关闭它，并且确保没有文件描述符泄漏。</p>\n<p>类似 <a href=\"#fs_class_fs_readstream\"><code>ReadStream</code></a>，如果指定了 <code>fd</code>，则 <code>WriteStream</code> 会忽略 <code>path</code> 参数并且会使用指定的文件描述符。\n这意味着不会触发 <code>&#39;open&#39;</code> 事件。\n注意，<code>fd</code> 应该是阻塞的；非阻塞的 <code>fd</code> 们应该传给 <a href=\"net.html#net_class_net_socket\"><code>net.Socket</code></a>。</p>\n<p>如果 <code>options</code> 是一个字符串，则它指定了字符编码。</p>\n"
+        },
+        {
+          "textRaw": "fs.exists(path, callback)",
+          "type": "method",
+          "name": "exists",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ],
+            "deprecated": [
+              "v1.0.0"
+            ]
+          },
+          "desc": "<p>稳定性: 0 - 废弃的: 使用 <a href=\"#fs_fs_stat_path_callback\"><code>fs.stat()</code></a> 或 <a href=\"#fs_fs_access_path_mode_callback\"><code>fs.access()</code></a> 代替。</p>\n<p>Test whether or not the given path exists by checking with the file system.\nThen call the <code>callback</code> argument with either true or false.  Example:</p>\n<pre><code class=\"lang-js\">fs.exists(&#39;/etc/passwd&#39;, (exists) =&gt; {\n  console.log(exists ? &#39;it\\&#39;s there&#39; : &#39;no passwd!&#39;);\n});\n</code></pre>\n<p><strong>Note that the parameter to this callback is not consistent with other\nNode.js callbacks.</strong> Normally, the first parameter to a Node.js callback is\nan <code>err</code> parameter, optionally followed by other parameters. The\n<code>fs.exists()</code> callback has only one boolean parameter. This is one reason\n<code>fs.access()</code> is recommended instead of <code>fs.exists()</code>.</p>\n<p>Using <code>fs.exists()</code> to check for the existence of a file before calling\n<code>fs.open()</code>, <code>fs.readFile()</code> or <code>fs.writeFile()</code> is not recommended. Doing\nso introduces a race condition, since other processes may change the file&#39;s\nstate between the two calls. Instead, user code should open/read/write the\nfile directly and handle the error raised if the file does not exist.</p>\n<p>For example:</p>\n<p><strong>write (NOT RECOMMENDED)</strong></p>\n<pre><code class=\"lang-js\">fs.exists(&#39;myfile&#39;, (exists) =&gt; {\n  if (exists) {\n    console.error(&#39;myfile already exists&#39;);\n  } else {\n    fs.open(&#39;myfile&#39;, &#39;wx&#39;, (err, fd) =&gt; {\n      if (err) throw err;\n      writeMyData(fd);\n    });\n  }\n});\n</code></pre>\n<p><strong>write (RECOMMENDED)</strong></p>\n<pre><code class=\"lang-js\">fs.open(&#39;myfile&#39;, &#39;wx&#39;, (err, fd) =&gt; {\n  if (err) {\n    if (err.code === &quot;EEXIST&quot;) {\n      console.error(&#39;myfile already exists&#39;);\n      return;\n    } else {\n      throw err;\n    }\n  }\n  writeMyData(fd);\n});\n</code></pre>\n<p><strong>read (NOT RECOMMENDED)</strong></p>\n<pre><code class=\"lang-js\">fs.exists(&#39;myfile&#39;, (exists) =&gt; {\n  if (exists) {\n    fs.open(&#39;myfile&#39;, &#39;r&#39;, (err, fd) =&gt; {\n      readMyData(fd);\n    });\n  } else {\n    console.error(&#39;myfile does not exist&#39;);\n  }\n});\n</code></pre>\n<p><strong>read (RECOMMENDED)</strong></p>\n<pre><code class=\"lang-js\">fs.open(&#39;myfile&#39;, &#39;r&#39;, (err, fd) =&gt; {\n  if (err) {\n    if (err.code === &quot;ENOENT&quot;) {\n      console.error(&#39;myfile does not exist&#39;);\n      return;\n    } else {\n      throw err;\n    }\n  } else {\n    readMyData(fd);\n  }\n});\n</code></pre>\n<p>The &quot;not recommended&quot; examples above check for existence and then use the\nfile; the &quot;recommended&quot; examples are better because they use the file directly\nand handle the error, if any.</p>\n<p>In general, check for the existence of a file only if the file won’t be\nused directly, for example when its existence is a signal from another\nprocess.</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "fs.existsSync(path)",
+          "type": "method",
+          "name": "existsSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"fs.html#fs_fs_exists_path_callback\"><code>fs.exists()</code></a> 的同步版本。\n如果文件存在，则返回 <code>true</code>，否则返回 <code>false</code>。</p>\n<p>注意，虽然 <code>fs.exists()</code> 是废弃的，但 <code>fs.existsSync()</code> 不是。\n（<code>fs.exists()</code> 的回调接收的参数与其他 Node.js 回调不一致，<code>fs.existsSync()</code> 不使用回调。）</p>\n"
+        },
+        {
+          "textRaw": "fs.fchmod(fd, mode, callback)",
+          "type": "method",
+          "name": "fchmod",
+          "meta": {
+            "added": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "mode"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 fchmod(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.fchmodSync(fd, mode)",
+          "type": "method",
+          "name": "fchmodSync",
+          "meta": {
+            "added": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "mode"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 fchmod(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.fchown(fd, uid, gid, callback)",
+          "type": "method",
+          "name": "fchown",
+          "meta": {
+            "added": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 fchown(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.fchownSync(fd, uid, gid)",
+          "type": "method",
+          "name": "fchownSync",
+          "meta": {
+            "added": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 fchown(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.fdatasync(fd, callback)",
+          "type": "method",
+          "name": "fdatasync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.96"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 fdatasync(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.fdatasyncSync(fd)",
+          "type": "method",
+          "name": "fdatasyncSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.96"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 fdatasync(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.fstat(fd, callback)",
+          "type": "method",
+          "name": "fstat",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.95"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 fstat(2)。\n回调获得两个参数 <code>(err, stats)</code>，其中 <code>stats</code> 是一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 对象。\n<code>fstat()</code> 与 <a href=\"fs.html#fs_fs_stat_path_callback\"><code>stat()</code></a> 类似，除了文件是通过文件描述符 <code>fd</code> 指定的。</p>\n"
+        },
+        {
+          "textRaw": "fs.fstatSync(fd)",
+          "type": "method",
+          "name": "fstatSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.95"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 fstat(2)。返回一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 实例。</p>\n"
+        },
+        {
+          "textRaw": "fs.fsync(fd, callback)",
+          "type": "method",
+          "name": "fsync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.96"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 fsync(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.fsyncSync(fd)",
+          "type": "method",
+          "name": "fsyncSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.96"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 fsync(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.ftruncate(fd, len, callback)",
+          "type": "method",
+          "name": "ftruncate",
+          "meta": {
+            "added": [
+              "v0.8.6"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`len` {Integer} 默认 = `0` ",
+                  "name": "len",
+                  "type": "Integer",
+                  "desc": "默认 = `0`"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "len"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 ftruncate(2)。\n完成回调只有一个可能的异常参数。</p>\n<p>如果文件描述符指向的文件大于 <code>len</code> 个字节，则只有前面 <code>len</code> 个字节会保留在文件中。</p>\n<p>例子，下面的程序会只保留文件前4个字节。</p>\n<pre><code class=\"lang-js\">console.log(fs.readFileSync(&#39;temp.txt&#39;, &#39;utf8&#39;));\n// 输出: Node.js\n\n// 获取要截断的文件的文件描述符\nconst fd = fs.openSync(&#39;temp.txt&#39;, &#39;r+&#39;);\n\n// 截断文件至前4个字节\nfs.ftruncate(fd, 4, (err) =&gt; {\n  assert.ifError(err);\n  console.log(fs.readFileSync(&#39;temp.txt&#39;, &#39;utf8&#39;));\n});\n// 输出: Node\n</code></pre>\n<p>如果前面的文件小于 <code>len</code> 个字节，则扩展文件，且扩展的部分用空字节（&#39;\\0&#39;）填充。例子：</p>\n<pre><code class=\"lang-js\">console.log(fs.readFileSync(&#39;temp.txt&#39;, &#39;utf-8&#39;));\n// 输出: Node.js\n\n// 获取要截断的文件的文件描述符\nconst fd = fs.openSync(&#39;temp.txt&#39;, &#39;r+&#39;);\n\n// 截断文件至前10个字节，但实际大小是7个字节\nfs.ftruncate(fd, 10, (err) =&gt; {\n  assert.ifError(!err);\n  console.log(fs.readFileSync(&#39;temp.txt&#39;));\n});\n// 输出: &lt;Buffer 4e 6f 64 65 2e 6a 73 00 00 00&gt;\n// (&#39;Node.js\\0\\0\\0&#39; in UTF8)\n</code></pre>\n<p>最后3个字节是空字节（&#39;\\0&#39;），用于补充超出的截断。</p>\n"
+        },
+        {
+          "textRaw": "fs.ftruncateSync(fd, len)",
+          "type": "method",
+          "name": "ftruncateSync",
+          "meta": {
+            "added": [
+              "v0.8.6"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`len` {Integer} 默认 = `0` ",
+                  "name": "len",
+                  "type": "Integer",
+                  "desc": "默认 = `0`"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "len"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 ftruncate(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.futimes(fd, atime, mtime, callback)",
+          "type": "method",
+          "name": "futimes",
+          "meta": {
+            "added": [
+              "v0.4.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`atime` {Integer} ",
+                  "name": "atime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mtime` {Integer} ",
+                  "name": "mtime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "atime"
+                },
+                {
+                  "name": "mtime"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>改变由所提供的文件描述符所指向的文件的文件时间戳。</p>\n"
+        },
+        {
+          "textRaw": "fs.futimesSync(fd, atime, mtime)",
+          "type": "method",
+          "name": "futimesSync",
+          "meta": {
+            "added": [
+              "v0.4.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`atime` {Integer} ",
+                  "name": "atime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mtime` {Integer} ",
+                  "name": "mtime",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "atime"
+                },
+                {
+                  "name": "mtime"
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_futimes_fd_atime_mtime_callback\"><code>fs.futimes()</code></a> 的同步版本。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.lchmod(path, mode, callback)",
+          "type": "method",
+          "name": "lchmod",
+          "meta": {
+            "deprecated": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 lchmod(2)。\n完成回调只有一个可能的异常参数。</p>\n<p>只在 Mac OS X 有效。</p>\n"
+        },
+        {
+          "textRaw": "fs.lchmodSync(path, mode)",
+          "type": "method",
+          "name": "lchmodSync",
+          "meta": {
+            "deprecated": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 lchmod(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.lchown(path, uid, gid, callback)",
+          "type": "method",
+          "name": "lchown",
+          "meta": {
+            "deprecated": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 lchown(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.lchownSync(path, uid, gid)",
+          "type": "method",
+          "name": "lchownSync",
+          "meta": {
+            "deprecated": [
+              "v0.4.7"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`uid` {Integer} ",
+                  "name": "uid",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`gid` {Integer} ",
+                  "name": "gid",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "uid"
+                },
+                {
+                  "name": "gid"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 lchown(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.link(existingPath, newPath, callback)",
+          "type": "method",
+          "name": "link",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`existingPath` {String | Buffer} ",
+                  "name": "existingPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`newPath` {String | Buffer} ",
+                  "name": "newPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "existingPath"
+                },
+                {
+                  "name": "newPath"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 link(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.linkSync(existingPath, newPath)",
+          "type": "method",
+          "name": "linkSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`existingPath` {String | Buffer} ",
+                  "name": "existingPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`newPath` {String | Buffer} ",
+                  "name": "newPath",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "existingPath"
+                },
+                {
+                  "name": "newPath"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 link(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.lstat(path, callback)",
+          "type": "method",
+          "name": "lstat",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.30"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 lstat(2)。\n回调获得两个参数 <code>(err, stats)</code>，其中 <code>stats</code> 是一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 对象。\n<code>lstat()</code> 与 <a href=\"fs.html#fs_fs_stat_path_callback\"><code>stat()</code></a> 类似，除非 <code>path</code> 是一个符号链接，则自身就是该链接，它指向的并不是文件。</p>\n"
+        },
+        {
+          "textRaw": "fs.lstatSync(path)",
+          "type": "method",
+          "name": "lstatSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.30"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 lstat(2)。返回一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 实例。</p>\n"
+        },
+        {
+          "textRaw": "fs.mkdir(path[, mode], callback)",
+          "type": "method",
+          "name": "mkdir",
+          "meta": {
+            "added": [
+              "v0.1.8"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 mkdir(2)。\n完成回调只有一个可能的异常参数。\n<code>mode</code> 默认为 <code>0o777</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.mkdirSync(path[, mode])",
+          "type": "method",
+          "name": "mkdirSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 mkdir(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.mkdtemp(prefix[, options], callback)",
+          "type": "method",
+          "name": "mkdtemp",
+          "meta": {
+            "added": [
+              "v5.10.0"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`prefix` {String} ",
+                  "name": "prefix",
+                  "type": "String"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "prefix"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>创建一个唯一的临时目录。</p>\n<p>生成六位随机字符附加到一个要求的 <code>prefix</code> 后面，然后创建一个唯一的临时目录。</p>\n<p>创建的目录路径会作为字符串传给回调的第二个参数。</p>\n<p>可选的 <code>options</code> 参数可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">fs.mkdtemp(&#39;/tmp/foo-&#39;, (err, folder) =&gt; {\n  if (err) throw err;\n  console.log(folder);\n  // 输出: /tmp/foo-itXde2\n});\n</code></pre>\n<p><strong>注意</strong>：<code>fs.mkdtemp()</code> 方法会直接附加六位随机选择的字符串到 <code>prefix</code> 字符串。\n例如，指定一个目录 <code>/tmp</code>，如果目的是要在 <code>/tmp</code> 里创建一个临时目录，则 <code>prefix</code> <strong>必须</strong> 以一个指定平台的路径分隔符（<code>require(&#39;path&#39;).sep</code>）结尾。</p>\n<pre><code class=\"lang-js\">// 新建的临时目录的父目录\nconst tmpDir = &#39;/tmp&#39;;\n\n// 该方法是 *错误的*：\nfs.mkdtemp(tmpDir, (err, folder) =&gt; {\n  if (err) throw err;\n  console.log(folder);\n  // 会输出类似于 `/tmpabc123`。\n  // 注意，一个新的临时目录会被创建在文件系统的根目录，而不是在 /tmp 目录里。\n});\n\n// 该方法是 *正确的*：\nconst path = require(&#39;path&#39;);\nfs.mkdtemp(tmpDir + path.sep, (err, folder) =&gt; {\n  if (err) throw err;\n  console.log(folder);\n  // 会输出类似于 `/tmp/abc123`。\n  // 一个新的临时目录会被创建在 /tmp 目录里。\n});\n</code></pre>\n"
+        },
+        {
+          "textRaw": "fs.mkdtempSync(prefix[, options])",
+          "type": "method",
+          "name": "mkdtempSync",
+          "meta": {
+            "added": [
+              "v5.10.0"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`prefix` {String} ",
+                  "name": "prefix",
+                  "type": "String"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "prefix"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_mkdtemp_prefix_options_callback\"><code>fs.mkdtemp()</code></a> 的同步版本。\n返回创建的目录的路径。</p>\n<p>可选的 <code>options</code> 参数可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。</p>\n"
+        },
+        {
+          "textRaw": "fs.open(path, flags[, mode], callback)",
+          "type": "method",
+          "name": "open",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`flags` {String | Number} ",
+                  "name": "flags",
+                  "type": "String | Number"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "flags"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步地打开文件。详见 open(2)。\n<code>flags</code> 可以是：</p>\n<ul>\n<li><p><code>&#39;r&#39;</code> - 以读取模式打开文件。如果文件不存在则发生异常。</p>\n</li>\n<li><p><code>&#39;r+&#39;</code> - 以读写模式打开文件。如果文件不存在则发生异常。</p>\n</li>\n<li><p><code>&#39;rs+&#39;</code> - 以同步读写模式打开文件。命令操作系统绕过本地文件系统缓存。</p>\n<p>这对 NFS 挂载模式下打开文件很有用，因为它可以让你跳过潜在的旧本地缓存。\n它对 I/O 的性能有明显的影响，所以除非需要，否则不要使用此标志。</p>\n<p>注意，这不会使 <code>fs.open()</code> 进入同步阻塞调用。\n如果那是你想要的，则应该使用 <code>fs.openSync()</code>。</p>\n</li>\n<li><p><code>&#39;w&#39;</code> - 以写入模式打开文件。文件会被创建（如果文件不存在）或截断（如果文件存在）。</p>\n</li>\n<li><p><code>&#39;wx&#39;</code> - 类似 <code>&#39;w&#39;</code>，但如果 <code>path</code> 存在，则失败。</p>\n</li>\n<li><p><code>&#39;w+&#39;</code> - 以读写模式打开文件。文件会被创建（如果文件不存在）或截断（如果文件存在）。</p>\n</li>\n<li><p><code>&#39;wx+&#39;</code> - 类似 <code>&#39;w+&#39;</code>，但如果 <code>path</code> 存在，则失败。</p>\n</li>\n<li><p><code>&#39;a&#39;</code> - 以追加模式打开文件。如果文件不存在，则会被创建。</p>\n</li>\n<li><p><code>&#39;ax&#39;</code> - 类似于 <code>&#39;a&#39;</code>，但如果 <code>path</code> 存在，则失败。</p>\n</li>\n<li><p><code>&#39;a+&#39;</code> - 以读取和追加模式打开文件。如果文件不存在，则会被创建。</p>\n</li>\n<li><p><code>&#39;ax+&#39;</code> - 类似于 <code>&#39;a+&#39;</code>，但如果 <code>path</code> 存在，则失败。</p>\n</li>\n</ul>\n<p><code>mode</code> 可设置文件模式（权限和 sticky 位），但只有当文件被创建时才有效。默认为 <code>0666</code>，可读写。</p>\n<p>该回调有两个参数 <code>(err, fd)</code>。</p>\n<p>特有的标志 <code>&#39;x&#39;</code>（在 open(2) 中的 <code>O_EXCL</code> 标志）确保 <code>path</code> 是新创建的。\n在 POSIX 操作系统中，<code>path</code> 会被视为存在，即使是一个链接到一个不存在的文件的符号。\n该特有的标志有可能在网络文件系统中无法使用。</p>\n<p><code>flags</code> 也可以是一个数字，[open(2)] 文档中有描述；\n常用的常量可从 <code>fs.constants</code> 获取。\n在 Windows 系统中，标志会被转换为与它等同的替代者，例如，<code>O_WRONLY</code> 转换为 <code>FILE_GENERIC_WRITE</code>、或 <code>O_EXCL|O_CREAT</code> 转换为 <code>CREATE_NEW</code>，通过 CreateFileW 接受。</p>\n<p>在 Linux 中，当文件以追加模式打开时，定位的写入不起作用。\n内核会忽略位置参数，并总是附加数据到文件的末尾。</p>\n<p>注意：<code>fs.open()</code> 某些标志的行为是与平台相关的。\n因此，在 OS X 和 Linux 下用 <code>&#39;a+&#39;</code> 标志打开一个目录（见下面的例子），会返回一个错误。\n与此相反，在 Windows 和 FreeBSD，则会返回一个文件描述符。</p>\n<pre><code class=\"lang-js\">// OS X 与 Linux\nfs.open(&#39;&lt;directory&gt;&#39;, &#39;a+&#39;, (err, fd) =&gt; {\n  // =&gt; [Error: EISDIR: illegal operation on a directory, open &lt;directory&gt;]\n});\n\n// Windows 与 FreeBSD\nfs.open(&#39;&lt;directory&gt;&#39;, &#39;a+&#39;, (err, fd) =&gt; {\n  // =&gt; null, &lt;fd&gt;\n});\n</code></pre>\n"
+        },
+        {
+          "textRaw": "fs.openSync(path, flags[, mode])",
+          "type": "method",
+          "name": "openSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`flags` {String | Number} ",
+                  "name": "flags",
+                  "type": "String | Number"
+                },
+                {
+                  "textRaw": "`mode` {Integer} ",
+                  "name": "mode",
+                  "type": "Integer",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "flags"
+                },
+                {
+                  "name": "mode",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_open_path_flags_mode_callback\"><code>fs.open()</code></a> 的同步版本。\n返回一个表示文件描述符的整数。</p>\n"
+        },
+        {
+          "textRaw": "fs.read(fd, buffer, offset, length, position, callback)",
+          "type": "method",
+          "name": "read",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`buffer` {String | Buffer} ",
+                  "name": "buffer",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`offset` {Integer} ",
+                  "name": "offset",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`length` {Integer} ",
+                  "name": "length",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "buffer"
+                },
+                {
+                  "name": "offset"
+                },
+                {
+                  "name": "length"
+                },
+                {
+                  "name": "position"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>从 <code>fd</code> 指定的文件中读取数据。</p>\n<p><code>buffer</code> 是数据将被写入到的 buffer。</p>\n<p><code>offset</code> 是 buffer 中开始写入的偏移量。</p>\n<p><code>length</code> 是一个整数，指定要读取的字节数。</p>\n<p><code>position</code> 是一个整数，指定从文件中开始读取的位置。\n如果 <code>position</code> 为 <code>null</code>，则数据从当前文件位置开始读取。</p>\n<p>回调有三个参数 <code>(err, bytesRead, buffer)</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.readdir(path[, options], callback)",
+          "type": "method",
+          "name": "readdir",
+          "meta": {
+            "added": [
+              "v0.1.8"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 readdir(3)。\n读取一个目录的内容。\n回调有两个参数 <code>(err, files)</code>，其中 <code>files</code> 是目录中不包括 <code>&#39;.&#39;</code> 和 <code>&#39;..&#39;</code> 的文件名的数组。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的文件名，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的文件名会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.readdirSync(path[, options])",
+          "type": "method",
+          "name": "readdirSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 readdir(3). \n返回一个不包括 <code>&#39;.&#39;</code> 和 <code>&#39;..&#39;</code> 的文件名的数组。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的文件名，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的文件名会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.readFile(file[, options], callback)",
+          "type": "method",
+          "name": "readFile",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.29"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Integer} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Integer",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `null` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `null`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'r'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'r'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的读取一个文件的全部内容。\n例子：</p>\n<pre><code class=\"lang-js\">fs.readFile(&#39;/etc/passwd&#39;, (err, data) =&gt; {\n  if (err) throw err;\n  console.log(data);\n});\n</code></pre>\n<p>回调有两个参数 <code>(err, data)</code>，其中 <code>data</code> 是文件的内容。</p>\n<p>如果字符编码未指定，则返回原始的 buffer。</p>\n<p>如果 <code>options</code> 是一个字符串，则它指定了字符编码。\n例子：</p>\n<pre><code class=\"lang-js\">fs.readFile(&#39;/etc/passwd&#39;, &#39;utf8&#39;, callback);\n</code></pre>\n<p>任何指定的文件描述符必须支持读取。</p>\n<p>注意，如果一个文件描述符被指定为 <code>file</code>，则它不会被自动关闭。</p>\n"
+        },
+        {
+          "textRaw": "fs.readFileSync(file[, options])",
+          "type": "method",
+          "name": "readFileSync",
+          "meta": {
+            "added": [
+              "v0.1.8"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Integer} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Integer",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `null` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `null`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'r'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'r'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_readfile_file_options_callback\"><code>fs.readFile</code></a> 的同步版本。\n返回 <code>file</code> 的内容。</p>\n<p>如果指定了 <code>encoding</code> 选项，则该函数返回一个字符串，否则返回一个 buffer。</p>\n"
+        },
+        {
+          "textRaw": "fs.readlink(path[, options], callback)",
+          "type": "method",
+          "name": "readlink",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 readlink(2)。\n回调有两个参数  <code>(err, linkString)</code>。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的链接路径，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的链接路径会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.readlinkSync(path[, options])",
+          "type": "method",
+          "name": "readlinkSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 readlink(2)。\n返回符号链接的字符串值。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的链接路径，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的链接路径会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.readSync(fd, buffer, offset, length, position)",
+          "type": "method",
+          "name": "readSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`buffer` {String | Buffer} ",
+                  "name": "buffer",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`offset` {Integer} ",
+                  "name": "offset",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`length` {Integer} ",
+                  "name": "length",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "buffer"
+                },
+                {
+                  "name": "offset"
+                },
+                {
+                  "name": "length"
+                },
+                {
+                  "name": "position"
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_read_fd_buffer_offset_length_position_callback\"><code>fs.read()</code></a> 的同步版本。\n返回 <code>bytesRead</code> 的数量。</p>\n"
+        },
+        {
+          "textRaw": "fs.realpath(path[, options], callback)",
+          "type": "method",
+          "name": "realpath",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 realpath(3)。\n<code>callback</code> 有两个参数 <code>(err, resolvedPath)</code>。\n可以使用 <code>process.cwd</code> 解析相对路径。</p>\n<p>只支持可转换成 UTF8 字符串的路径。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的路径，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的路径会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.realpathSync(path[, options])",
+          "type": "method",
+          "name": "realpathSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer}; ",
+                  "name": "path",
+                  "type": "String | Buffer",
+                  "desc": ";"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 realpath(3)。\n返回解析的路径。</p>\n<p>只支持可转换成 UTF8 字符串的路径。</p>\n<p>可选的 <code>options</code> 参数用于传入回调的路径，它可以是一个字符串并指定一个字符编码，或是一个对象且由一个 <code>encoding</code> 属性指定使用的字符编码。\n如果 <code>encoding</code> 设为 <code>&#39;buffer&#39;</code>，则返回的路径会被作为 <code>Buffer</code> 对象传入。</p>\n"
+        },
+        {
+          "textRaw": "fs.rename(oldPath, newPath, callback)",
+          "type": "method",
+          "name": "rename",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`oldPath` {String | Buffer} ",
+                  "name": "oldPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`newPath` {String | Buffer} ",
+                  "name": "newPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "oldPath"
+                },
+                {
+                  "name": "newPath"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 rename(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.renameSync(oldPath, newPath)",
+          "type": "method",
+          "name": "renameSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`oldPath` {String | Buffer} ",
+                  "name": "oldPath",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`newPath` {String | Buffer} ",
+                  "name": "newPath",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "oldPath"
+                },
+                {
+                  "name": "newPath"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 rename(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.rmdir(path, callback)",
+          "type": "method",
+          "name": "rmdir",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 rmdir(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.rmdirSync(path)",
+          "type": "method",
+          "name": "rmdirSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 rmdir(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.stat(path, callback)",
+          "type": "method",
+          "name": "stat",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 stat(2)。\n回调有两个参数 <code>(err, stats)</code> 其中 <code>stats</code> 是一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 对象。</p>\n<p>如果发生错误，则 <code>err.code</code> 会是<a href=\"errors.html#errors_common_system_errors\">常见系统错误</a>之一。</p>\n<p>不建议在调用 <code>fs.open()</code> 、<code>fs.readFile()</code> 或 <code>fs.writeFile()</code> 之前使用 <code>fs.stat()</code> 检查一个文件是否存在。\n作为替代，用户代码应该直接打开/读取/写入文件，当文件无效时再处理错误。</p>\n<p>如果要检查一个文件是否存在且不操作它，推荐使用 <a href=\"#fs_fs_access_path_mode_callback\"><code>fs.access()</code></a>。</p>\n"
+        },
+        {
+          "textRaw": "fs.statSync(path)",
+          "type": "method",
+          "name": "statSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 stat(2)。\n返回一个 <a href=\"#fs_class_fs_stats\"><code>fs.Stats</code></a> 实例。</p>\n"
+        },
+        {
+          "textRaw": "fs.symlink(target, path[, type], callback)",
+          "type": "method",
+          "name": "symlink",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`target` {String | Buffer} ",
+                  "name": "target",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`type` {String} ",
+                  "name": "type",
+                  "type": "String",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "target"
+                },
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "type",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 symlink(2)。\n完成回调只有一个可能的异常参数。\n<code>type</code> 参数可以设为 <code>&#39;dir&#39;</code>、<code>&#39;file&#39;</code> 或 <code>&#39;junction&#39;</code>（默认为 <code>&#39;file&#39;</code>），且仅在 Windows 上有效（在其他平台上忽略）。\n注意，Windows 结点要求目标路径是绝对的。\n当使用 <code>&#39;junction&#39;</code> 时，<code>target</code> 参数会被自动标准化为绝对路径。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">fs.symlink(&#39;./foo&#39;, &#39;./new-port&#39;);\n</code></pre>\n<p>它创建了一个名为 &quot;new-port&quot; 且指向 &quot;foo&quot; 的符号链接。</p>\n"
+        },
+        {
+          "textRaw": "fs.symlinkSync(target, path[, type])",
+          "type": "method",
+          "name": "symlinkSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`target` {String | Buffer} ",
+                  "name": "target",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`type` {String} ",
+                  "name": "type",
+                  "type": "String",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "target"
+                },
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "type",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 symlink(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.truncate(path, len, callback)",
+          "type": "method",
+          "name": "truncate",
+          "meta": {
+            "added": [
+              "v0.8.6"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`len` {Integer} 默认 = `0` ",
+                  "name": "len",
+                  "type": "Integer",
+                  "desc": "默认 = `0`"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "len"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 truncate(2)。\n完成回调只有一个可能的异常参数。\n文件描述符也可以作为第一个参数传入，在这种情况下，<code>fs.ftruncate()</code> 会被调用。</p>\n"
+        },
+        {
+          "textRaw": "fs.truncateSync(path, len)",
+          "type": "method",
+          "name": "truncateSync",
+          "meta": {
+            "added": [
+              "v0.8.6"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`len` {Integer} 默认 = `0` ",
+                  "name": "len",
+                  "type": "Integer",
+                  "desc": "默认 = `0`"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "len"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 truncate(2)。\n返回 <code>undefined</code>。\n文件描述符也可以作为第一个参数传入，在这种情况下，<code>fs.ftruncateSync()</code> 会被调用。</p>\n"
+        },
+        {
+          "textRaw": "fs.unlink(path, callback)",
+          "type": "method",
+          "name": "unlink",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步的 unlink(2)。\n完成回调只有一个可能的异常参数。</p>\n"
+        },
+        {
+          "textRaw": "fs.unlinkSync(path)",
+          "type": "method",
+          "name": "unlinkSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>同步的 unlink(2)。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.unwatchFile(filename[, listener])",
+          "type": "method",
+          "name": "unwatchFile",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`filename` {String | Buffer} ",
+                  "name": "filename",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`listener` {Function} ",
+                  "name": "listener",
+                  "type": "Function",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "filename"
+                },
+                {
+                  "name": "listener",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>停止监视 <code>filename</code> 文件的变化。\n如果指定了 <code>listener</code>，则只移除特定的监听器。\n否则，<strong>所有</strong>的监听器都会被移除，且已经有效地停止监视 <code>filename</code>。</p>\n<p>调用 <code>fs.unwatchFile()</code> 且带上一个未被监视的文件名，将会是一个空操作，而不是一个错误。</p>\n<p>注意：<a href=\"#fs_fs_watch_filename_options_listener\"><code>fs.watch()</code></a> 比 <code>fs.watchFile()</code> 和 <code>fs.unwatchFile()</code> 更高效。\n可能的话，应该使用 <code>fs.watch()</code> 而不是 <code>fs.watchFile()</code> 和 <code>fs.unwatchFile()</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.utimes(path, atime, mtime, callback)",
+          "type": "method",
+          "name": "utimes",
+          "meta": {
+            "added": [
+              "v0.4.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`atime` {Integer} ",
+                  "name": "atime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mtime` {Integer} ",
+                  "name": "mtime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "atime"
+                },
+                {
+                  "name": "mtime"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>改变指定的路径所指向的文件的文件时间戳。</p>\n<p>注意：<code>atime</code> 和 <code>mtime</code> 参数遵循以下规则：</p>\n<ul>\n<li>值应该是一个以秒为单位的 Unix 时间戳。\n例如，<code>Date.now()</code> 返回毫秒，所以在传入前应该除以1000。</li>\n<li>如果值是一个数值字符串，如 <code>&#39;123456789&#39;</code>，则该值会被转换为对应的数值。</li>\n<li>如果值是 <code>NaN</code> 或 <code>Infinity</code>，则该值会被转换为 <code>Date.now() / 1000</code>。</li>\n</ul>\n"
+        },
+        {
+          "textRaw": "fs.utimesSync(path, atime, mtime)",
+          "type": "method",
+          "name": "utimesSync",
+          "meta": {
+            "added": [
+              "v0.4.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {String | Buffer} ",
+                  "name": "path",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`atime` {Integer} ",
+                  "name": "atime",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`mtime` {Integer} ",
+                  "name": "mtime",
+                  "type": "Integer"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                },
+                {
+                  "name": "atime"
+                },
+                {
+                  "name": "mtime"
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_futimes_fd_atime_mtime_callback\"><code>fs.utimes()</code></a> 的同步版本。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.watch(filename[, options][, listener])",
+          "type": "method",
+          "name": "watch",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.5.10"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`filename` {String | Buffer} ",
+                  "name": "filename",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {String | Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`persistent` {Boolean} 指明如果文件正在被监视，进程是否应该继续运行。默认 = `true` ",
+                      "name": "persistent",
+                      "type": "Boolean",
+                      "desc": "指明如果文件正在被监视，进程是否应该继续运行。默认 = `true`"
+                    },
+                    {
+                      "textRaw": "`recursive` {Boolean} 指明是否全部子目录应该被监视，或只是当前目录。 适用于当一个目录被指定时，且只在支持的平台（详见 [Caveats]）。默认 = `false` ",
+                      "name": "recursive",
+                      "type": "Boolean",
+                      "desc": "指明是否全部子目录应该被监视，或只是当前目录。 适用于当一个目录被指定时，且只在支持的平台（详见 [Caveats]）。默认 = `false`"
+                    },
+                    {
+                      "textRaw": "`encoding` {String} 指定用于传给监听器的文件名的字符编码。默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String",
+                      "desc": "指定用于传给监听器的文件名的字符编码。默认 = `'utf8'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "String | Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`listener` {Function} ",
+                  "name": "listener",
+                  "type": "Function",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "filename"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "listener",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>监视 <code>filename</code> 的变化，<code>filename</code> 可以是一个文件或一个目录。\n返回的对象是一个 <a href=\"#fs_class_fs_fswatcher\"><code>fs.FSWatcher</code></a>。</p>\n<p>第二个参数是可选的。\n如果提供的 <code>options</code> 是一个字符串，则它指定了 <code>encoding</code>。\n否则 <code>options</code> 应该以一个对象传入。</p>\n<p>监听器回调有两个参数 <code>(eventType, filename)</code>。\n<code>eventType</code> 可以是 <code>&#39;rename&#39;</code> 或 <code>&#39;change&#39;</code>，<code>filename</code> 是触发事件的文件的名称。</p>\n<p>注意，在大多数平台，当一个文件出现或消失在一个目录里时，<code>&#39;rename&#39;</code> 会被触发。</p>\n<p>还需要注意，监听器回调是绑定在由 <a href=\"#fs_class_fs_fswatcher\"><code>fs.FSWatcher</code></a> 触发的 <code>&#39;change&#39;</code> 事件上，但它跟 <code>eventType</code> 的 <code>&#39;change&#39;</code> 值不是同一个东西。</p>\n",
+          "miscs": [
+            {
+              "textRaw": "Caveats",
+              "name": "Caveats",
+              "type": "misc",
+              "desc": "<p><code>fs.watch</code> API 不是 100％ 跨平台一致的，且在某些情况下不可用。</p>\n<p>递归选项只支持 OS X 和 Windows。</p>\n",
+              "miscs": [
+                {
+                  "textRaw": "Availability",
+                  "name": "Availability",
+                  "type": "misc",
+                  "desc": "<p>该特性依赖于底层操作系统提供的一种方法来通知文件系统的变化。</p>\n<ul>\n<li>在 Linux 系统中，使用 <a href=\"http://man7.org/linux/man-pages/man7/inotify.7.html\"><code>inotify</code></a>。</li>\n<li>在 BSD 系统中，使用 <a href=\"https://www.freebsd.org/cgi/man.cgi?kqueue\"><code>kqueue</code></a>。</li>\n<li>在 OS X 系统中，对文件使用 <a href=\"https://www.freebsd.org/cgi/man.cgi?kqueue\"><code>kqueue</code></a>，对目录使用 <a href=\"https://developer.apple.com/library/mac/documentation/Darwin/Conceptual/FSEvents_ProgGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005289-CH1-SW1\"><code>FSEvents</code></a>。</li>\n<li>在 SunOS 系统（包括 Solaris 和 SmartOS）中，使用 <a href=\"http://illumos.org/man/port_create\"><code>event ports</code></a>。</li>\n<li>在 Windows 系统中，该特性依赖 <a href=\"https://msdn.microsoft.com/en-us/library/windows/desktop/aa365465%28v=vs.85%29.aspx\"><code>ReadDirectoryChangesW</code></a>。</li>\n<li>在 Aix 系统中，该特性依赖 <a href=\"https://www.ibm.com/developerworks/aix/library/au-aix_event_infrastructure/\"><code>AHAFS</code></a> 必须是启动的。</li>\n</ul>\n<p>如果底层功能因某些原因不可用，则 <code>fs.watch</code> 也无法正常工作。\n例如，当使用虚拟化软件如 Vagrant、Docker 等时，在网络文件系统（NFS、SMB 等）或主文件系统中监视文件或目录可能是不可靠的。</p>\n<p>你仍然可以使用 <code>fs.watchFile</code>，它使用状态查询，但它较慢且更不可靠。</p>\n"
+                },
+                {
+                  "textRaw": "Inodes",
+                  "name": "Inodes",
+                  "type": "misc",
+                  "desc": "<p>在 Linux 或 OS X 系统中，<code>fs.watch()</code> 解析路径到一个<a href=\"https://en.wikipedia.org/wiki/Inode\">索引节点</a>，并监视该索引节点。\n如果监视的路径被删除或重建，则它会被分配一个新的索引节点。\n监视器会发出一个删除事件，但会继续监视<strong>原始的</strong>索引节点。\n新建的索引节点的事件不会被触发。\n这是正常的行为。</p>\n"
+                },
+                {
+                  "textRaw": "Filename Argument",
+                  "name": "Filename Argument",
+                  "type": "misc",
+                  "desc": "<p>回调中提供的 <code>filename</code> 参数仅在 Linux 和 Windows 系统上支持。\n即使在支持的平台中，<code>filename</code> 也不能保证提供。\n因此，不要以为 <code>filename</code> 参数总是在回调中提供，如果它是空的，需要有一定的后备逻辑。</p>\n<pre><code class=\"lang-js\">fs.watch(&#39;somedir&#39;, (eventType, filename) =&gt; {\n  console.log(`事件类型是: ${eventType}`);\n  if (filename) {\n    console.log(`提供的文件名: ${filename}`);\n  } else {\n    console.log(&#39;未提供文件名&#39;);\n  }\n});\n</code></pre>\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "fs.watchFile(filename[, options], listener)",
+          "type": "method",
+          "name": "watchFile",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.31"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`filename` {String | Buffer} ",
+                  "name": "filename",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {Object} ",
+                  "options": [
+                    {
+                      "textRaw": "`persistent` {Boolean} ",
+                      "name": "persistent",
+                      "type": "Boolean"
+                    },
+                    {
+                      "textRaw": "`interval` {Integer} ",
+                      "name": "interval",
+                      "type": "Integer"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`listener` {Function} ",
+                  "name": "listener",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "filename"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "listener"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>监视 <code>filename</code> 的变化。\n回调 <code>listener</code> 会在每次访问文件时被调用。</p>\n<p><code>options</code> 参数可被省略。\n如果提供的话，它应该是一个对象。\n<code>options</code> 对象可能包含一个名为 <code>persistent</code> 的布尔值，表明当文件正在被监视时，进程是否应该继续运行。\n<code>options</code> 对象可以指定一个 <code>interval</code> 属性，表示目标应该每隔多少毫秒被轮询。\n默认值为 <code>{ persistent: true, interval: 5007 }</code>。</p>\n<p><code>listener</code> 有两个参数，当前的状态对象和以前的状态对象：</p>\n<pre><code class=\"lang-js\">fs.watchFile(&#39;message.text&#39;, (curr, prev) =&gt; {\n  console.log(`the current mtime is: ${curr.mtime}`);\n  console.log(`the previous mtime was: ${prev.mtime}`);\n});\n</code></pre>\n<p>These stat objects are instances of <code>fs.Stat</code>.\n这里的状态对象是 <code>fs.Stat</code> 实例。</p>\n<p>如果你想在文件被修改而不只是访问时得到通知，则需要比较 <code>curr.mtime</code> 和 <code>prev.mtime</code>。</p>\n<p>注意：当一个 <code>fs.watchFile</code> 的运行结果是一个 <code>ENOENT</code> 错误时，它会调用监听器一次，且将所有字段置零（或将日期设为 Unix 纪元）。\n在 Windows 中，<code>blksize</code> 和 <code>blocks</code> 字段会是 <code>undefined</code> 而不是零。\n如果文件是在那之后创建的，则监听器会被再次调用，且带上最新的状态对象。\n这是在 v0.10 版之后在功能上的变化。</p>\n<p>注意：<a href=\"#fs_fs_watch_filename_options_listener\"><code>fs.watch()</code></a> 比 <code>fs.watchFile</code> 和 <code>fs.unwatchFile</code> 更高效。\n可能的话，应该使用 <code>fs.watch</code> 而不是 <code>fs.watchFile</code> 和 <code>fs.unwatchFile</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.write(fd, buffer, offset, length[, position], callback)",
+          "type": "method",
+          "name": "write",
+          "meta": {
+            "added": [
+              "v0.0.2"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`buffer` {String | Buffer} ",
+                  "name": "buffer",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`offset` {Integer} ",
+                  "name": "offset",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`length` {Integer} ",
+                  "name": "length",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "buffer"
+                },
+                {
+                  "name": "offset"
+                },
+                {
+                  "name": "length"
+                },
+                {
+                  "name": "position",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>写入 <code>buffer</code> 到 <code>fd</code> 指定的文件。</p>\n<p><code>offset</code> 和 <code>length</code> 决定 buffer 中被写入的部分。</p>\n<p><code>position</code> 指向从文件开始写入数据的位置的偏移量。\n如果 <code>typeof position !== &#39;number&#39;</code>，则数据从当前位置写入。详见 pwrite(2)。</p>\n<p>回调有三个参数 <code>(err, written, buffer)</code>，其中 <code>written</code> 指定从 <code>buffer</code> 写入了多少<strong>字节</strong>。</p>\n<p>注意，多次对同一文件使用 <code>fs.write</code> 且不等待回调，是不安全的。\n对于这种情况，强烈推荐使用 <code>fs.createWriteStream</code>。</p>\n<p>在 Linux 上，当文件以追加模式打开时，指定位置的写入是不起作用的。\n内核会忽略位置参数，并总是将数据追加到文件的末尾。</p>\n"
+        },
+        {
+          "textRaw": "fs.write(fd, data[, position[, encoding]], callback)",
+          "type": "method",
+          "name": "write",
+          "meta": {
+            "added": [
+              "v0.11.5"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`encoding` {String} ",
+                  "name": "encoding",
+                  "type": "String",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "position",
+                  "optional": true
+                },
+                {
+                  "name": "encoding",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>写入 <code>data</code> 到 <code>fd</code> 指定的文件。\n如果 <code>data</code> 不是一个 Buffer 实例，则该值将被强制转换为一个字符串。</p>\n<p><code>position</code> 指向从文件开始写入数据的位置的偏移量。\n如果 <code>typeof position !== &#39;number&#39;</code>，则数据从当前位置写入。详见 pwrite(2)。</p>\n<p><code>encoding</code> 是期望的字符串编码。</p>\n<p>回调有三个参数 <code>(err, written, string)</code>，其中 <code>written</code> 指定传入的字符串被写入多少字节。\n注意，写入的字节与字符串的字符是不同的。详见 <a href=\"buffer.html#buffer_class_method_buffer_bytelength_string_encoding\"><code>Buffer.byteLength</code></a>。</p>\n<p>不同于写入 <code>buffer</code>，该方法整个字符串必须被写入。\n不能指定子字符串。\n这是因为结果数据的字节偏移量可能与字符串的偏移量不同。</p>\n<p>注意，多次对同一文件使用 <code>fs.write</code> 且不等待回调，是不安全的。\n对于这种情况，强烈推荐使用 <code>fs.createWriteStream</code>。</p>\n<p>在 Linux 上，当文件以追加模式打开时，指定位置的写入是不起作用的。\n内核会忽略位置参数，并总是将数据追加到文件的末尾。</p>\n"
+        },
+        {
+          "textRaw": "fs.writeFile(file, data[, options], callback)",
+          "type": "method",
+          "name": "writeFile",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.29"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Integer} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Integer",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `'utf8'`"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} 默认 = `0o666` ",
+                      "name": "mode",
+                      "type": "Integer",
+                      "desc": "默认 = `0o666`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'w'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'w'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} ",
+                  "name": "callback",
+                  "type": "Function"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>异步地写入数据到文件，如果文件已经存在，则替代文件。\n<code>data</code> 可以是一个字符串或一个 buffer。</p>\n<p>如果 <code>data</code> 是一个 buffer，则忽略 <code>encoding</code> 选项。它默认为 <code>&#39;utf8&#39;</code>。</p>\n<p>例子：</p>\n<pre><code class=\"lang-js\">fs.writeFile(&#39;message.txt&#39;, &#39;Hello Node.js&#39;, (err) =&gt; {\n  if (err) throw err;\n  console.log(&#39;It\\&#39;s saved!&#39;);\n});\n</code></pre>\n<p>如果 <code>options</code> 是一个字符串，则它指定了字符编码。例如：</p>\n<pre><code class=\"lang-js\">fs.writeFile(&#39;message.txt&#39;, &#39;Hello Node.js&#39;, &#39;utf8&#39;, callback);\n</code></pre>\n<p>任何指定的文件描述符必须支持写入。</p>\n<p>注意，多次对同一文件使用 <code>fs.writeFile</code> 且不等待回调，是不安全的。\n对于这种情况，强烈推荐使用 <code>fs.createWriteStream</code>。</p>\n<p><strong>注意：如果 <code>file</code> 指定为一个文件描述符，则它不会被自动关闭。</strong></p>\n"
+        },
+        {
+          "textRaw": "fs.writeFileSync(file, data[, options])",
+          "type": "method",
+          "name": "writeFileSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.29"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`file` {String | Buffer | Integer} 文件名或文件描述符 ",
+                  "name": "file",
+                  "type": "String | Buffer | Integer",
+                  "desc": "文件名或文件描述符"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`options` {Object | String} ",
+                  "options": [
+                    {
+                      "textRaw": "`encoding` {String | Null} 默认 = `'utf8'` ",
+                      "name": "encoding",
+                      "type": "String | Null",
+                      "desc": "默认 = `'utf8'`"
+                    },
+                    {
+                      "textRaw": "`mode` {Integer} 默认 = `0o666` ",
+                      "name": "mode",
+                      "type": "Integer",
+                      "desc": "默认 = `0o666`"
+                    },
+                    {
+                      "textRaw": "`flag` {String} 默认 = `'w'` ",
+                      "name": "flag",
+                      "type": "String",
+                      "desc": "默认 = `'w'`"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object | String",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "file"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_writefile_file_data_options_callback\"><code>fs.writeFile()</code></a> 的同步版本。返回 <code>undefined</code>。</p>\n"
+        },
+        {
+          "textRaw": "fs.writeSync(fd, buffer, offset, length[, position])",
+          "type": "method",
+          "name": "writeSync",
+          "meta": {
+            "added": [
+              "http://nodejs.cn/api/v0.1.21"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`buffer` {String | Buffer} ",
+                  "name": "buffer",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`offset` {Integer} ",
+                  "name": "offset",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`length` {Integer} ",
+                  "name": "length",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "buffer"
+                },
+                {
+                  "name": "offset"
+                },
+                {
+                  "name": "length"
+                },
+                {
+                  "name": "position",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_write_fd_buffer_offset_length_position_callback\"><code>fs.write()</code></a> 的同步版本。返回写入的字节数。</p>\n"
+        },
+        {
+          "textRaw": "fs.writeSync(fd, data[, position[, encoding]])",
+          "type": "method",
+          "name": "writeSync",
+          "meta": {
+            "added": [
+              "v0.11.5"
+            ]
+          },
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`fd` {Integer} ",
+                  "name": "fd",
+                  "type": "Integer"
+                },
+                {
+                  "textRaw": "`data` {String | Buffer} ",
+                  "name": "data",
+                  "type": "String | Buffer"
+                },
+                {
+                  "textRaw": "`position` {Integer} ",
+                  "name": "position",
+                  "type": "Integer",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`encoding` {String} ",
+                  "name": "encoding",
+                  "type": "String",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "fd"
+                },
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "position",
+                  "optional": true
+                },
+                {
+                  "name": "encoding",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p><a href=\"#fs_fs_write_fd_buffer_offset_length_position_callback\"><code>fs.write()</code></a> 的同步版本。返回写入的字节数。</p>\n"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "fs.constants",
+          "name": "constants",
+          "desc": "<p>返回一个包含常用文件系统操作的常量的对象。\n具体的常量定义在 <a href=\"#fs_fs_constants_1\">FS Constants</a> 中描述。</p>\n"
+        }
+      ],
+      "type": "module",
+      "displayName": "fs"
+    }
+  ]
+}

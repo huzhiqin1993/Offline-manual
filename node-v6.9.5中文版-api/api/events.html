@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="zh-cmn-Hans">
+<head>
+  <meta charset="utf-8">
+  <title>events | Node.js API &#x6587;&#x6863;</title>
+  <link rel="stylesheet" href="../static/api.css" tppabs="http://nodejs.cn/static/api.css">
+  <link rel="icon" sizes="32x32" type="image/png" href="/static/favicon.png">
+</head>
+<body class="alt apidoc" id="api-section-events">
+  <div id="content" class="clearfix">
+    <div id="column2" class="interior">
+      <div id="intro" class="interior">
+        <a href="javascript:if(confirm('http://nodejs.cn/  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='http://nodejs.cn/'" tppabs="http://nodejs.cn/" title="Go back to the home page">
+          Node.js &#x4E2D;&#x6587;&#x7F51;
+        </a>
+      </div>
+      <ul>
+<li><a class="nav-documentation" href="documentation.html" tppabs="http://nodejs.cn/api/documentation.html">&#x5173;&#x4E8E;&#x672C;&#x6587;&#x6863;</a></li>
+<li><a class="nav-synopsis" href="synopsis.html" tppabs="http://nodejs.cn/api/synopsis.html">&#x7528;&#x6CD5;&#x4E0E;&#x4F8B;&#x5B50;</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-assert" href="assert.html" tppabs="http://nodejs.cn/api/assert.html">Assert (&#x65AD;&#x8A00;)</a></li>
+<li><a class="nav-buffer" href="buffer.html" tppabs="http://nodejs.cn/api/buffer.html">Buffer</a></li>
+<li><a class="nav-addons" href="addons.html" tppabs="http://nodejs.cn/api/addons.html">C/C++ &#x63D2;&#x4EF6;</a></li>
+<li><a class="nav-child_process" href="child_process.html" tppabs="http://nodejs.cn/api/child_process.html">Child Processes (&#x5B50;&#x8FDB;&#x7A0B;)</a></li>
+<li><a class="nav-cluster" href="cluster.html" tppabs="http://nodejs.cn/api/cluster.html">Cluster (&#x96C6;&#x7FA4;)</a></li>
+<li><a class="nav-cli" href="cli.html" tppabs="http://nodejs.cn/api/cli.html">CLI (&#x547D;&#x4EE4;&#x884C;&#x9009;&#x9879;)</a></li>
+<li><a class="nav-console" href="console.html" tppabs="http://nodejs.cn/api/console.html">Console (&#x63A7;&#x5236;&#x53F0;)</a></li>
+<li><a class="nav-crypto" href="crypto.html" tppabs="http://nodejs.cn/api/crypto.html">Crypto (&#x52A0;&#x5BC6;)</a></li>
+<li><a class="nav-debugger" href="debugger.html" tppabs="http://nodejs.cn/api/debugger.html">Debugger (&#x8C03;&#x8BD5;&#x5668;)</a></li>
+<li><a class="nav-dns" href="dns.html" tppabs="http://nodejs.cn/api/dns.html">DNS (&#x57DF;&#x540D;&#x670D;&#x52A1;&#x5668;)</a></li>
+<li><a class="nav-domain" href="domain.html" tppabs="http://nodejs.cn/api/domain.html">Domain (&#x57DF;)</a></li>
+<li><a class="nav-errors" href="errors.html" tppabs="http://nodejs.cn/api/errors.html">Error (&#x9519;&#x8BEF;)</a></li>
+<li><a class="nav-events active" href="events.html" tppabs="http://nodejs.cn/api/events.html">Events (&#x4E8B;&#x4EF6;)</a></li>
+<li><a class="nav-fs" href="fs.html" tppabs="http://nodejs.cn/api/fs.html">File System (&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;)</a></li>
+<li><a class="nav-globals" href="globals.html" tppabs="http://nodejs.cn/api/globals.html">Global (&#x5168;&#x5C40;&#x53D8;&#x91CF;)</a></li>
+<li><a class="nav-http" href="http.html" tppabs="http://nodejs.cn/api/http.html">HTTP</a></li>
+<li><a class="nav-https" href="https.html" tppabs="http://nodejs.cn/api/https.html">HTTPS</a></li>
+<li><a class="nav-modules" href="modules.html" tppabs="http://nodejs.cn/api/modules.html">Module (&#x6A21;&#x5757;)</a></li>
+<li><a class="nav-net" href="net.html" tppabs="http://nodejs.cn/api/net.html">Net (&#x7F51;&#x7EDC;)</a></li>
+<li><a class="nav-os" href="os.html" tppabs="http://nodejs.cn/api/os.html">OS (&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;)</a></li>
+<li><a class="nav-path" href="path.html" tppabs="http://nodejs.cn/api/path.html">Path (&#x8DEF;&#x5F84;)</a></li>
+<li><a class="nav-process" href="process.html" tppabs="http://nodejs.cn/api/process.html">Process (&#x8FDB;&#x7A0B;)</a></li>
+<li><a class="nav-punycode" href="punycode.html" tppabs="http://nodejs.cn/api/punycode.html">Punycode</a></li>
+<li><a class="nav-querystring" href="querystring.html" tppabs="http://nodejs.cn/api/querystring.html">Query Strings (&#x67E5;&#x8BE2;&#x5B57;&#x7B26;&#x4E32;)</a></li>
+<li><a class="nav-readline" href="readline.html" tppabs="http://nodejs.cn/api/readline.html">Readline</a></li>
+<li><a class="nav-repl" href="repl.html" tppabs="http://nodejs.cn/api/repl.html">REPL</a></li>
+<li><a class="nav-stream" href="stream.html" tppabs="http://nodejs.cn/api/stream.html">Stream (&#x6D41;)</a></li>
+<li><a class="nav-string_decoder" href="string_decoder.html" tppabs="http://nodejs.cn/api/string_decoder.html">String Decoder (&#x5B57;&#x7B26;&#x4E32;&#x89E3;&#x7801;)</a></li>
+<li><a class="nav-timers" href="timers.html" tppabs="http://nodejs.cn/api/timers.html">Timer (&#x5B9A;&#x65F6;&#x5668;)</a></li>
+<li><a class="nav-tls" href="tls.html" tppabs="http://nodejs.cn/api/tls.html">TLS/SSL</a></li>
+<li><a class="nav-tty" href="tty.html" tppabs="http://nodejs.cn/api/tty.html">TTY</a></li>
+<li><a class="nav-dgram" href="dgram.html" tppabs="http://nodejs.cn/api/dgram.html">UDP/Datagram</a></li>
+<li><a class="nav-url" href="url.html" tppabs="http://nodejs.cn/api/url.html">URL</a></li>
+<li><a class="nav-util" href="util.html" tppabs="http://nodejs.cn/api/util.html">Utilities (&#x5B9E;&#x7528;&#x51FD;&#x6570;)</a></li>
+<li><a class="nav-v8" href="v8.html" tppabs="http://nodejs.cn/api/v8.html">V8</a></li>
+<li><a class="nav-vm" href="vm.html" tppabs="http://nodejs.cn/api/vm.html">VM (&#x865A;&#x62DF;&#x673A;)</a></li>
+<li><a class="nav-zlib" href="zlib.html" tppabs="http://nodejs.cn/api/zlib.html">ZLIB (&#x538B;&#x7F29;)</a></li>
+</ul>
+<div class="line"></div>
+
+
+    </div>
+
+    <div id="column1" data-id="events" class="interior">
+      <header>
+        <h1>Node.js 6.9.5 &#x6587;&#x6863;</h1>
+        <div id="gtoc">
+          <p>
+            <a href="index.htm" tppabs="http://nodejs.cn/api/" name="toc">&#x7D22;&#x5F15;</a> |
+            <!--<a href="/api/all.html">ÂçïÈ°µÈù¢ÊòæÁ§∫</a> |-->
+            <a href="events.json" tppabs="http://nodejs.cn/api/events.json">JSON&#x683C;&#x5F0F;</a> |
+            <a href="en/events.html" tppabs="http://nodejs.cn/api/en/events.html">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a>
+          </p>
+        </div>
+        <hr>
+      </header>
+
+      <div id="toc">
+        <h2>&#x76EE;&#x5F55;</h2>
+        <ul>
+<li><span class="stability_2"><a href="#events_events">events (&#x4E8B;&#x4EF6;)</a></span><ul>
+<li><span class="stability_undefined"><a href="#events_passing_arguments_and_this_to_listeners">&#x7ED9;&#x76D1;&#x542C;&#x5668;&#x4F20;&#x5165;&#x53C2;&#x6570;&#x4E0E; <code>this</code></a></span></li>
+<li><span class="stability_undefined"><a href="#events_asynchronous_vs_synchronous">&#x5F02;&#x6B65;&#x4E0E;&#x540C;&#x6B65;</a></span></li>
+<li><span class="stability_undefined"><a href="#events_handling_events_only_once">&#x53EA;&#x5904;&#x7406;&#x4E8B;&#x4EF6;&#x4E00;&#x6B21;</a></span></li>
+<li><span class="stability_undefined"><a href="#events_error_events">&#x9519;&#x8BEF;&#x4E8B;&#x4EF6;</a></span></li>
+<li><span class="stability_undefined"><a href="#events_class_eventemitter">EventEmitter &#x7C7B;</a></span><ul>
+<li><span class="stability_undefined"><a href="#events_event_newlistener">&apos;newListener&apos; &#x4E8B;&#x4EF6;</a></span></li>
+<li><span class="stability_undefined"><a href="#events_event_removelistener">&apos;removeListener&apos; &#x4E8B;&#x4EF6;</a></span></li>
+<li><span class="stability_0"><a href="#events_eventemitter_listenercount_emitter_eventname">EventEmitter.listenerCount(emitter, eventName)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_eventemitter_defaultmaxlisteners">EventEmitter.defaultMaxListeners</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_addlistener_eventname_listener">emitter.addListener(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_emit_eventname_args">emitter.emit(eventName[, ...args])</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_eventnames">emitter.eventNames()</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_getmaxlisteners">emitter.getMaxListeners()</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_listenercount_eventname">emitter.listenerCount(eventName)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_listeners_eventname">emitter.listeners(eventName)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_on_eventname_listener">emitter.on(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_once_eventname_listener">emitter.once(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_prependlistener_eventname_listener">emitter.prependListener(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_prependoncelistener_eventname_listener">emitter.prependOnceListener(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_removealllisteners_eventname">emitter.removeAllListeners([eventName])</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_removelistener_eventname_listener">emitter.removeListener(eventName, listener)</a></span></li>
+<li><span class="stability_undefined"><a href="#events_emitter_setmaxlisteners_n">emitter.setMaxListeners(n)</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+      </div>
+
+      <div id="apicontent">
+        <h1>events (&#x4E8B;&#x4EF6;)<span><a class="mark" href="#events_events" id="events_events">#</a></span></h1><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_events" tppabs="http://nodejs.cn/api/en/events.html#events_events">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<pre class="api_stability api_stability_2">&#x7A33;&#x5B9A;&#x6027;: 2 - &#x7A33;&#x5B9A;&#x7684;</pre><!--type=module-->
+<p>&#x5927;&#x591A;&#x6570; Node.js &#x6838;&#x5FC3; API &#x90FD;&#x662F;&#x91C7;&#x7528;&#x60EF;&#x7528;&#x7684;&#x5F02;&#x6B65;&#x4E8B;&#x4EF6;&#x9A71;&#x52A8;&#x67B6;&#x6784;&#xFF0C;&#x5176;&#x4E2D;&#x67D0;&#x4E9B;&#x7C7B;&#x578B;&#x7684;&#x5BF9;&#x8C61;&#xFF08;&#x79F0;&#x4E3A;&#x89E6;&#x53D1;&#x5668;&#xFF09;&#x4F1A;&#x5468;&#x671F;&#x6027;&#x5730;&#x89E6;&#x53D1;&#x547D;&#x540D;&#x4E8B;&#x4EF6;&#x6765;&#x8C03;&#x7528;&#x51FD;&#x6570;&#x5BF9;&#x8C61;&#xFF08;&#x76D1;&#x542C;&#x5668;&#xFF09;&#x3002;</p>
+<p>&#x4F8B;&#x5982;&#xFF0C;&#x4E00;&#x4E2A; <a href="net.html#net_class_net_server" tppabs="http://nodejs.cn/api/net.html#net_class_net_server"><code>net.Server</code></a> &#x5BF9;&#x8C61;&#x4F1A;&#x5728;&#x6BCF;&#x6B21;&#x6709;&#x65B0;&#x8FDE;&#x63A5;&#x65F6;&#x89E6;&#x53D1;&#x4E00;&#x4E2A;&#x4E8B;&#x4EF6;&#xFF1B;&#x4E00;&#x4E2A; <a href="fs.html#fs_class_fs_readstream" tppabs="http://nodejs.cn/api/fs.html#fs_class_fs_readstream"><code>fs.ReadStream</code></a> &#x4F1A;&#x5728;&#x6587;&#x4EF6;&#x88AB;&#x6253;&#x5F00;&#x65F6;&#x89E6;&#x53D1;&#x4E00;&#x4E2A;&#x4E8B;&#x4EF6;&#xFF1B;&#x4E00;&#x4E2A; <a href="stream.html" tppabs="http://nodejs.cn/api/stream.html">stream</a> &#x4F1A;&#x5728;&#x6570;&#x636E;&#x53EF;&#x8BFB;&#x65F6;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;&#x3002;</p>
+<p>&#x6240;&#x6709;&#x80FD;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;&#x7684;&#x5BF9;&#x8C61;&#x90FD;&#x662F; <code>EventEmitter</code> &#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#x3002;
+&#x8FD9;&#x4E9B;&#x5BF9;&#x8C61;&#x5F00;&#x653E;&#x4E86;&#x4E00;&#x4E2A; <code>eventEmitter.on()</code> &#x51FD;&#x6570;&#xFF0C;&#x5141;&#x8BB8;&#x5C06;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x51FD;&#x6570;&#x9644;&#x52A0;&#x5230;&#x4F1A;&#x88AB;&#x5BF9;&#x8C61;&#x89E6;&#x53D1;&#x7684;&#x547D;&#x540D;&#x4E8B;&#x4EF6;&#x4E0A;&#x3002;
+&#x4E8B;&#x4EF6;&#x540D;&#x79F0;&#x901A;&#x5E38;&#x662F;&#x9A7C;&#x5CF0;&#x5F0F;&#x7684;&#x5B57;&#x7B26;&#x4E32;&#xFF0C;&#x4F46;&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4EFB;&#x4F55;&#x6709;&#x6548;&#x7684; JavaScript &#x5C5E;&#x6027;&#x540D;&#x3002;</p>
+<p>&#x5F53; <code>EventEmitter</code> &#x5BF9;&#x8C61;&#x89E6;&#x53D1;&#x4E00;&#x4E2A;&#x4E8B;&#x4EF6;&#x662F;&#xFF0C;&#x6240;&#x6709;&#x9644;&#x52A0;&#x5728;&#x7279;&#x5B9A;&#x4E8B;&#x4EF6;&#x4E0A;&#x7684;&#x51FD;&#x6570;&#x90FD;&#x88AB;&#x540C;&#x6B65;&#x5730;&#x8C03;&#x7528;&#x3002;
+&#x88AB;&#x8C03;&#x7528;&#x7684;&#x76D1;&#x542C;&#x5668;&#x8FD4;&#x56DE;&#x7684;&#x503C;&#x90FD;&#x4F1A;&#x88AB;&#x5FFD;&#x7565;&#x5E76;&#x4E22;&#x5F03;&#x3002;</p>
+<p>&#x4EE5;&#x4E0B;&#x4F8B;&#x5B50;&#x5C55;&#x793A;&#x4E86;&#x4E00;&#x4E2A;&#x53EA;&#x6709;&#x5355;&#x4E2A;&#x76D1;&#x542C;&#x5668;&#x7684; <code>EventEmitter</code> &#x5B9E;&#x4F8B;&#x3002;
+<code>eventEmitter.on()</code> &#x65B9;&#x6CD5;&#x7528;&#x4E8E;&#x6CE8;&#x518C;&#x76D1;&#x542C;&#x5668;&#xFF0C;<code>eventEmitter.emit()</code> &#x65B9;&#x6CD5;&#x7528;&#x4E8E;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;&#x3002;</p>
+<pre><code class="lang-js">const EventEmitter = require(&apos;events&apos;);
+
+class MyEmitter extends EventEmitter {}
+
+const myEmitter = new MyEmitter();
+myEmitter.on(&apos;event&apos;, () =&gt; {
+  console.log(&apos;&#x53D1;&#x751F;&#x4E86;&#x4E00;&#x4E2A;&#x4E8B;&#x4EF6;&#xFF01;&apos;);
+});
+myEmitter.emit(&apos;event&apos;);
+</code></pre>
+<h2>&#x7ED9;&#x76D1;&#x542C;&#x5668;&#x4F20;&#x5165;&#x53C2;&#x6570;&#x4E0E; <code>this</code><span><a class="mark" href="#events_passing_arguments_and_this_to_listeners" id="events_passing_arguments_and_this_to_listeners">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_passing_arguments_and_this_to_listeners" tppabs="http://nodejs.cn/api/en/events.html#events_passing_arguments_and_this_to_listeners">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<p><code>eventEmitter.emit()</code> &#x65B9;&#x6CD5;&#x5141;&#x8BB8;&#x5C06;&#x4EFB;&#x610F;&#x53C2;&#x6570;&#x4F20;&#x7ED9;&#x76D1;&#x542C;&#x5668;&#x51FD;&#x6570;&#x3002;
+&#x5F53;&#x4E00;&#x4E2A;&#x666E;&#x901A;&#x7684;&#x76D1;&#x542C;&#x5668;&#x51FD;&#x6570;&#x88AB; <code>EventEmitter</code> &#x8C03;&#x7528;&#x65F6;&#xFF0C;&#x6807;&#x51C6;&#x7684; <code>this</code> &#x5173;&#x952E;&#x8BCD;&#x4F1A;&#x88AB;&#x8BBE;&#x7F6E;&#x6307;&#x5411;&#x76D1;&#x542C;&#x5668;&#x6240;&#x9644;&#x52A0;&#x7684; <code>EventEmitter</code>&#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.on(&apos;event&apos;, function(a, b) {
+  console.log(a, b, this);
+  // &#x6253;&#x5370;:
+  //   a b MyEmitter {
+  //     domain: null,
+  //     _events: { event: [Function] },
+  //     _eventsCount: 1,
+  //     _maxListeners: undefined }
+});
+myEmitter.emit(&apos;event&apos;, &apos;a&apos;, &apos;b&apos;);
+</code></pre>
+<p>&#x4E5F;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; ES6 &#x7684;&#x7BAD;&#x5934;&#x51FD;&#x6570;&#x4F5C;&#x4E3A;&#x76D1;&#x542C;&#x5668;&#x3002;&#x4F46;&#x662F;&#x8FD9;&#x6837; <code>this</code> &#x5173;&#x952E;&#x8BCD;&#x5C31;&#x4E0D;&#x518D;&#x6307;&#x5411; <code>EventEmitter</code> &#x5B9E;&#x4F8B;&#xFF1A;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.on(&apos;event&apos;, (a, b) =&gt; {
+  console.log(a, b, this);
+  // &#x6253;&#x5370;: a b {}
+});
+myEmitter.emit(&apos;event&apos;, &apos;a&apos;, &apos;b&apos;);
+</code></pre>
+<h2>&#x5F02;&#x6B65;&#x4E0E;&#x540C;&#x6B65;<span><a class="mark" href="#events_asynchronous_vs_synchronous" id="events_asynchronous_vs_synchronous">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_asynchronous_vs_synchronous" tppabs="http://nodejs.cn/api/en/events.html#events_asynchronous_vs_synchronous">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<p><code>EventListener</code> &#x4F1A;&#x6309;&#x7167;&#x76D1;&#x542C;&#x5668;&#x6CE8;&#x518C;&#x7684;&#x987A;&#x5E8F;&#x540C;&#x6B65;&#x5730;&#x8C03;&#x7528;&#x6240;&#x6709;&#x76D1;&#x542C;&#x5668;&#x3002;
+&#x6240;&#x4EE5;&#x9700;&#x8981;&#x786E;&#x4FDD;&#x4E8B;&#x4EF6;&#x7684;&#x6B63;&#x786E;&#x6392;&#x5E8F;&#x4E14;&#x907F;&#x514D;&#x7ADE;&#x4E89;&#x6761;&#x4EF6;&#x6216;&#x903B;&#x8F91;&#x9519;&#x8BEF;&#x3002;
+&#x76D1;&#x542C;&#x5668;&#x51FD;&#x6570;&#x53EF;&#x4EE5;&#x4F7F;&#x7528; <code>setImmediate()</code> &#x6216; <code>process.nextTick()</code> &#x65B9;&#x6CD5;&#x5207;&#x6362;&#x5230;&#x5F02;&#x6B65;&#x64CD;&#x4F5C;&#x6A21;&#x5F0F;&#xFF1A;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.on(&apos;event&apos;, (a, b) =&gt; {
+  setImmediate(() =&gt; {
+    console.log(&apos;&#x8FD9;&#x4E2A;&#x662F;&#x5F02;&#x6B65;&#x53D1;&#x751F;&#x7684;&apos;);
+  });
+});
+myEmitter.emit(&apos;event&apos;, &apos;a&apos;, &apos;b&apos;);
+</code></pre>
+<h2>&#x53EA;&#x5904;&#x7406;&#x4E8B;&#x4EF6;&#x4E00;&#x6B21;<span><a class="mark" href="#events_handling_events_only_once" id="events_handling_events_only_once">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_handling_events_only_once" tppabs="http://nodejs.cn/api/en/events.html#events_handling_events_only_once">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<p>&#x5F53;&#x4F7F;&#x7528; <code>eventEmitter.on()</code> &#x65B9;&#x6CD5;&#x6CE8;&#x518C;&#x76D1;&#x542C;&#x5668;&#x65F6;&#xFF0C;&#x76D1;&#x542C;&#x5668;&#x4F1A;&#x5728;&#x6BCF;&#x6B21;&#x89E6;&#x53D1;&#x547D;&#x540D;&#x4E8B;&#x4EF6;&#x65F6;&#x88AB;&#x8C03;&#x7528;&#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+var m = 0;
+myEmitter.on(&apos;event&apos;, () =&gt; {
+  console.log(++m);
+});
+myEmitter.emit(&apos;event&apos;);
+// &#x6253;&#x5370;: 1
+myEmitter.emit(&apos;event&apos;);
+// &#x6253;&#x5370;: 2
+</code></pre>
+<p>&#x4F7F;&#x7528; <code>eventEmitter.once()</code> &#x65B9;&#x6CD5;&#x65F6;&#x53EF;&#x4EE5;&#x6CE8;&#x518C;&#x4E00;&#x4E2A;&#x5BF9;&#x4E8E;&#x7279;&#x5B9A;&#x4E8B;&#x4EF6;&#x6700;&#x591A;&#x88AB;&#x8C03;&#x7528;&#x4E00;&#x6B21;&#x7684;&#x76D1;&#x542C;&#x5668;&#x3002;
+&#x5F53;&#x4E8B;&#x4EF6;&#x88AB;&#x89E6;&#x53D1;&#x65F6;&#xFF0C;&#x76D1;&#x542C;&#x5668;&#x4F1A;&#x88AB;&#x6CE8;&#x9500;&#xFF0C;&#x7136;&#x540E;&#x518D;&#x8C03;&#x7528;&#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+var m = 0;
+myEmitter.once(&apos;event&apos;, () =&gt; {
+  console.log(++m);
+});
+myEmitter.emit(&apos;event&apos;);
+// &#x6253;&#x5370;: 1
+myEmitter.emit(&apos;event&apos;);
+// &#x5FFD;&#x7565;
+</code></pre>
+<h2>&#x9519;&#x8BEF;&#x4E8B;&#x4EF6;<span><a class="mark" href="#events_error_events" id="events_error_events">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_error_events" tppabs="http://nodejs.cn/api/en/events.html#events_error_events">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<p>&#x5F53; <code>EventEmitter</code> &#x5B9E;&#x4F8B;&#x4E2D;&#x53D1;&#x751F;&#x9519;&#x8BEF;&#x65F6;&#xFF0C;&#x4F1A;&#x89E6;&#x53D1;&#x4E00;&#x4E2A; <code>&apos;error&apos;</code> &#x4E8B;&#x4EF6;&#x3002;
+&#x8FD9;&#x5728; Node.js &#x4E2D;&#x662F;&#x7279;&#x6B8A;&#x60C5;&#x51B5;&#x3002;</p>
+<p>&#x5982;&#x679C; <code>EventEmitter</code> &#x6CA1;&#x6709;&#x4E3A; <code>&apos;error&apos;</code> &#x4E8B;&#x4EF6;&#x6CE8;&#x518C;&#x81F3;&#x5C11;&#x4E00;&#x4E2A;&#x76D1;&#x542C;&#x5668;&#xFF0C;&#x5219;&#x5F53; <code>&apos;error&apos;</code> &#x4E8B;&#x4EF6;&#x89E6;&#x53D1;&#x65F6;&#xFF0C;&#x4F1A;&#x629B;&#x51FA;&#x9519;&#x8BEF;&#x3001;&#x6253;&#x5370;&#x5806;&#x6808;&#x8DDF;&#x8E2A;&#x3001;&#x4E14;&#x9000;&#x51FA; Node.js &#x8FDB;&#x7A0B;&#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.emit(&apos;error&apos;, new Error(&apos;whoops!&apos;));
+// &#x629B;&#x51FA;&#x9519;&#x8BEF;&#xFF0C;&#x5E76;&#x4F7F; Node.js &#x5954;&#x6E83;
+</code></pre>
+<p>&#x4E3A;&#x4E86;&#x9632;&#x6B62; Node.js &#x8FDB;&#x7A0B;&#x5D29;&#x6E83;&#xFF0C;&#x53EF;&#x4EE5;&#x5728; <a href="process.html#process_event_uncaughtexception" tppabs="http://nodejs.cn/api/process.html#process_event_uncaughtexception"><code>process</code> &#x5BF9;&#x8C61;&#x7684; <code>uncaughtException</code> &#x4E8B;&#x4EF6;</a>&#x4E0A;&#x6CE8;&#x518C;&#x76D1;&#x542C;&#x5668;&#xFF0C;&#x6216;&#x4F7F;&#x7528; <a href="domain.html" tppabs="http://nodejs.cn/api/domain.html"><code>domain</code></a> &#x6A21;&#x5757;&#x3002;
+&#xFF08;&#x6CE8;&#x610F;&#xFF0C;<code>domain</code> &#x6A21;&#x5757;&#x5DF2;&#x88AB;&#x5E9F;&#x5F03;&#xFF09;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+
+process.on(&apos;uncaughtException&apos;, (err) =&gt; {
+  console.log(&apos;&#x6709;&#x9519;&#x8BEF;&apos;);
+});
+
+myEmitter.emit(&apos;error&apos;, new Error(&apos;whoops!&apos;));
+// &#x6253;&#x5370;: &#x6709;&#x9519;&#x8BEF;
+</code></pre>
+<p>&#x4F5C;&#x4E3A;&#x6700;&#x4F73;&#x5B9E;&#x8DF5;&#xFF0C;&#x5E94;&#x8BE5;&#x59CB;&#x7EC8;&#x4E3A; <code>&apos;error&apos;</code> &#x4E8B;&#x4EF6;&#x6CE8;&#x518C;&#x76D1;&#x542C;&#x5668;&#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.on(&apos;error&apos;, (err) =&gt; {
+  console.log(&apos;&#x6709;&#x9519;&#x8BEF;&apos;);
+});
+myEmitter.emit(&apos;error&apos;, new Error(&apos;whoops!&apos;));
+// &#x6253;&#x5370;: &#x6709;&#x9519;&#x8BEF;
+</code></pre>
+<h2>EventEmitter &#x7C7B;<span><a class="mark" href="#events_class_eventemitter" id="events_class_eventemitter">#</a></span></h2><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_class_eventemitter" tppabs="http://nodejs.cn/api/en/events.html#events_class_eventemitter">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p><code>EventEmitter</code> &#x7C7B;&#x7531; <code>events</code> &#x6A21;&#x5757;&#x5B9A;&#x4E49;&#x548C;&#x5F00;&#x653E;&#x7684;&#xFF1A;</p>
+<pre><code class="lang-js">const EventEmitter = require(&apos;events&apos;);
+</code></pre>
+<p>&#x5F53;&#x65B0;&#x7684;&#x76D1;&#x542C;&#x5668;&#x88AB;&#x6DFB;&#x52A0;&#x65F6;&#xFF0C;&#x6240;&#x6709;&#x7684; EventEmitter &#x4F1A;&#x89E6;&#x53D1; <code>&apos;newListener&apos;</code> &#x4E8B;&#x4EF6;&#xFF1B;&#x5F53;&#x79FB;&#x9664;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x76D1;&#x542C;&#x5668;&#x65F6;&#xFF0C;&#x5219;&#x89E6;&#x53D1; <code>&apos;removeListener&apos;</code>&#x3002;</p>
+<h3>&apos;newListener&apos; &#x4E8B;&#x4EF6;<span><a class="mark" href="#events_event_newlistener" id="events_event_newlistener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_event_newlistener" tppabs="http://nodejs.cn/api/en/events.html#events_event_newlistener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> &#x8981;&#x76D1;&#x542C;&#x7684;&#x4E8B;&#x4EF6;&#x7684;&#x540D;&#x79F0;</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> &#x4E8B;&#x4EF6;&#x7684;&#x53E5;&#x67C4;&#x51FD;&#x6570;</li>
+</ul>
+<p><code>EventEmitter</code> &#x5B9E;&#x4F8B;&#x4F1A;&#x5728;&#x4E00;&#x4E2A;&#x76D1;&#x542C;&#x5668;&#x88AB;&#x6DFB;&#x52A0;&#x5230;&#x5176;&#x5185;&#x90E8;&#x76D1;&#x542C;&#x5668;&#x6570;&#x7EC4;&#x4E4B;&#x524D;&#x89E6;&#x53D1;&#x81EA;&#x8EAB;&#x7684; <code>&apos;newListener&apos;</code> &#x4E8B;&#x4EF6;&#x3002;</p>
+<p>&#x6CE8;&#x518C;&#x4E86; <code>&apos;newListener&apos;</code> &#x4E8B;&#x4EF6;&#x7684;&#x76D1;&#x542C;&#x5668;&#x4F1A;&#x4F20;&#x5165;&#x4E8B;&#x4EF6;&#x540D;&#x4E0E;&#x88AB;&#x6DFB;&#x52A0;&#x7684;&#x76D1;&#x542C;&#x5668;&#x7684;&#x5F15;&#x7528;&#x3002;</p>
+<p>&#x4E8B;&#x5B9E;&#x4E0A;&#xFF0C;&#x5728;&#x6DFB;&#x52A0;&#x76D1;&#x542C;&#x5668;&#x4E4B;&#x524D;&#x89E6;&#x53D1;&#x4E8B;&#x4EF6;&#x6709;&#x4E00;&#x4E2A;&#x5FAE;&#x5999;&#x4F46;&#x91CD;&#x8981;&#x7684;&#x526F;&#x4F5C;&#x7528;&#xFF1A;
+<code>&apos;newListener&apos;</code> &#x56DE;&#x8C03;&#x4E2D;&#x4EFB;&#x4F55;&#x989D;&#x5916;&#x7684;&#x88AB;&#x6CE8;&#x518C;&#x5230;&#x76F8;&#x540C;&#x540D;&#x79F0;&#x7684;&#x76D1;&#x542C;&#x5668;&#x4F1A;&#x5728;&#x76D1;&#x542C;&#x5668;&#x88AB;&#x6DFB;&#x52A0;&#x4E4B;&#x524D;&#x88AB;&#x63D2;&#x5165; &#x3002;</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+// &#x53EA;&#x5904;&#x7406;&#x4E00;&#x6B21;&#xFF0C;&#x6240;&#x4EE5;&#x4E0D;&#x4F1A;&#x65E0;&#x9650;&#x5FAA;&#x73AF;
+myEmitter.once(&apos;newListener&apos;, (event, listener) =&gt; {
+  if (event === &apos;event&apos;) {
+    // &#x5728;&#x5F00;&#x5934;&#x63D2;&#x5165;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x76D1;&#x542C;&#x5668;
+    myEmitter.on(&apos;event&apos;, () =&gt; {
+      console.log(&apos;B&apos;);
+    });
+  }
+});
+myEmitter.on(&apos;event&apos;, () =&gt; {
+  console.log(&apos;A&apos;);
+});
+myEmitter.emit(&apos;event&apos;);
+// &#x6253;&#x5370;:
+//   B
+//   A
+</code></pre>
+<h3>&apos;removeListener&apos; &#x4E8B;&#x4EF6;<span><a class="mark" href="#events_event_removelistener" id="events_event_removelistener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_event_removelistener" tppabs="http://nodejs.cn/api/en/events.html#events_event_removelistener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.9.3</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> &#x4E8B;&#x4EF6;&#x540D;</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> &#x4E8B;&#x4EF6;&#x53E5;&#x67C4;&#x51FD;&#x6570;</li>
+</ul>
+<p><code>&apos;removeListener&apos;</code> &#x4E8B;&#x4EF6;&#x5728; <code>listener</code> &#x88AB;&#x79FB;&#x9664;&#x540E;&#x89E6;&#x53D1;&#x3002;</p>
+<h3>EventEmitter.listenerCount(emitter, eventName)<span><a class="mark" href="#events_eventemitter_listenercount_emitter_eventname" id="events_eventemitter_listenercount_emitter_eventname">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_eventemitter_listenercount_emitter_eventname" tppabs="http://nodejs.cn/api/en/events.html#events_eventemitter_listenercount_emitter_eventname">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.9.12</span>
+<span>&#x5E9F;&#x5F03;&#x4E8E;: v4.0.0 </span>
+</div><pre class="api_stability api_stability_0">Stability: 0 - Deprecated: Use <a href="#events_emitter_listenercount_eventname"><code>emitter.listenerCount()</code></a> instead.</pre><p>A class method that returns the number of listeners for the given <code>eventName</code>
+registered on the given <code>emitter</code>.</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+myEmitter.on(&apos;event&apos;, () =&gt; {});
+myEmitter.on(&apos;event&apos;, () =&gt; {});
+console.log(EventEmitter.listenerCount(myEmitter, &apos;event&apos;));
+// Prints: 2
+</code></pre>
+<h3>EventEmitter.defaultMaxListeners<span><a class="mark" href="#events_eventemitter_defaultmaxlisteners" id="events_eventemitter_defaultmaxlisteners">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_eventemitter_defaultmaxlisteners" tppabs="http://nodejs.cn/api/en/events.html#events_eventemitter_defaultmaxlisteners">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.11.2</span>
+</div><p>By default, a maximum of <code>10</code> listeners can be registered for any single
+event. This limit can be changed for individual <code>EventEmitter</code> instances
+using the <a href="#events_emitter_setmaxlisteners_n"><code>emitter.setMaxListeners(n)</code></a> method. To change the default
+for <em>all</em> <code>EventEmitter</code> instances, the <code>EventEmitter.defaultMaxListeners</code>
+property can be used.</p>
+<p>Take caution when setting the <code>EventEmitter.defaultMaxListeners</code> because the
+change effects <em>all</em> <code>EventEmitter</code> instances, including those created before
+the change is made. However, calling <a href="#events_emitter_setmaxlisteners_n"><code>emitter.setMaxListeners(n)</code></a> still has
+precedence over <code>EventEmitter.defaultMaxListeners</code>.</p>
+<p>Note that this is not a hard limit. The <code>EventEmitter</code> instance will allow
+more listeners to be added but will output a trace warning to stderr indicating
+that a &quot;possible EventEmitter memory leak&quot; has been detected. For any single
+<code>EventEmitter</code>, the <code>emitter.getMaxListeners()</code> and <code>emitter.setMaxListeners()</code>
+methods can be used to temporarily avoid this warning:</p>
+<pre><code class="lang-js">emitter.setMaxListeners(emitter.getMaxListeners() + 1);
+emitter.once(&apos;event&apos;, () =&gt; {
+  // do stuff
+  emitter.setMaxListeners(Math.max(emitter.getMaxListeners() - 1, 0));
+});
+</code></pre>
+<p>The <a href="cli.html#cli_trace_warnings" tppabs="http://nodejs.cn/api/cli.html#cli_trace_warnings"><code>--trace-warnings</code></a> command line flag can be used to display the
+stack trace for such warnings.</p>
+<p>The emitted warning can be inspected with <a href="process.html#process_event_warning" tppabs="http://nodejs.cn/api/process.html#process_event_warning"><code>process.on(&apos;warning&apos;)</code></a> and will
+have the additional <code>emitter</code>, <code>type</code> and <code>count</code> properties, referring to
+the event emitter instance, the event&#x2019;s name and the number of attached
+listeners, respectively.</p>
+<h3>emitter.addListener(eventName, listener)<span><a class="mark" href="#events_emitter_addlistener_eventname_listener" id="events_emitter_addlistener_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_addlistener_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_addlistener_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p>Alias for <code>emitter.on(eventName, listener)</code>.</p>
+<h3>emitter.emit(eventName[, ...args])<span><a class="mark" href="#events_emitter_emit_eventname_args" id="events_emitter_emit_eventname_args">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_emit_eventname_args" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_emit_eventname_args">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p>Synchronously calls each of the listeners registered for the event named
+<code>eventName</code>, in the order they were registered, passing the supplied arguments
+to each.</p>
+<p>Returns <code>true</code> if the event had listeners, <code>false</code> otherwise.</p>
+<h3>emitter.eventNames()<span><a class="mark" href="#events_emitter_eventnames" id="events_emitter_eventnames">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_eventnames" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_eventnames">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v6.0.0</span>
+</div><p>Returns an array listing the events for which the emitter has registered
+listeners. The values in the array will be strings or Symbols.</p>
+<pre><code class="lang-js">const EventEmitter = require(&apos;events&apos;);
+const myEE = new EventEmitter();
+myEE.on(&apos;foo&apos;, () =&gt; {});
+myEE.on(&apos;bar&apos;, () =&gt; {});
+
+const sym = Symbol(&apos;symbol&apos;);
+myEE.on(sym, () =&gt; {});
+
+console.log(myEE.eventNames());
+// Prints: [ &apos;foo&apos;, &apos;bar&apos;, Symbol(symbol) ]
+</code></pre>
+<h3>emitter.getMaxListeners()<span><a class="mark" href="#events_emitter_getmaxlisteners" id="events_emitter_getmaxlisteners">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_getmaxlisteners" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_getmaxlisteners">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v1.0.0</span>
+</div><p>Returns the current max listener value for the <code>EventEmitter</code> which is either
+set by <a href="#events_emitter_setmaxlisteners_n"><code>emitter.setMaxListeners(n)</code></a> or defaults to
+<a href="#events_eventemitter_defaultmaxlisteners"><code>EventEmitter.defaultMaxListeners</code></a>.</p>
+<h3>emitter.listenerCount(eventName)<span><a class="mark" href="#events_emitter_listenercount_eventname" id="events_emitter_listenercount_eventname">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_listenercount_eventname" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_listenercount_eventname">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v3.2.0</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> The name of the event being listened for</li>
+</ul>
+<p>Returns the number of listeners listening to the event named <code>eventName</code>.</p>
+<h3>emitter.listeners(eventName)<span><a class="mark" href="#events_emitter_listeners_eventname" id="events_emitter_listeners_eventname">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_listeners_eventname" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_listeners_eventname">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p>Returns a copy of the array of listeners for the event named <code>eventName</code>.</p>
+<pre><code class="lang-js">server.on(&apos;connection&apos;, (stream) =&gt; {
+  console.log(&apos;someone connected!&apos;);
+});
+console.log(util.inspect(server.listeners(&apos;connection&apos;)));
+// Prints: [ [Function] ]
+</code></pre>
+<h3>emitter.on(eventName, listener)<span><a class="mark" href="#events_emitter_on_eventname_listener" id="events_emitter_on_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_on_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_on_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.101</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> The name of the event.</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> The callback function</li>
+</ul>
+<p>Adds the <code>listener</code> function to the end of the listeners array for the
+event named <code>eventName</code>. No checks are made to see if the <code>listener</code> has
+already been added. Multiple calls passing the same combination of <code>eventName</code>
+and <code>listener</code> will result in the <code>listener</code> being added, and called, multiple
+times.</p>
+<pre><code class="lang-js">server.on(&apos;connection&apos;, (stream) =&gt; {
+  console.log(&apos;someone connected!&apos;);
+});
+</code></pre>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<p>By default, event listeners are invoked in the order they are added. The
+<code>emitter.prependListener()</code> method can be used as an alternative to add the
+event listener to the beginning of the listeners array.</p>
+<pre><code class="lang-js">const myEE = new EventEmitter();
+myEE.on(&apos;foo&apos;, () =&gt; console.log(&apos;a&apos;));
+myEE.prependListener(&apos;foo&apos;, () =&gt; console.log(&apos;b&apos;));
+myEE.emit(&apos;foo&apos;);
+// Prints:
+//   b
+//   a
+</code></pre>
+<h3>emitter.once(eventName, listener)<span><a class="mark" href="#events_emitter_once_eventname_listener" id="events_emitter_once_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_once_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_once_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.3.0</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> The name of the event.</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> The callback function</li>
+</ul>
+<p>Adds a <strong>one time</strong> <code>listener</code> function for the event named <code>eventName</code>. The
+next time <code>eventName</code> is triggered, this listener is removed and then invoked.</p>
+<pre><code class="lang-js">server.once(&apos;connection&apos;, (stream) =&gt; {
+  console.log(&apos;Ah, we have our first user!&apos;);
+});
+</code></pre>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<p>By default, event listeners are invoked in the order they are added. The
+<code>emitter.prependOnceListener()</code> method can be used as an alternative to add the
+event listener to the beginning of the listeners array.</p>
+<pre><code class="lang-js">const myEE = new EventEmitter();
+myEE.once(&apos;foo&apos;, () =&gt; console.log(&apos;a&apos;));
+myEE.prependOnceListener(&apos;foo&apos;, () =&gt; console.log(&apos;b&apos;));
+myEE.emit(&apos;foo&apos;);
+// Prints:
+//   b
+//   a
+</code></pre>
+<h3>emitter.prependListener(eventName, listener)<span><a class="mark" href="#events_emitter_prependlistener_eventname_listener" id="events_emitter_prependlistener_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_prependlistener_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_prependlistener_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v6.0.0</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> The name of the event.</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> The callback function</li>
+</ul>
+<p>Adds the <code>listener</code> function to the <em>beginning</em> of the listeners array for the
+event named <code>eventName</code>. No checks are made to see if the <code>listener</code> has
+already been added. Multiple calls passing the same combination of <code>eventName</code>
+and <code>listener</code> will result in the <code>listener</code> being added, and called, multiple
+times.</p>
+<pre><code class="lang-js">server.prependListener(&apos;connection&apos;, (stream) =&gt; {
+  console.log(&apos;someone connected!&apos;);
+});
+</code></pre>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<h3>emitter.prependOnceListener(eventName, listener)<span><a class="mark" href="#events_emitter_prependoncelistener_eventname_listener" id="events_emitter_prependoncelistener_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_prependoncelistener_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_prependoncelistener_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v6.0.0</span>
+</div><ul>
+<li><code>eventName</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;String&gt;</a> | <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type" class="type">&lt;Symbol&gt;</a> The name of the event.</li>
+<li><code>listener</code> <a href="javascript:if(confirm('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function  \n\n∏√Œƒº˛Œﬁ∑®”√ Teleport Ultra œ¬‘ÿ, “ÚŒ™ À¸ «“ª∏ˆ”ÚªÚ¬∑æ∂Õ‚≤ø±ª…Ë÷√Œ™À¸µƒ∆Ù ºµÿ÷∑µƒµÿ÷∑°£  \n\nƒ„œÎ‘⁄∑˛ŒÒ∆˜…œ¥Úø™À¸?'))window.location='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function'" tppabs="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> The callback function</li>
+</ul>
+<p>Adds a <strong>one time</strong> <code>listener</code> function for the event named <code>eventName</code> to the
+<em>beginning</em> of the listeners array. The next time <code>eventName</code> is triggered, this
+listener is removed, and then invoked.</p>
+<pre><code class="lang-js">server.prependOnceListener(&apos;connection&apos;, (stream) =&gt; {
+  console.log(&apos;Ah, we have our first user!&apos;);
+});
+</code></pre>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<h3>emitter.removeAllListeners([eventName])<span><a class="mark" href="#events_emitter_removealllisteners_eventname" id="events_emitter_removealllisteners_eventname">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_removealllisteners_eventname" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_removealllisteners_eventname">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p>Removes all listeners, or those of the specified <code>eventName</code>.</p>
+<p>Note that it is bad practice to remove listeners added elsewhere in the code,
+particularly when the <code>EventEmitter</code> instance was created by some other
+component or module (e.g. sockets or file streams).</p>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<h3>emitter.removeListener(eventName, listener)<span><a class="mark" href="#events_emitter_removelistener_eventname_listener" id="events_emitter_removelistener_eventname_listener">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_removelistener_eventname_listener" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_removelistener_eventname_listener">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.1.26</span>
+</div><p>Removes the specified <code>listener</code> from the listener array for the event named
+<code>eventName</code>.</p>
+<pre><code class="lang-js">var callback = (stream) =&gt; {
+  console.log(&apos;someone connected!&apos;);
+};
+server.on(&apos;connection&apos;, callback);
+// ...
+server.removeListener(&apos;connection&apos;, callback);
+</code></pre>
+<p><code>removeListener</code> will remove, at most, one instance of a listener from the
+listener array. If any single listener has been added multiple times to the
+listener array for the specified <code>eventName</code>, then <code>removeListener</code> must be
+called multiple times to remove each instance.</p>
+<p>Note that once an event has been emitted, all listeners attached to it at the
+time of emitting will be called in order. This implies that any <code>removeListener()</code>
+or <code>removeAllListeners()</code> calls <em>after</em> emitting and <em>before</em> the last listener
+finishes execution will not remove them from <code>emit()</code> in progress. Subsequent
+events will behave as expected.</p>
+<pre><code class="lang-js">const myEmitter = new MyEmitter();
+
+var callbackA = () =&gt; {
+  console.log(&apos;A&apos;);
+  myEmitter.removeListener(&apos;event&apos;, callbackB);
+};
+
+var callbackB = () =&gt; {
+  console.log(&apos;B&apos;);
+};
+
+myEmitter.on(&apos;event&apos;, callbackA);
+
+myEmitter.on(&apos;event&apos;, callbackB);
+
+// callbackA removes listener callbackB but it will still be called.
+// Internal listener array at time of emit [callbackA, callbackB]
+myEmitter.emit(&apos;event&apos;);
+// Prints:
+//   A
+//   B
+
+// callbackB is now removed.
+// Internal listener array [callbackA]
+myEmitter.emit(&apos;event&apos;);
+// Prints:
+//   A
+</code></pre>
+<p>Because listeners are managed using an internal array, calling this will
+change the position indices of any listener registered <em>after</em> the listener
+being removed. This will not impact the order in which listeners are called,
+but it means that any copies of the listener array as returned by
+the <code>emitter.listeners()</code> method will need to be recreated.</p>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+<h3>emitter.setMaxListeners(n)<span><a class="mark" href="#events_emitter_setmaxlisteners_n" id="events_emitter_setmaxlisteners_n">#</a></span></h3><p style="font-size:12px;margin-top:-1em"><a href="en/events.html#events_emitter_setmaxlisteners_n" tppabs="http://nodejs.cn/api/en/events.html#events_emitter_setmaxlisteners_n">&#x67E5;&#x770B;&#x82F1;&#x6587;&#x6587;&#x6863;</a></p>
+<div class="api_metadata">
+<span>&#x65B0;&#x589E;&#x4E8E;: v0.3.5</span>
+</div><p>By default EventEmitters will print a warning if more than <code>10</code> listeners are
+added for a particular event. This is a useful default that helps finding
+memory leaks. Obviously, not all events should be limited to just 10 listeners.
+The <code>emitter.setMaxListeners()</code> method allows the limit to be modified for this
+specific <code>EventEmitter</code> instance. The value can be set to <code>Infinity</code> (or <code>0</code>)
+to indicate an unlimited number of listeners.</p>
+<p>Returns a reference to the <code>EventEmitter</code>, so that calls can be chained.</p>
+
+      </div>
+    </div>
+  </div>
+  <script src="../static/api.js" tppabs="http://nodejs.cn/static/api.js"></script>
+  <script>highlight(undefined, undefined, 'pre');</script>
+</body>
+</html>
